@@ -20,11 +20,18 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 * * Different approaches to Artificial Intelligence, including the "good old" symbolic approach with **Knowledge Representation** and reasoning ([GOFAI](https://en.wikipedia.org/wiki/Symbolic_artificial_intelligence)).
 
 # Resources:
+* Computational resources: I strongly recommend creating (free) accounts on the following platforms:
+  - [Google collaborative](https://colab.research.google.com/)
+  - [HuggingFace](https://huggingface.co/)
+  - [Kaggle](https://www.kaggle.com/)
+  - [LightingAI](https://lightning.ai/)
+  - [Weights and Biases](https://wandb.ai/site)
+  
 * Deep Learning books:
   - [Deep Learning](https://www.deeplearningbook.org/)
   - [Dive into Deep Learningas](https://d2l.ai/)
   - [Deep Learning - Foundations and Concepts](https://www.bishopbook.com/)
-  - [Deep Learnig with Python](https://github.com/fchollet/deep-learning-with-python-notebooks)
+  - [Deep Learning with Python](https://github.com/fchollet/deep-learning-with-python-notebooks)
 
 * Artificial Intelligence Books:
   - [Artificial Intelligence: A Modern Approach](https://aima.cs.berkeley.edu/)
