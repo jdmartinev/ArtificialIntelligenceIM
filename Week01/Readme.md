@@ -86,7 +86,7 @@ Alternately, we can try to model the simplest elements inside our brain – a ne
 
 > | What about ML?         |      |
 > |--------------|-----------|
-> | Part of Artificial Intelligence that is based on computer learning to solve a problem based on some data is called **Machine Learning**. We will not consider classical machine learning in this course - we refer you to a separate [Machine Learning for Beginners](http://aka.ms/ml-beginners) curriculum. |   ![ML for Beginners](Images/ml-for-beginners.png)    |
+> | Part of Artificial Intelligence that is based on computer learning to solve a problem based on some data is called **Machine Learning**. We will not consider classical machine learning in this course  |   ![ML for Beginners](Images/ml-for-beginners.png)    |
 
 ## A Brief History of AI
 
