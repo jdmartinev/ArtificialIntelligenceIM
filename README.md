@@ -5,7 +5,7 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 | **INSTRUCTOR** | Juan David Martínez Vargas (jdmartinev@eafit.edu.co)   |
 | -------------- | -------------------------------- |
 | **LECTURES**   | Tuesday & Thursday 7:30 – 9:00, 15-103 |
-| **MATERIAL**   | [2024 repo](#)   
+| **MATERIAL**   | [2024 repo](https://github.com/jdmartinev/ArtificialIntelligenceIM/)  
 
 ## Roadmap of the course
 
@@ -36,6 +36,8 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 * Online courses:
   - [Intro to Deep Learning](http://introtodeeplearning.com/)
   - [DeepMind Deep Learning course](https://www.youtube.com/watch?v=7R52wiUgxZI)
+ 
+## Lectures
   
 - [Lecture01 - Introduction to AI](/Week01/)
 
