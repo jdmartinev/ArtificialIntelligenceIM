@@ -1,6 +1,6 @@
 # Introduction to AI
 
-![Summary of Introduction of AI content in a doodle](ai-intro.png)
+![Summary of Introduction of AI content in a doodle](images/ai-intro.png)
 
 > Sketchnote by [Tomomi Imura](https://twitter.com/girlie_mac)
 
