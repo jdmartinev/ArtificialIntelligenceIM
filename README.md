@@ -7,6 +7,8 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 | **LECTURES**   | Tuesday & Thursday 7:30 – 9:00, 15-103 |
 | **MATERIAL**   | [2024 repo](https://github.com/jdmartinev/ArtificialIntelligenceIM/)  
 
+![Summary of Introduction of AI content in a doodle](AI.jpg)
+
 ## Roadmap of the course
 
 **[Roadmap of the Course](/Week01/Roadmap.md)**
