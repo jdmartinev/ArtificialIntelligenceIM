@@ -8,6 +8,7 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 | **MATERIAL**   | [2024 repo](https://github.com/jdmartinev/ArtificialIntelligenceIM/)  
 
 ![Summary of Introduction of AI content in a doodle](AI.jpg)
+> Sketchnote by [Tomomi Imura](https://twitter.com/girlie_mac)
 
 ## Roadmap of the course
 
