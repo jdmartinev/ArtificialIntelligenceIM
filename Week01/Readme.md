@@ -36,7 +36,7 @@ for more infomation refer **[Artificial General Intelligence](https://en.wikiped
 
 One of the problems when dealing with the term **[Intelligence](https://en.wikipedia.org/wiki/Intelligence)** is that there is no clear definition of this term. One can argue that intelligence is connected to **abstract thinking**, or to **self-awareness**, but we cannot properly define it.
 
-![Photo of a Cat](images/photo-cat.jpg)
+![Photo of a Cat](Images/photo-cat.jpg)
 
 > [Photo](https://unsplash.com/photos/75715CVEJhI) by [Amber Kipp](https://unsplash.com/@sadmax) from Unsplash
 
