@@ -1,6 +1,6 @@
 # Introduction to AI
 
-![Summary of Introduction of AI content in a doodle](images/ai-intro.png)
+![Summary of Introduction of AI content in a doodle](Images/ai-intro.png)
 
 > Sketchnote by [Tomomi Imura](https://twitter.com/girlie_mac)
 
@@ -10,7 +10,7 @@
 
 Originally, computers were invented by [Charles Babbage](https://en.wikipedia.org/wiki/Charles_Babbage) to operate on numbers following a well-defined procedure - an algorithm. Modern computers, even though significantly more advanced than the original model proposed in the 19th century, still follow the same idea of controlled computations. Thus it is possible to program a computer to do something if we know the exact sequence of steps that we need to do in order to achieve the goal.
 
-![Photo of a person](images/dsh_age.png)
+![Photo of a person](Images/dsh_age.png)
 
 > Photo by [Vickie Soshnikova](http://twitter.com/vickievalerie)
 
@@ -88,13 +88,13 @@ Alternately, we can try to model the simplest elements inside our brain – a ne
 
 > | What about ML?         |      |
 > |--------------|-----------|
-> | Part of Artificial Intelligence that is based on computer learning to solve a problem based on some data is called **Machine Learning**. We will not consider classical machine learning in this course - we refer you to a separate [Machine Learning for Beginners](http://aka.ms/ml-beginners) curriculum. |   ![ML for Beginners](images/ml-for-beginners.png)    |
+> | Part of Artificial Intelligence that is based on computer learning to solve a problem based on some data is called **Machine Learning**. We will not consider classical machine learning in this course - we refer you to a separate [Machine Learning for Beginners](http://aka.ms/ml-beginners) curriculum. |   ![ML for Beginners](Images/ml-for-beginners.png)    |
 
 ## A Brief History of AI
 
 Artificial Intelligence was started as a field in the middle of the twentieth century. Initially, symbolic reasoning was a prevalent approach, and it led to a number of important successes, such as expert systems – computer programs that were able to act as an expert in some limited problem domains. However, it soon became clear that such approach does not scale well. Extracting the knowledge from an expert, representing it in a computer, and keeping that knowledgebase accurate turns out to be a very complex task, and too expensive to be practical in many cases. This led to so-called [AI Winter](https://en.wikipedia.org/wiki/AI_winter) in the 1970s.
 
-<img alt="Brief History of AI" src="images/history-of-ai.png" width="70%"/>
+<img alt="Brief History of AI" src="Images/history-of-ai.png" width="70%"/>
 
 > Image by [Dmitry Soshnikov](http://soshnikov.com)
 
@@ -114,7 +114,7 @@ Similarly, we can see how the approach towards creating “talking programs” (
 * Modern assistants, such as Cortana, Siri or Google Assistant are all hybrid systems that use Neural networks to convert speech into text and recognize our intent, and then employ some reasoning or explicit algorithms to perform required actions.
 * In the future, we may expect a complete neural-based model to handle dialogue by itself. The recent GPT and [Turing-NLG](https://turing.microsoft.com/) family of neural networks show great success in this.
 
-<img alt="the Turing test's evolution" src="images/turing-test-evol.png" width="70%"/>
+<img alt="the Turing test's evolution" src="Images/turing-test-evol.png" width="70%"/>
 
 > Image by Dmitry Soshnikov, [photo](https://unsplash.com/photos/r8LmVbUKgns) by [Marina Abrosimova](https://unsplash.com/@abrosimova_marina_foto), Unsplash
 
