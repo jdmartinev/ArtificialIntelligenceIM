@@ -17,6 +17,21 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 # Resources:
 * Deep Learning books:
   - [Deep Learning](https://www.deeplearningbook.org/)
+  - [Dive into Deep Learningas](https://d2l.ai/)
+  - [Deep Learning - Foundations and Concepts](https://www.bishopbook.com/)
+  - [Deep Learnig with Python](https://github.com/fchollet/deep-learning-with-python-notebooks)
+
+* Artificial Intelligence Books:
+  - [Artificial Intelligence: A Modern Approach](https://aima.cs.berkeley.edu/)
+  - [Artificial Intelligence with Python: A Comprehensive Guide to Building Intelligent Apps for Python Beginners and Developers](https://www.amazon.com/Artificial-Intelligence-Python-Comprehensive-Intelligent/dp/178646439X)
+
+* Large Language Models:
+  - [Building a Large Language Model from Scratch](https://www.manning.com/books/build-a-large-language-model-from-scratch)
+ 
+* Online courses:
+  - [Intro to Deep Learning](http://introtodeeplearning.com/)
+  - [DeepMind Deep Learning course](https://www.youtube.com/watch?v=7R52wiUgxZI)
+  
 - [Lecture01 - Introduction to AI](/Week01/)
 
 
