@@ -120,7 +120,7 @@ Similarly, we can see how the approach towards creating “talking programs” (
 
 The huge recent growth in neural network research started around 2010, when large public datasets started to become available. A huge collection of images called [ImageNet](https://en.wikipedia.org/wiki/ImageNet), which contains around 14 million annotated images, gave birth to the [ImageNet Large Scale Visual Recognition Challenge](https://image-net.org/challenges/LSVRC/).
 
-![ILSVRC Accuracy](images/ilsvrc.gif)
+![ILSVRC Accuracy](Images/ilsvrc.gif)
 
 > Image by [Dmitry Soshnikov](http://soshnikov.com)
 
@@ -137,7 +137,7 @@ Year | Human Parity achieved
 2018 | [Automatic Machine Translation](https://arxiv.org/abs/1803.05567) (Chinese-to-English)
 2020 | [Image Captioning](https://arxiv.org/abs/2009.13682)
 
-Over the past few years we have witnessed huge successes with large language models, such as BERT and GPT-3. This happened mostly due to the fact that there is a lot of general text data available that allows us to train models to capture the structure and meaning of texts, pre-train them on general text collections, and then specialize those models for more specific tasks. We will learn more about [Natural Language Processing](../5-NLP/README.md) later in this course.
+Over the past few years, we have witnessed huge successes with large language models, such as BERT and GPT-3. This happened mostly due to the fact that there is a lot of general text data available that allows us to train models to capture the structure and meaning of texts, pre-train them on general text collections, and then specialize those models for more specific tasks. We will learn more about [Natural Language Processing](../5-NLP/README.md) later in this course.
 
 ## 🚀 Challenge
 
@@ -145,6 +145,3 @@ Do a tour of the internet to determine where, in your opinion, AI is most effect
 
 ## [Post-lecture quiz](https://red-field-0a6ddfd03.1.azurestaticapps.net/quiz/201)
 
-## Review & Self Study
-
-Review the history of AI and ML by reading through [this lesson](https://github.com/microsoft/ML-For-Beginners/tree/main/1-Introduction/2-history-of-ML). Take an element from the sketchnote at the top of that lesson or this one and research it in more depth to understand the cultural context informing its evolution.
