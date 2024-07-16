@@ -12,4 +12,4 @@ So, first create an account in [Azure for students](https://azure.microsoft.com/
 
 1. Siamese Neural Networks (just for fun)
 
-![SNN explanation](siamese/paper.png)
+![SNN explanation](images/siamese.png)
