@@ -1,6 +1,6 @@
 # Introduction to AI
 
-![Summary of Introduction of AI content in a doodle](Images/ai-intro.png)
+![Summary of Introduction of AI content in a doodle](images/ai-intro.png)
 
 > Sketchnote by [Tomomi Imura](https://twitter.com/girlie_mac)
 
@@ -8,7 +8,7 @@
 
 Originally, computers were invented by [Charles Babbage](https://en.wikipedia.org/wiki/Charles_Babbage) to operate on numbers following a well-defined procedure - an algorithm. Modern computers, even though significantly more advanced than the original model proposed in the 19th century, still follow the same idea of controlled computations. Thus it is possible to program a computer to do something if we know the exact sequence of steps that we need to do in order to achieve the goal.
 
-![Photo of a person](Images/dsh_age.png)
+![Photo of a person](images/dsh_age.png)
 
 > Photo by [Vickie Soshnikova](http://twitter.com/vickievalerie)
 
@@ -34,7 +34,7 @@ for more infomation refer **[Artificial General Intelligence](https://en.wikiped
 
 One of the problems when dealing with the term **[Intelligence](https://en.wikipedia.org/wiki/Intelligence)** is that there is no clear definition of this term. One can argue that intelligence is connected to **abstract thinking**, or to **self-awareness**, but we cannot properly define it.
 
-![Photo of a Cat](Images/photo-cat.jpg)
+![Photo of a Cat](images/photo-cat.jpg)
 
 > [Photo](https://unsplash.com/photos/75715CVEJhI) by [Amber Kipp](https://unsplash.com/@sadmax) from Unsplash
 
@@ -86,13 +86,13 @@ Alternately, we can try to model the simplest elements inside our brain – a ne
 
 > | What about ML?         |      |
 > |--------------|-----------|
-> | Part of Artificial Intelligence that is based on computer learning to solve a problem based on some data is called **Machine Learning**. We will not consider classical machine learning in this course  |   ![ML for Beginners](Images/ml-for-beginners.png)    |
+> | Part of Artificial Intelligence that is based on computer learning to solve a problem based on some data is called **Machine Learning**. We will not consider classical machine learning in this course  |   ![ML for Beginners](images/ml-for-beginners.png)    |
 
 ## A Brief History of AI
 
 Artificial Intelligence was started as a field in the middle of the twentieth century. Initially, symbolic reasoning was a prevalent approach, and it led to a number of important successes, such as expert systems – computer programs that were able to act as an expert in some limited problem domains. However, it soon became clear that such approach does not scale well. Extracting the knowledge from an expert, representing it in a computer, and keeping that knowledgebase accurate turns out to be a very complex task, and too expensive to be practical in many cases. This led to so-called [AI Winter](https://en.wikipedia.org/wiki/AI_winter) in the 1970s.
 
-<img alt="Brief History of AI" src="Images/history-of-ai.png" width="70%"/>
+<img alt="Brief History of AI" src="images/history-of-ai.png" width="70%"/>
 
 > Image by [Dmitry Soshnikov](http://soshnikov.com)
 
@@ -112,7 +112,7 @@ Similarly, we can see how the approach towards creating “talking programs” (
 * Modern assistants, such as Cortana, Siri or Google Assistant are all hybrid systems that use Neural networks to convert speech into text and recognize our intent, and then employ some reasoning or explicit algorithms to perform required actions.
 * In the future, we may expect a complete neural-based model to handle dialogue by itself. The recent GPT and [Turing-NLG](https://turing.microsoft.com/) family of neural networks show great success in this.
 
-<img alt="the Turing test's evolution" src="Images/turing-test-evol.png" width="70%"/>
+<img alt="the Turing test's evolution" src="images/turing-test-evol.png" width="70%"/>
 
 > Image by Dmitry Soshnikov, [photo](https://unsplash.com/photos/r8LmVbUKgns) by [Marina Abrosimova](https://unsplash.com/@abrosimova_marina_foto), Unsplash
 
@@ -120,7 +120,7 @@ Similarly, we can see how the approach towards creating “talking programs” (
 
 The huge recent growth in neural network research started around 2010, when large public datasets started to become available. A huge collection of images called [ImageNet](https://en.wikipedia.org/wiki/ImageNet), which contains around 14 million annotated images, gave birth to the [ImageNet Large Scale Visual Recognition Challenge](https://image-net.org/challenges/LSVRC/).
 
-![ILSVRC Accuracy](Images/ilsvrc.gif)
+![ILSVRC Accuracy](images/ilsvrc.gif)
 
 > Image by [Dmitry Soshnikov](http://soshnikov.com)
 
