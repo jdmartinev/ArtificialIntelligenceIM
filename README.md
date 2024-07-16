@@ -24,9 +24,15 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 * Different approaches to Artificial Intelligence, including the "good old" symbolic approach with **Knowledge Representation** and reasoning ([GOFAI](https://en.wikipedia.org/wiki/Symbolic_artificial_intelligence)).
 
 ## Evaluation
-| **Quiz 1 (10%)** | Neural Network basics   |
-
-
+| **Quiz 1 (5%)** | Neural Network basics   |
+| **Quiz 2 (5%)** | Computer vision   |
+| **Quiz 3 (5%)** | Natural Language Processing  |
+| **Quiz 4 (5%)** | AI approaches  |
+| **Assignment 1 (15%)** | Fully connected nets and backpropagation  |
+| **Assignment 2 (15%)** | Application of computer vision  |
+| **Assignment 3 (15%)** | GPT2  |
+| **Assignment 4 (15%)** | Multi-Agent Systems  |
+| **Final project (20)** | AI applications  |
 
 # Resources:
 * Computational resources: I strongly recommend creating (free) accounts on the following platforms:
