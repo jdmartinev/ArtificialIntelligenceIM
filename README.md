@@ -24,6 +24,7 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 * Different approaches to Artificial Intelligence, including the "good old" symbolic approach with **Knowledge Representation** and reasoning ([GOFAI](https://en.wikipedia.org/wiki/Symbolic_artificial_intelligence)).
 
 ## Evaluation
+| **Event** | Topic  |
 | -------------- | -------------------------------- |
 | **Quiz 1 (5%)** | Neural Network basics   |
 | **Quiz 2 (5%)** | Computer vision   |
