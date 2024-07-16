@@ -63,6 +63,6 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
  
 ## Lectures
   
-- [Lecture01 - Introduction to AI](/Week01/)
+- [Lecture01 - Introduction to AI](/Lecture01/)
 
 
