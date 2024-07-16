@@ -13,3 +13,19 @@ So, first create an account in [Azure for students](https://azure.microsoft.com/
 ## 1. Siamese Neural Networks (just for fun)
 
 ![SNN explanation](images/siamese.png)
+
+We will get the code from the following page:
+https://github.com/CloudAdvocacy/Siamese-Networks-for-One-Shot-Learning
+
+A good source for finding papers with code is:
+https://paperswithcode.com/paper/siamese-neural-networks-for-one-shot-image
+
+What can we find in this repo:
+
+- Script to train / evaluate the model
+- Script to perform Bayesian hyperparameter optimization
+- Omniglot dataset
+
+- Modified training script
+- Files to use scripts on Azure ML Inside AML directory
+
