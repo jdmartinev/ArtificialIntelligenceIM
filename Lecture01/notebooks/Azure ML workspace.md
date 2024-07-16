@@ -10,6 +10,6 @@ We will follow the steps to replicate the experimnts using the Azure Machine Lea
 
 So, first create an account in [Azure for students](https://azure.microsoft.com/es-es/free/students/?WT.mc_id=academic-77998-cacaste) using you @eafit.edu.co account
 
-1. Siamese Neural Networks (just for fun)
+## 1. Siamese Neural Networks (just for fun)
 
 ![SNN explanation](images/siamese.png)
