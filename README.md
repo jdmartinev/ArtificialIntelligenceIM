@@ -23,6 +23,11 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 * Less popular AI approaches, such as **Genetic Algorithms** and **Multi-Agent Systems**.
 * Different approaches to Artificial Intelligence, including the "good old" symbolic approach with **Knowledge Representation** and reasoning ([GOFAI](https://en.wikipedia.org/wiki/Symbolic_artificial_intelligence)).
 
+## Evaluation
+| **Quiz 1 (10%)** | Neural Network basics   |
+
+
+
 # Resources:
 * Computational resources: I strongly recommend creating (free) accounts on the following platforms:
   - [Google collaborative](https://colab.research.google.com/)
