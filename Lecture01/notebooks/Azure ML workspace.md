@@ -29,3 +29,10 @@ What can we find in this repo:
 - Modified training script
 - Files to use scripts on Azure ML Inside AML directory
 
+## 2. Azure ML studio
+
+Once you have created the Azure for students account, go to the Azure ML studio:
+
+![Step 1](images/azureStudents.png)
+![Step 2](images/azureML.png)
+
