@@ -102,3 +102,8 @@ Asumiendo que $y=xw+b$, calcular:
 $$
 \frac{\partial L}{\partial w}, \frac{\partial L}{\partial x}, \frac{\partial L}{\partial b},
 $$
+
+
+## Lectura
+
+https://karpathy.medium.com/yes-you-should-understand-backprop-e2f06eab496b
