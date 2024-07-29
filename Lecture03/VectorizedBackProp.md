@@ -1,3 +1,25 @@
+## 2 Retropropagación con Tensores
+
+En el contexto de las redes neuronales, una capa $\(f\)$ es típicamente una función de entradas (tensores) $\(x\)$ y pesos $\(w\)$; la salida (tensor) de la capa es entonces $\(y = f(x, w)\)$. La capa $\(f\)$ está típicamente incrustada en una red neuronal grande con una pérdida escalar $\(L\)$.
+
+Durante la retropropagación, asumimos que se nos da $\(\frac{\partial L}{\partial y}\)$ y nuestro objetivo es calcular $\(\frac{\partial L}{\partial x}\)$ y $\(\frac{\partial L}{\partial w}\)$. Por la regla de la cadena sabemos que
+
+$$
+\frac{\partial L}{\partial x} = \frac{\partial L}{\partial y} \frac{\partial y}{\partial x}
+$$
+
+$$
+\frac{\partial L}{\partial w} = \frac{\partial L}{\partial y} \frac{\partial y}{\partial w}
+$$
+
+Por lo tanto, una forma de proceder sería formar las Jacobianas (generalizadas) $$\(\frac{\partial y}{\partial x}\)$$ y $$\(\frac{\partial y}{\partial w}\)$$ y usar la multiplicación de matrices (generalizadas) para calcular $$\(\frac{\partial L}{\partial x}\)$$ y $$\(\frac{\partial L}{\partial w}\)$$.
+
+Sin embargo, hay un problema con este enfoque: las matrices Jacobianas $$\(\frac{\partial y}{\partial x}\)$$ y $$\(\frac{\partial y}{\partial w}\)$$ son típicamente demasiado grandes para caber en la memoria.
+
+Como ejemplo concreto, supongamos que $$\(f\)$$ es una capa lineal que toma como entrada un minibatch de $$\(N\)$$ vectores, cada uno de dimensión $$\(D\)$$, y produce un minibatch de $$\(N\)$$ vectores, cada uno de dimensión $$\(M\)$$. Entonces $$\(x\)$$ es una matriz de forma $$\(N \times D\)$$, $$\(w\)$$ es una matriz de forma $$\(D \times M\), y \(y = f(x, w) = xw\)$$ es una matriz de forma $$\(N \times M\)$$.
+
+La Jacobiana $$\(\frac{\partial y}{\partial x}\)$$ entonces tiene forma $$\((N \times M) \times (N \times D)\)$$. En una red neuronal típica podríamos tener $$\(N = 64\)$$ y $$\(M = D = 4096\)$$; entonces $$\(\frac{\partial y}{\partial x}\)$$ consiste en 64 $$\(\cdot\) 4096 \(\cdot\) 64 \(\cdot\) 4096\)$$ valores escalares; esto es más de 68 mil millones de números; usando punto flotante de 32 bits, esta matriz Jacobiana ocupará 256 GB de memoria para almacenarse. Por lo tanto, es completamente inútil intentar almacenar y manipular explícitamente la matriz Jacobiana.
+
 Sin embargo, resulta que para la mayoría de las capas de redes neuronales comunes, podemos derivar expresiones que calculan el producto $\(\frac{\partial y}{\partial x} \frac{\partial L}{\partial y}\)$ **sin formar explícitamente la matriz Jacobiana** $\(\frac{\partial y}{\partial x}\)$. Aún mejor, podemos derivar típicamente esta expresión sin siquiera calcular una expresión explícita para la Jacobiana $(\frac{\partial y}{\partial x}\)$; en muchos casos podemos trabajar un caso pequeño en papel y luego inferir la fórmula general.
 
 Veamos cómo funciona esto para el caso de la capa lineal $\(f(x, w) = xw\)$. Supongamos $\(N = 1\)$, $\(D = 2\)$, $\(M = 3\)$. Entonces podemos escribir explícitamente
