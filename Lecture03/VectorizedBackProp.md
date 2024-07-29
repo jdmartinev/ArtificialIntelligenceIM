@@ -100,5 +100,5 @@ Este resultado final $\frac{\partial L}{\partial x} = \frac{\partial L}{\partial
 Asumiendo que $$y=wx+b$$, calcular:
 
 $$
-\frac{\partial L}\partial{w}, \frac{\partial L}\partial{x}, \frac{\partial L}\partial{b},
+\frac{\partial L}{\partial w}, \frac{\partial L}{\partial x}, \frac{\partial L}{\partial b},
 $$
