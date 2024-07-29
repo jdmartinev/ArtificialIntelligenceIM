@@ -69,7 +69,7 @@ $$
 \frac{\partial y}{\partial x_{1,2}} = \begin{pmatrix} \frac{\partial y_{1,1}}{\partial x_{1,2}} & \frac{\partial y_{1,2}}{\partial x_{1,2}} & \frac{\partial y_{1,3}}{\partial x_{1,2}} \end{pmatrix} = \begin{pmatrix} w_{2,1} & w_{2,2} & w_{2,3} \end{pmatrix}
 $$
 
-donde la igualdad final proviene de tomar las derivadas de la Ecuación 3 con respecto a $\(x_{1,1}\)$.
+donde la igualdad final proviene de tomar las derivadas de la Ecuación 3 con respecto a $x_{1,1}$.
 
 Ahora podemos combinar estos resultados y escribir
 
@@ -81,7 +81,7 @@ $$
 \frac{\partial L}{\partial x_{1,2}} = \frac{\partial L}{\partial y} \frac{\partial y}{\partial x_{1,2}} = dy_{1,1} w_{2,1} + dy_{1,2} w_{2,2} + dy_{1,3} w_{2,3}
 $$
 
-Esto nos da nuestra expresión final para $\(\frac{\partial L}{\partial x}\)$:
+Esto nos da nuestra expresión final para $\frac{\partial L}{\partial x}$:
 
 $$
 \frac{\partial L}{\partial x} = \begin{pmatrix} \frac{\partial L}{\partial x_{1,1}} & \frac{\partial L}{\partial x_{1,2}} \end{pmatrix}
@@ -94,4 +94,4 @@ $$
 = \frac{\partial L}{\partial y} x^T
 $$
 
-Este resultado final $\(\frac{\partial L}{\partial x} = \frac{\partial L}{\partial y} x^T\)$ es muy interesante porque nos permite calcular $\(\frac{\partial L}{\partial x}\)$ de manera eficiente sin formar explícitamente la Jacobiana $\(\frac{\partial y}{\partial x}\)$. Solo derivamos esta fórmula para el caso específico de $\(N = 1\), \(D = 2\), \(M = 3\)$, pero de hecho tiene generalidad.
+Este resultado final $\frac{\partial L}{\partial x} = \frac{\partial L}{\partial y} x^T$ es muy interesante porque nos permite calcular $\frac{\partial L}{\partial x}$ de manera eficiente sin formar explícitamente la Jacobiana $\frac{\partial y}{\partial x}$. Solo derivamos esta fórmula para el caso específico de $N = 1, D = 2, M = 3$, pero de hecho tiene generalidad.
