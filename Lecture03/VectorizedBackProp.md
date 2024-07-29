@@ -98,5 +98,7 @@ Este resultado final $\frac{\partial L}{\partial x} = \frac{\partial L}{\partial
 
 ## Ejercicio
 Asumiendo que $y=xw+b$, calcular:
+
+$$
 \frac{\partial L}{\partial w}, \frac{\partial L}{\partial x}, \frac{\partial L}{\partial b},
 $$
