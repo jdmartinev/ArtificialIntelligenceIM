@@ -97,8 +97,6 @@ $$
 Este resultado final $\frac{\partial L}{\partial x} = \frac{\partial L}{\partial y} x^T$ es muy interesante porque nos permite calcular $\frac{\partial L}{\partial x}$ de manera eficiente sin formar explícitamente la Jacobiana $\frac{\partial y}{\partial x}$. Solo derivamos esta fórmula para el caso específico de $N = 1, D = 2, M = 3$, pero de hecho tiene generalidad.
 
 ## Ejercicio
-Asumiendo que $y=wx+b$, calcular:
-
-$$
+Asumiendo que $y=xw+b$, calcular:
 \frac{\partial L}{\partial w}, \frac{\partial L}{\partial x}, \frac{\partial L}{\partial b},
 $$
