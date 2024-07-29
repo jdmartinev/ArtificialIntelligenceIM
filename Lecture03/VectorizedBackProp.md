@@ -33,7 +33,7 @@ $$
 $$
 
 $$
-= \begin{pmatrix} x_{1,1}w_{1,1} + x_{1,2}w_{2,1} \\ x_{1,1}w_{1,2} + x_{1,2}w_{2,2} \\ x_{1,1}w_{1,3} + x_{1,2}w_{2,3} \end{pmatrix}
+= \begin{pmatrix} x_{1,1}w_{1,1} + x_{1,2}w_{2,1} \\\ x_{1,1}w_{1,2} + x_{1,2}w_{2,2}  \\\ x_{1,1}w_{1,3} + x_{1,2}w_{2,3} \end{pmatrix}
 $$
 
 Durante la retropropagación asumimos que tenemos acceso a $\frac{\partial L}{\partial y}$, que técnicamente tiene forma $1 \times N \times M$; sin embargo, por conveniencia notacional pensaremos en él como una matriz de forma $N \times M$. Entonces podemos escribir
