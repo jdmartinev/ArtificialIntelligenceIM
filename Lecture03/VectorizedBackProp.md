@@ -100,9 +100,14 @@ Este resultado final $\frac{\partial L}{\partial x} = \frac{\partial L}{\partial
 Asumiendo que $y=xw+b$, calcular:
 
 $$
-\frac{\partial L}{\partial w}, \frac{\partial L}{\partial x}, \frac{\partial L}{\partial b},
+\frac{\partial L}{\partial x} = \frac{\partial L}{\partial y} w^T 
 $$
-
+$$
+\frac{\partial L}{\partial w} = x^{\top}\frac{\partial L}{\partial y},
+$$
+$$
+\frac{\partial L}{\partial b} = \frac{\partial L}{\partial y},
+$$
 
 ## Lectura
 
