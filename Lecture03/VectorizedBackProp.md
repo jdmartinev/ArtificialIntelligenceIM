@@ -1,4 +1,4 @@
-## 2 Retropropagación con Tensores
+## Retropropagación con Tensores
 
 En el contexto de las redes neuronales, una capa $\(f\)$ es típicamente una función de entradas (tensores) $\(x\)$ y pesos $\(w\)$; la salida (tensor) de la capa es entonces $\(y = f(x, w)\)$. La capa $\(f\)$ está típicamente incrustada en una red neuronal grande con una pérdida escalar $\(L\)$.
 
