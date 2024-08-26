@@ -8,12 +8,15 @@ https://www.kaggle.com/code/juanmartinezv4399/kerasdataloader
 
 3. Transfer learning
 
-https://www.kaggle.com/code/juanmartinezv4399/kerastransferlearning
+Example: https://www.kaggle.com/code/juanmartinezv4399/kerastransferlearning
+
+Homework: 
+
+https://www.kaggle.com/code/juanmartinezv4399/l05-cnn-transfer-pytorch
+https://www.kaggle.com/code/juanmartinezv4399/l05-cnn-transfer-keras
+
 
 4. Fastai
 
 https://www.kaggle.com/code/juanmartinezv4399/fastaiexample
 
-5. HuggingFace application
-
-https://huggingface.co/spaces/jdmartinev/imageclassifier_fastapi
