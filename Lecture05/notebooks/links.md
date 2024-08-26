@@ -13,6 +13,7 @@ Example: https://www.kaggle.com/code/juanmartinezv4399/kerastransferlearning
 Homework: 
 
 https://www.kaggle.com/code/juanmartinezv4399/l05-cnn-transfer-pytorch
+
 https://www.kaggle.com/code/juanmartinezv4399/l05-cnn-transfer-keras
 
 
