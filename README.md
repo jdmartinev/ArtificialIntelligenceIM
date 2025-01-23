@@ -5,7 +5,7 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 
 | **INSTRUCTOR** | Juan David Martínez Vargas (jdmartinev@eafit.edu.co)   |
 | -------------- | -------------------------------- |
-| **LECTURES**   | Tuesday 7:30 – 9:00, 17-203 <br> Thursday 7:30 - 9:00 20-503|
+| **LECTURES**   | Tuesday 7:30 – 9:00, 17-203 <br> Thursday 7:30 - 9:00 20-523|
 | **MATERIAL**   | [2025 repo](https://github.com/jdmartinev/ArtificialIntelligenceIM/)  
 
 ![Summary of Introduction of AI content in a doodle](AI.jpg)
