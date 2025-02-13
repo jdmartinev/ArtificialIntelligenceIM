@@ -27,12 +27,12 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 | **Event**              | **Topic**                                  | **Material** | **Starting Date** | **Final Date** |
 |------------------------|-------------------------------------------|-------------|------------------|--------------|
 | **Quiz 1 (5%)**       | Neural Network Basics                     |             |           2025-02-13             |     2025 - 03 -09         |
-| **Quiz 2 (5%)**       | Computer Vision                           |             |                  |              |
-| **Quiz 3 (5%)**       | Natural Language Processing               |             |                  |              |
+| **Quiz 2 (5%)**       | Natural Language Processing               |             |                  |              |
+| **Quiz 3 (5%)**       | Computer Vision               |           |             |                  |
 | **Quiz 4 (5%)**       | AI Approaches                             |             |                  |              |
 | **Assignment 1 (15%)** | Fully Connected Nets and Backpropagation  | [Hugging Face Link](https://huggingface.co/spaces/MLEAFIT/AICompetition0120251) |     2025-02-13             |     2025 - 03 -09          |
-| **Assignment 2 (15%)** | Application of Computer Vision           |             |                  |              |
-| **Assignment 3 (15%)** | GPT-2                                     |             |                  |              |
+| **Assignment 2 (15%)** | Transformers and LLMs           |             |                  |              |
+| **Assignment 3 (15%)** | Application of Computer Vision                                     |             |                  |              |
 | **Assignment 4 (15%)** | Multi-Agent Systems                      |             |                  |              |
 | **Final Project (20%)** | AI Applications                          |             |                  |              |
 
