@@ -24,17 +24,17 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 * Different approaches to Artificial Intelligence, including the "good old" symbolic approach with **Knowledge Representation** and reasoning ([GOFAI](https://en.wikipedia.org/wiki/Symbolic_artificial_intelligence)).
 
 ## Evaluation
-| **Event** | Topic  | Material |
-| -------------- | -------------------------------- |
-| **Quiz 1 (5%)** | Neural Network basics   | |
-| **Quiz 2 (5%)** | Computer vision   | |
-| **Quiz 3 (5%)** | Natural Language Processing  | |
-| **Quiz 4 (5%)** | AI approaches  | |
-| **Assignment 1 (15%)** | Fully connected nets and backpropagation  |  [https://huggingface.co/spaces/MLEAFIT/AICompetition0120251](https://huggingface.co/spaces/MLEAFIT/AICompetition0120251) |
-| **Assignment 2 (15%)** | Application of computer vision  | |
-| **Assignment 3 (15%)** | GPT2  | |
-| **Assignment 4 (15%)** | Multi-Agent Systems  | |
-| **Final project (20)** | AI applications | |
+| **Event**              | **Topic**                                  | **Material** | **Starting Date** | **Final Date** |
+|------------------------|-------------------------------------------|-------------|------------------|--------------|
+| **Quiz 1 (5%)**       | Neural Network Basics                     |             |           2025-02-13             |     2025 - 03 -09         |
+| **Quiz 2 (5%)**       | Computer Vision                           |             |                  |              |
+| **Quiz 3 (5%)**       | Natural Language Processing               |             |                  |              |
+| **Quiz 4 (5%)**       | AI Approaches                             |             |                  |              |
+| **Assignment 1 (15%)** | Fully Connected Nets and Backpropagation  | [Hugging Face Link](https://huggingface.co/spaces/MLEAFIT/AICompetition0120251) |     2025-02-13             |     2025 - 03 -09          |
+| **Assignment 2 (15%)** | Application of Computer Vision           |             |                  |              |
+| **Assignment 3 (15%)** | GPT-2                                     |             |                  |              |
+| **Assignment 4 (15%)** | Multi-Agent Systems                      |             |                  |              |
+| **Final Project (20%)** | AI Applications                          |             |                  |              |
 
 # Resources:
 * Computational resources: I strongly recommend creating (free) accounts on the following platforms:
