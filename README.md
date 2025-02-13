@@ -30,7 +30,7 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 | **Quiz 2 (5%)** | Computer vision   |
 | **Quiz 3 (5%)** | Natural Language Processing  |
 | **Quiz 4 (5%)** | AI approaches  |
-| **Assignment 1 (15%)** | Fully connected nets and backpropagation  |
+| **Assignment 1 (15%)** | Fully connected nets and backpropagation  |  [https://huggingface.co/spaces/MLEAFIT/AICompetition0120251](https://huggingface.co/spaces/MLEAFIT/AICompetition0120251) |
 | **Assignment 2 (15%)** | Application of computer vision  |
 | **Assignment 3 (15%)** | GPT2  |
 | **Assignment 4 (15%)** | Multi-Agent Systems  |
