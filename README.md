@@ -30,7 +30,7 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 | **Quiz 2 (5%)**       | Transformers and LLMs               |             |                  |              |
 | **Quiz 3 (5%)**       | Computer Vision               |           |             |                  |
 | **Quiz 4 (5%)**       | AI Approaches                             |             |                  |              |
-| **Assignment 1 (15%)** | Fully Connected Nets and Backpropagation  | [Hugging Face Link](https://huggingface.co/spaces/MLEAFIT/AICompetition0120251) |     2025-02-13             |     2025 - 03 -09          |
+| **Assignment 1 (15%)** | Fully Connected Nets and Backpropagation  | [Hugging Face Link](https://huggingface.co/spaces/MLEAFIT/AIComp0120251) |     2025-02-13             |     2025 - 03 -09          |
 | **Assignment 2 (15%)** | Transformers and LLMs           |             |                  |              |
 | **Assignment 3 (15%)** | Application of Computer Vision                                     |             |                  |              |
 | **Assignment 4 (15%)** | Multi-Agent Systems                      |             |                  |              |
