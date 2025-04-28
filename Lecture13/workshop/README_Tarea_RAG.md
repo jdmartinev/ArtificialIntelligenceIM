@@ -126,5 +126,9 @@ with open('./my_rag_output.json', mode='w', encoding='utf-8') as f:
   - El código de tu pipeline RAG.
   - El archivo JSON con las preguntas, contextos y respuestas.
 
+
+
+  
+
 **Atención**: El conjunto de datos utilizado proviene de la transcripción del video "[1hr Talk] Intro to Large Language Models" de Andrej Karpathy, bajo licencia Creative Commons Attribution (CC-BY).
 ---
