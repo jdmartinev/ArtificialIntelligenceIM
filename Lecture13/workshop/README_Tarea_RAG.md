@@ -128,7 +128,8 @@ with open('./my_rag_output.json', mode='w', encoding='utf-8') as f:
 
 
 
-  
+
 
 **Atención**: El conjunto de datos utilizado proviene de la transcripción del video "[1hr Talk] Intro to Large Language Models" de Andrej Karpathy, bajo licencia Creative Commons Attribution (CC-BY).
+
 ---
