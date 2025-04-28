@@ -77,7 +77,7 @@ result = qa_chain({"query": question})
 
 Se ha preparado un conjunto de **50 preguntas** que tu pipeline RAG deberá responder.
 
-Puedes encontrar estas preguntas en el archivo [questions.json](questions.json).
+Puedes encontrar estas preguntas en el archivo [questions.json](docs/questions.json).
 
 Debes escribir un script que:
 
