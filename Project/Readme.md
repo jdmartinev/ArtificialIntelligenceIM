@@ -6,7 +6,11 @@ This document outlines the final project requirements for the **Artificial Intel
 
 ## 📆 Important Dates
 
-- **May 2** – Submit your **project idea** (title, short description, team members)
+- **May 2** – Submit your **project idea**, including:  
+  - A brief description of the problem  
+  - A sketch of the proposed solution (e.g., model type, data to be used)  
+  - Planned evaluation metrics
+  
 - **June 1** – **Final submission deadline**
 
 ---
@@ -69,4 +73,44 @@ The repo must contain:
 ---
 
 Make sure all materials are submitted by **June 1**, 11:59 PM.
+
+---
+
+
+## 💡 Suggested Project Ideas (Optional)
+
+Below are some suggested project topics. These are **not mandatory**, but may serve as inspiration:
+
+### 🧠 Basics
+
+- **Backpropagation in Convolutional Networks**  
+  Implement a convolutional layer from scratch (forward and backward pass) and integrate it into our miniconda project.
+
+- **Vision Transformers (ViT)**  
+  Study and explain the core architecture of Vision Transformers, possibly including a minimal implementation.
+
+### 🗣️ Natural Language Processing
+
+- **Supervised Fine-tuning of a Small Language Model (SLM)**  
+  Fine-tune an SLM on a specific NLP task (e.g., classification, summarization, Q&A).
+
+- **GPRO Fine-tuning with DeepSeek Models**  
+  Explore parameter-efficient fine-tuning techniques (e.g., GPRO) on a model from the DeepSeek suite.
+
+### 👁️ Computer Vision
+
+- **Object Detection with YOLO**  
+  Apply and adapt YOLO (You Only Look Once) to a custom dataset or use-case.
+
+- **Segmentation with SAM2**  
+  Use Meta's Segment Anything Model (SAM2) to build a segmentation pipeline or explore transfer to other domains.
+
+### 🛠️ Applications of AI
+
+- **Retrieval-Augmented Generation (RAG)**  
+  Build a RAG system for a specific application (e.g., education, legal, healthcare).
+
+- **Multi-Agent System for Coordination Tasks**  
+  Implement a system of AI agents working together to solve a complex task (e.g., simulation, negotiation, or search and rescue).
+
 
