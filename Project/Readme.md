@@ -6,7 +6,7 @@ This document outlines the final project requirements for the **Artificial Intel
 
 ## 📆 Important Dates
 
-- **May 2** – Submit your **project idea**, including:  
+- **May 9** – Submit your **project idea**, including:  
   - A brief description of the problem  
   - A sketch of the proposed solution (e.g., model type, data to be used)  
   - Planned evaluation metrics
