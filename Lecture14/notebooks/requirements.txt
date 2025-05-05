@@ -1,0 +1,10 @@
+langchain
+langchain_community
+langchain-openai 
+openai 
+faiss-cpu
+google-search-results
+openai-agents
+llama-index-llms-huggingface-api 
+llama-index-embeddings-huggingface
+python-dotenv
