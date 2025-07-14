@@ -38,7 +38,7 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 |------------------------|------------------------------------------------------|-------------------------------------------------------|-------------|
 |                        | [Introduction to AI](/Lecture01/Lecture01.pdf)  <br> |                                                       |             |
 |        *Lecture01*     | [Linear Algebra for DL](Lecture01/Lecture01b.pdf)    |   [Broadcasting](Lecture01/notebooks/L01_broadcasting.ipynb)|       | 
-|------------------------|------------------------------------------------------|-------------------------------------------------------|-------------|
+
 
 # Resources:
 * Computational resources: I strongly recommend creating (free) accounts on the following platforms:
