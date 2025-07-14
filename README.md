@@ -59,13 +59,13 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
  
 ## Lectures
 
-| **Lecture**              | **Topic**                                       |  Lab        |                  |
-|------------------------|---------------------------------------------------|-------------|------------------|--------------|
-| *Lecture01*            | [Introduction to AI](/Lecture01/Lecture01.pdf)  <br>  [Linear Algebra for DL](Lecture01/Lecture01b.pdf)   |             |     Week 04      |   Week 06    |
+| **Lecture**            | **Topic**                                            |  Lab                                                  |             |
+|------------------------|------------------------------------------------------|-------------------------------------------------------|-------------|
+| *Lecture01*            | [Introduction to AI](/Lecture01/Lecture01.pdf)  <br>
+                           [Linear Algebra for DL](Lecture01/Lecture01b.pdf)    |                                                       |             |   
 
 
   
-- [Lecture01 - Introduction to AI](/Lecture01/Lecture01.pdf)
-- [Lecture01b - Linear Algebra for DL](Lecture01/Lecture01b.pdf)
+
 
 
