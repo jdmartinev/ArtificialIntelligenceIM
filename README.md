@@ -32,6 +32,14 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 | **Assignment 4 (15%)** | Application of GenAI                      |             |     Week 14             |     Week 16          |
 | **Final Project (20%)** | AI Applications                          |             |     Week 12             |     Week 18          |
 
+## Lectures
+
+| **Lecture**            | **Topic**                                            |  **Code**                                             |   **Lab**   |
+|------------------------|------------------------------------------------------|-------------------------------------------------------|-------------|
+|                        | [Introduction to AI](/Lecture01/Lecture01.pdf)  <br> |                                                       |             |
+|        *Lecture01*     | [Linear Algebra for DL](Lecture01/Lecture01b.pdf)    |   [Broadcasting](Lecture01/notebooks/L01_broadcasting.ipynb)|       | 
+|------------------------|------------------------------------------------------|-------------------------------------------------------|-------------|
+
 # Resources:
 * Computational resources: I strongly recommend creating (free) accounts on the following platforms:
   - [Google collaborative](https://colab.research.google.com/)
@@ -57,12 +65,7 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
   - [Intro to Deep Learning](http://introtodeeplearning.com/)
   - [DeepMind Deep Learning course](https://www.youtube.com/watch?v=7R52wiUgxZI)
  
-## Lectures
-
-| **Lecture**            | **Topic**                                            |  **Code**                                             |   **Lab**   |
-|------------------------|------------------------------------------------------|-------------------------------------------------------|-------------|
-|                        | [Introduction to AI](/Lecture01/Lecture01.pdf)  <br> |                                                       |             |
-|        *Lecture01*     | [Linear Algebra for DL](Lecture01/Lecture01b.pdf)    |   [Broadcasting](Lecture01/notebooks/L01_broadcasting.ipynb) |      |                                                    
+                                                  
 
 
   
