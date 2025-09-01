@@ -26,7 +26,7 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 ## Evaluation
 | **Event**              | **Topic**                                  | **Material** | **Starting Date** | **Final Date** |
 |------------------------|-------------------------------------------|-------------|------------------|--------------|
-| **Assignment 1 (20%)** | Fully Connected Nets and Backpropagation  |             |     Week 04             |     Week 06          |
+| **Assignment 1 (20%)** | Fully Connected Nets and Backpropagation  |[AIComp0120252](huggingface.co/spaces/MLEAFIT/AIComp0120252)             |     Week 04             |     Week 06          |
 | **Assignment 2 (20%)** | Application of Computer Vision            |             |     Week 08             |     Week 10          |
 | **Assignment 3 (20%)** | Application of Transformers and NLP       |             |     Week 10             |     Week 12          |
 | **Assignment 4 (20%)** | Application of GenAI                      |             |     Week 14             |     Week 16          |
