@@ -34,11 +34,26 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 
 ## Lectures
 
-| **Lecture**            | **Topic**                                            |  **Code**                                             |   **Lab**   |
-|------------------------|------------------------------------------------------|-------------------------------------------------------|-------------|
-|                        | [Introduction to AI](/Lecture01/Lecture01.pdf)  <br> |                                                       |             |
-|        *Lecture01*     | [Linear Algebra for DL](Lecture01/Lecture01b.pdf)    |   [Broadcasting](Lecture01/notebooks/L01_broadcasting.ipynb)|       | 
+### Lecture 01
+- [Lecture01.pdf](Lecture01/Lecture01.pdf) — Introduction to AI, DL and ML
+- [Lecture01b.pdf](Lecture01/Lecture01b.pdf) — Linear Algebra for DL
 
+### Lecture 02
+- [Lecture02.pdf](Lecture02/Lecture02.pdf) — Linear models and regularization
+- [Lecture02b.pdf](Lecture02/Lecture02b.pdf) — Linear models for classification
+
+### Lecture 03
+- [Lecture03.pdf](Lecture03/Lecture03.pdf) — FFNNs
+- [Lecture03b.pdf](Lecture03/Lecture03b.pdf) — Optimización para redes neuronales (Adam, RMSProp)
+- [Lecture03c.pdf](Lecture03/Lecture03c.pdf) — Backprop
+
+### Lecture 04
+- [Lecture04.pdf](Lecture04/Lecture04.pdf) — Redes convolucionales
+- [Conv2D.pdf](Lecture04/Conv2D.pdf) — Forward and backward operations for convolutions
+
+### Lecture 05
+- [Lecture05.pdf](Lecture05/Lecture05.pdf) — Autoencoders (AEs)
+- [Lecture05b.pdf](Lecture05/Lecture05b.pdf) — Variational Autoencoders (VAEs)
 
 # Resources:
 * Computational resources: I strongly recommend creating (free) accounts on the following platforms:
