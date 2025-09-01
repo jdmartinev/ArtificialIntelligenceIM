@@ -44,16 +44,20 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 
 ### Lecture 03
 - [Lecture03.pdf](Lecture03/Lecture03.pdf) — FFNNs
-- [Lecture03b.pdf](Lecture03/Lecture03b.pdf) — Optimización para redes neuronales (Adam, RMSProp)
+- [Lecture03b.pdf](Lecture03/Lecture03b.pdf) — Advanced optimization for DL (Adam, RMSProp)
 - [Lecture03c.pdf](Lecture03/Lecture03c.pdf) — Backprop
 
 ### Lecture 04
-- [Lecture04.pdf](Lecture04/Lecture04.pdf) — Redes convolucionales
+- [Lecture04.pdf](Lecture04/Lecture04.pdf) — Convolutional Neural Networks (CNNs)
 - [Conv2D.pdf](Lecture04/Conv2D.pdf) — Forward and backward operations for convolutions
 
 ### Lecture 05
-- [Lecture05.pdf](Lecture05/Lecture05.pdf) — Autoencoders (AEs)
-- [Lecture05b.pdf](Lecture05/Lecture05b.pdf) — Variational Autoencoders (VAEs)
+- [Lecture05.pdf](Lecture05/Lecture05.pdf) — Advanced CNN architectures
+- [Conv2D.pdf](Lecture05/BatchNorm.pdf) — Regularization for CNNs
+- 
+### Lecture 06
+- [Lecture06.pdf](Lecture06/Lecture06.pdf) — Autoencoders (AEs)
+- [Lecture06b.pdf](Lecture06/Lecture06b.pdf) — Variational Autoencoders (VAEs)
 
 # Resources:
 * Computational resources: I strongly recommend creating (free) accounts on the following platforms:
