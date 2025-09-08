@@ -57,7 +57,10 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 - 
 ### Lecture 06
 - [Lecture06.pdf](Lecture06/Lecture06.pdf) — Autoencoders (AEs)
-- [Lecture06b.pdf](Lecture06/Lecture06b.pdf) — Variational Autoencoders (VAEs)
+- [Lecture06b.pdf](Lecture06/VAE.pdf) — Variational Autoencoders (VAEs)
+- [Lecture06c.pdf](Lecture06/Lecture06c.pdf) — Generative Adversarial Networks (GANs)
+- [Lecture06d.pdf](Lecture06/DDPM.pdf) — Denoising Diffusion Probabilistic Models (DDPMs)
+- [DDPMs paper](https://arxiv.org/pdf/2006.11239)
 
 # Resources:
 * Computational resources: I strongly recommend creating (free) accounts on the following platforms:
