@@ -155,9 +155,39 @@ curl -X POST "http://127.0.0.1:8000/predict" \
 6. Wrap-up & discussion — 15m  
 
 ---
-
 ## Deliverables
-- **Trained model weights**
-- **Validation metrics**
-- **Working LitServe API**
-- **Short report (1–2 pages)**
+
+Each student/team must submit:
+
+1. **Training Parameters (20%)**  
+   - Document all hyperparameters used:  
+     - Model version (e.g., `yolov8n`, `yolov8s`)  
+     - Epochs, batch size, image size  
+     - Optimizer, learning rate, scheduler (if customized)  
+     - Augmentation settings  
+   - Provide reasoning for at least one key choice (e.g., why `yolov8s` instead of `yolov8n`).  
+
+2. **Evaluation Metrics (30%)**  
+   - Compute and report **all key metrics** discussed in [Roboflow’s guide](https://blog.roboflow.com/object-detection-metrics/):  
+     - **mAP@.50, mAP@[.50:.95]**  
+     - **Precision** and **Recall**  
+     - **F1 score**  
+     - **IoU** analysis  
+     - **AP and AR per class**  
+     - **Confusion matrix** (optional visualization)  
+   - Present metrics on **both validation and test sets**.  
+
+3. **Recommended Metrics (20%)**  
+   - Based on your results, argue which metrics are **most informative** for this dataset (e.g., is Recall more important than Precision in logistics?).  
+   - Justify your choice in **1–2 paragraphs**.  
+
+4. **Deployment (20%)**  
+   - A **working LitServe API** that returns predictions for uploaded images.  
+   - Provide at least one **API test example** (screenshot, curl request, or Postman).  
+
+5. **Report (10%)**  
+   - A 2–3 page report (Markdown or PDF) including:  
+     - Training setup  
+     - Metrics tables for val/test  
+     - Recommended metric(s) discussion  
+     - Deployment screenshots or API results  
