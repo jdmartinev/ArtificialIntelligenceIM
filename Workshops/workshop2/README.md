@@ -139,6 +139,10 @@ curl -X POST "http://127.0.0.1:8000/predict" \
 - Compare with Roboflow’s hosted baseline model.
 
 ---
+### Resources
+
+- You can follow this [ROBOFLOW tutorial](https://lightning.ai/bhimrajyadav/studios/deploy-rf-detr-a-sota-real-time-object-detection-model-using-litserve?view=public&section=featured&query=detection) to deploy the model
+---
 
 ## Agenda (3–4 hours)
 1. Intro & dataset briefing — 10m  
