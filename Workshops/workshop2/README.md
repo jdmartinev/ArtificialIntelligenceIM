@@ -144,6 +144,8 @@ curl -X POST "http://127.0.0.1:8000/predict" \
 - You can follow this [Ultralitics tutorial](https://docs.ultralytics.com/es/usage/python/#train) to fine-tune the model.
 
 - You can follow this [ROBOFLOW tutorial](https://lightning.ai/bhimrajyadav/studios/deploy-rf-detr-a-sota-real-time-object-detection-model-using-litserve?view=public&section=featured&query=detection) to deploy the model.
+
+- You can check this [kaggle notebook](https://www.kaggle.com/code/juanmartinezv4399/workshop2) 
 ---
 
 ## Agenda (3–4 hours)
