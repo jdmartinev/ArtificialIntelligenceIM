@@ -80,7 +80,9 @@ Understand the dataset and evaluate the reasoning ability of the **base Gemma 3 
 
 ---
 
-### 🧠 2. Fine-Tuning with GRPO (`02_fine_tuning_grpo.ipynb`)
+### 🧠 2. Fine-Tuning with GRPO 
+
+Adjust the notebook [02_fine_tuning_grpo](02_fine_tuning_grpo.ipynb) for this dataset.
 
 **Objective:**  
 Fine-tune the base model using **Group Relative Policy Optimization (GRPO)** and a custom **reward model** to enhance reasoning.
@@ -102,7 +104,9 @@ Fine-tune the base model using **Group Relative Policy Optimization (GRPO)** and
 
 ---
 
-### ⚖️ 3. Evaluation of the Fine-Tuned Model (`03_comparison_evaluation.ipynb`)
+### ⚖️ 3. Evaluation of the Fine-Tuned Model 
+
+Create a notebook `03_comparison_evaluation.ipynb` to evaluate the fine-tuned model-
 
 **Objective:**  
 Compare the reasoning performance of the **fine-tuned model** versus the **base model**.
@@ -120,6 +124,18 @@ Compare the reasoning performance of the **fine-tuned model** versus the **base 
 - ✅ At least **three example questions** showing reasoning improvements (or failures).  
 - 📊 Visualization of results (bar chart or summary table).  
 - 🧩 Short reflection: what did the model learn through GRPO?
+
+---
+
+### ⚙️ Optional but Highly Recommended
+
+Once you have completed the workshop and fine-tuned your model, try **deploying it using LightningAI Studio**.  
+This allows you to interact with your model through a user-friendly chat interface and share it easily.
+
+🔗 **Follow this LightningAI Studio tutorial:**  
+[Chat with DeepSeek-R1: An Advanced AI Reasoning Model (LightningAI)](https://lightning.ai/collectiveai/studios/chat-with-deepseek-r1-an-advanced-ai-reasoning-model?view=public&section=featured&query=deepseek&tab=files&path=cloudspaces%2F01jjgzsemxx1cs3fwdw0y6p2dd%2Fdeepseek-r1&y=2&x=1)
+
+You can adapt this workflow to **deploy your fine-tuned Gemma 3 reasoning model**, experiment with prompts, and visualize reasoning outputs interactively.
 
 ---
 
