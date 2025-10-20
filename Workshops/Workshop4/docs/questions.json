@@ -1,0 +1,252 @@
+[
+    {
+        "question": "What are some security challenges associated with large language models?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is the purpose of the base model in the process of developing an assistant model?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is an adversarial example in the context of large language models?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What are the challenges associated with large language models in the context of security?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What are the key components of large language models and how do they function?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is an adversarial example in the context of large language models?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is the significance of parameters and weights in the functioning of a neural network?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What methods does the language model use for data collection and organization when responding to queries?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is the significance of Meta AI in the development of large language models?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is the purpose of a universal transferable suffix in the context of jailbreaking language models?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is the concept of jailbreaking the model in the context of large language models?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What are some capabilities of ChatGPT in handling complex queries and data organization?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is the significance of self-improvement in the development of systems like AlphaGo?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is the process of fine tuning in the development of language models?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is the process involved in training the Llama 270B model?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is the significance of the open source ecosystem in the context of large language models?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is the purpose of adding a linear trend line to a plot in data analysis?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is retrieval augmented generation and how does it enhance the capabilities of large language models?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What are some security challenges associated with large language models?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is the potential for self-improvement in language models within narrow domains?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What role does Matplotlib play in data visualization when using language models like ChatGPT?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is the process involved in neural network training and how does it relate to data compression?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is the significance of self-improvement in the development of systems like AlphaGo?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What is the purpose of the Elo rating system in evaluating language models?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What role do Google Apps Scripts play in the context of data exfiltration in shared Google Docs?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "How do proprietary LLMs stack up against open-source ones on security?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What compression is used in Llama 270B's database for word prediction?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What are the two stages to create an assistant model from a base model?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "Which method ranks language models by win rates like chess?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "How do GPUs and fine-tuning contribute to an effective assistant model?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "How do language models use tools for funding data analysis?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What stages helped AlphaGo beat humans, and how could this relate to language models?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What roles do pre-training and fine-tuning play in LLMs as empirical artifacts?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "How does faint text in images affect a model's response?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What attacks use role play and encoding to bypass LLM safety?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What are the perks of human-machine teamwork for labeling?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What hidden text in images can sway a language model's response to include a fake link, and how is it embedded?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What allows a language model to follow harmful prompts?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What parallels are there between AlphaGo's imitation learning and self-improvement in language models, given the reward challenges?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What are the effects of tailoring language models for specific tasks, given the challenges of rewards and self-improvement?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What advanced features does ChatGPT have for complex queries and data synthesis, especially regarding tools and multimodal use?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What strategies do language models use to structure data for complex queries with external tools?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "How is internet text turned into neural network parameters and fine-tuned for an assistant model?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What security risks come from mixing proprietary and open-source LLMs, especially regarding jailbreaks and user safety?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What defines the Lama 270b's capabilities and training methods?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What are the implications of viewing large language models like operating systems, especially regarding customization and self-improvement challenges?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What methods and resources compress internet text for the Lama 270b model?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What parallels exist between proprietary/open-source OS dynamics and large language models in terms of performance and security?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "How did self-improvement shape AlphaGo, and how could it help improve language models with their reward evaluation issues?",
+        "answer": "",
+        "contexts": []
+    },
+    {
+        "question": "What role do parameters and weights play in the functioning of a neural network?",
+        "answer": "",
+        "contexts": []
+    }
+]
