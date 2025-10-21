@@ -17,7 +17,7 @@ This document outlines the final project requirements for the **Artificial Intel
 
 ## 👥 Team Requirements
 
-- Projects must be completed in teams of **4 students**.
+- Projects must be completed in teams of **3 students**.
 
 ---
 
