@@ -15,18 +15,17 @@ Por favor sigue atentamente las instrucciones de configuración y desarrollo que
 
 Para completar esta tarea necesitarás:
 
-- Python 3.10 o superior con las librerías de los ejemplos en clase instaladas
-- Una clave de API de Groq
+- Python 3.10 o superior con las librerías de los ejemplos en clase instaladas.
+- Una clave de API de **Google (Gemini)**.
 
 ---
 
 ## 2. Configuración
 
-- Crea el archivo `api_keys.env.
-- Configura tu clave `GROQ_API_KEY` en el archivo `.env`:
+- Crea el archivo `api_keys.env` (o `.env`).
+- Configura tu clave `GOOGLE_API_KEY` en el archivo `.env`:
   ```bash
-  GROQ_API_KEY=...
-  ```
+  GOOGLE_API_KEY=...
 
 ---
 
@@ -36,36 +35,89 @@ En esta tarea implementarás un sistema RAG que responda preguntas basadas en la
 
 La transcripción se encuentra en [intro-to-llms-karpathy.txt](docs/intro-to-llms-karpathy.txt).
 
-Tu pipeline RAG debe incluir los siguientes pasos:
+Para esta tarea, usaremos el stack tecnológico que practicamos en nuestros ejemplos:
+- **LLM**: Google Gemini (`ChatGoogleGenerativeAI`)
+- **Embeddings**: Hugging Face (`all-mpnet-base-v2`)
+- **Vector Store**: `Chroma` Persistente
 
-- **Ingesta de datos**:
-  - Divide el documento en fragmentos pequeños.
-  - Genera embeddings para cada fragmento.
-  - Almacena los embeddings en una base de datos vectorial.
-- **RAG**:
-  - Genera el embedding de una pregunta.
-  - Recupera los fragmentos relevantes de la base de datos.
-  - Envía la pregunta y los fragmentos al LLM para generar una respuesta.
+Es **requisito** implementar el pipeline en dos fases (separando la ingesta de la consulta) para usar una base de datos vectorial **persistente**.
 
-Un ejemplo básico usando LangChain en Python podría verse así:
+---
+
+### 3.1. Fase A: Ingesta y Creación del Vector Store
+
+Crea un script o notebook para cargar, procesar y guardar los documentos en disco. **Esto solo se ejecuta una vez.**
 
 ```python
-hfEmbeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.document_loaders import TextLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import Chroma
+
+# 1. Cargar y Dividir el Documento
+loader = TextLoader("docs/intro-to-llms-karpathy.txt")
+documents = loader.load()
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+docs = text_splitter.split_documents(documents)
+
+# 2. Inicializar Embeddings (los de nuestro ejemplo)
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-mpnet-base-v2"
 )
-loader = TextLoader("intro-to-llms-karpathy.txt")
-index = VectorstoreIndexCreator(embedding=hfEmbeddings).from_loaders([loader])
-llm = init_chat_model("llama3-8b-8192", model_provider="groq")
+
+# 3. Crear y Guardar el Vector Store
+persist_directory = "db/karpathy_chroma"
+vector_store = Chroma.from_documents(
+    documents=docs,
+    embedding=embeddings,
+    persist_directory=persist_directory
+)
+
+vector_store.persist()
+print("✅ Base de datos vectorial creada.")
+```
+### 3.2. Fase B: Pipeline RAG y Consultas
+
+Crea un segundo script que **cargue** la base de datos persistente y construya el pipeline para responder preguntas.
+
+```python
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.vectorstores import Chroma
+from langchain.chains import RetrievalQA
+from dotenv import load_dotenv
+import os
+
+# 1. Cargar Variables de Entorno
+load_dotenv()
+os.environ["GOOGLE_API_KEY"] = os.environ.get("GOOGLE_API_KEY")
+
+# 2. Cargar LLM (como en nuestro ejemplo)
+llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash-latest")
+
+# 3. Cargar Embeddings (el mismo modelo)
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-mpnet-base-v2"
+)
+
+# 4. Cargar el Vector Store desde el disco
+persist_directory = "db/karpathy_chroma"
+vector_store = Chroma(
+    persist_directory=persist_directory,
+    embedding_function=embeddings
+)
+
+# 5. Crear el Pipeline RAG
 qa_chain = RetrievalQA.from_chain_type(
     llm,
-    retriever=index.vectorstore.as_retriever(),
+    retriever=vector_store.as_retris_ever(),
     return_source_documents=True,
 )
 
-question = "¿Qué es retrieval augmented generation y cómo mejora las capacidades de los modelos de lenguaje?"
-result = qa_chain({"query": question})
-```
-
+# 6. Probar
+question = "¿Qué es retrieval augmented generation?"
+result = qa_chain.invoke({"query": question})
+print(result["result"])
 **Recursos recomendados**:
 
 - Python:
