@@ -118,6 +118,7 @@ qa_chain = RetrievalQA.from_chain_type(
 question = "¿Qué es retrieval augmented generation?"
 result = qa_chain.invoke({"query": question})
 print(result["result"])
+```
 **Recursos recomendados**:
 
 - Python:
@@ -177,8 +178,6 @@ with open('./my_rag_output.json', mode='w', encoding='utf-8') as f:
 - Asegúrate de enviar:
   - El código de tu pipeline RAG.
   - El archivo JSON con las preguntas, contextos y respuestas.
-
-
 
   
 
