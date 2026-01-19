@@ -37,6 +37,9 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 ### Lecture 01
 - [Lecture01.pdf](Lecture01/Lecture01.pdf) — Introduction to AI, DL and ML
 - [Lecture01b.pdf](Lecture01/Lecture01b.pdf) — Linear Algebra for DL
+- Homework:
+  - Review the [Pytorch in one our blog](https://sebastianraschka.com/teaching/pytorch-1h/)
+  - Review the [pytorch basics notebook](Lecture01/notebooks/L01_broadcasting.ipynb) 
 
 # Resources:
 * Computational resources: I strongly recommend creating (free) accounts on the following platforms:
