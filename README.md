@@ -38,30 +38,6 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 - [Lecture01.pdf](Lecture01/Lecture01.pdf) — Introduction to AI, DL and ML
 - [Lecture01b.pdf](Lecture01/Lecture01b.pdf) — Linear Algebra for DL
 
-### Lecture 02
-- [Lecture02.pdf](Lecture02/Lecture02.pdf) — Linear models and regularization
-- [Lecture02b.pdf](Lecture02/Lecture02b.pdf) — Linear models for classification
-
-### Lecture 03
-- [Lecture03.pdf](Lecture03/Lecture03.pdf) — FFNNs
-- [Lecture03b.pdf](Lecture03/Lecture03b.pdf) — Advanced optimization for DL (Adam, RMSProp)
-- [Lecture03c.pdf](Lecture03/Lecture03c.pdf) — Backprop
-
-### Lecture 04
-- [Lecture04.pdf](Lecture04/Lecture04.pdf) — Convolutional Neural Networks (CNNs)
-- [Conv2D.pdf](Lecture04/Conv2D.pdf) — Forward and backward operations for convolutions
-
-### Lecture 05
-- [Lecture05.pdf](Lecture05/Lecture05.pdf) — Advanced CNN architectures
-- [Conv2D.pdf](Lecture05/BatchNorm.pdf) — Regularization for CNNs
-- 
-### Lecture 06
-- [Lecture06.pdf](Lecture06/Lecture06.pdf) — Autoencoders (AEs)
-- [Lecture06b.pdf](Lecture06/VAE.pdf) — Variational Autoencoders (VAEs)
-- [Lecture06c.pdf](Lecture06/Lecture06c.pdf) — Generative Adversarial Networks (GANs)
-- [Lecture06d.pdf](Lecture06/DDPM.pdf) — Denoising Diffusion Probabilistic Models (DDPMs)
-- [DDPMs paper](https://arxiv.org/pdf/2006.11239)
-
 # Resources:
 * Computational resources: I strongly recommend creating (free) accounts on the following platforms:
   - [Google collaborative](https://colab.research.google.com/)
