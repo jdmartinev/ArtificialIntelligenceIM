@@ -13,7 +13,7 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 
 ## Roadmap of the course
 
-**[Roadmap of the Course](/Lecture01/Roadmap.md)**
+**[Roadmap of the Course](/Lecture01/schedule.md)**
 
 
 ## We will learn in this course:
