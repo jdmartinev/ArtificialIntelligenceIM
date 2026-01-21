@@ -23,16 +23,14 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 * State of the art Generative AI applications.
 
 
-| Assessment Item          | Percentage | Week      |
-|--------------------------|------------|-----------|
-| Midterm I                | 10 %       | Week 4    |
-| Laboratory I             | 10 %       | Week 4    |
-| Quiz I                   | 5 %        | Week 7    |
-| Laboratory II            | 15 %       | Week 8    |
-| Laboratory + paper       | 20 %       | Week 12   |
-| Quiz II                  | 10 %       | Week 15   |
-| Laboratory III           | 10 %       | Week 16   |
-| Final Project            | 20 %       | Week 18   |
+## Evaluation
+| **Event**              | **Topic**                                  | **Material** | **Starting Date** | **Final Date** |
+|------------------------|-------------------------------------------|-------------|------------------|--------------|
+| **Assignment 1 (20%)** | Fully Connected Nets and Backpropagation  |             |     Week 05             |     Week 08          |
+| **Assignment 2 (20%)** | Application of Computer Vision            |             |     Week 08             |     Week 10          |
+| **Assignment 3 (20%)** | Application of Transformers and NLP       |             |     Week 10             |     Week 12          |
+| **Assignment 4 (20%)** | Application of GenAI                      |             |     Week 14             |     Week 16          |
+| **Final Project (20%)** | AI Applications                          |             |     Week 12             |     Week 18          |
 
 
 ## Lectures
