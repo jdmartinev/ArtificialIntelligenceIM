@@ -41,7 +41,24 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 - Homework:
   - Review the [Pytorch in one our blog](https://sebastianraschka.com/teaching/pytorch-1h/)
   - Review the [pytorch basics notebook](Lecture01/notebooks/L01-what-is-pytorch)
-  - Review the [broadcasting notebook](Lecture01/notebooks/L01_broadcasting.ipynb) 
+  - Review the [broadcasting notebook](Lecture01/notebooks/L01_broadcasting.ipynb)
+ 
+### Lecture 02
+- [Lecture02.pdf](Lecture02/Lecture02.pdf) — Linear Regression from a Deep Learning Perspective
+- [Lecture02b.pdf](Lecture02/Lecture02b.pdf) — Logistic and Softmax Regression from a Deep Learning Perspective
+- [BiasVariance.pdf](Lecture02/BiasVariance.pdf) — Bias–Variance Trade-off and Decomposition
+
+- Notebooks:
+  - [L02_linear-regr-scratch.ipynb](Lecture02/notebooks/L02_linear-regr-scratch.ipynb) — Linear regression implemented from scratch
+  - [L02b_softmax_regression_scratch.ipynb](Lecture02/notebooks/L02b_softmax_regression_scratch.ipynb) — Logistic and softmax regression from scratch
+  - [L02_fitting.ipynb](Lecture02/notebooks/L02_fitting.ipynb) — Model fitting and training dynamics
+  - [L02_regularization.ipynb](Lecture02/notebooks/L02_regularization.ipynb) — Regularization techniques
+  - [L02_hyperparameter_tunning.ipynb](Lecture02/notebooks/L02_hyperparameter_tunning.ipynb) — Hyperparameter tuning basics
+
+- Homework:
+  - Review the bias–variance trade-off and relate it to underfitting and overfitting
+  - Run and modify the linear and softmax regression notebooks
+  - Experiment with regularization strength and observe its effect on generalization
 
 # Resources:
 * Computational resources: I strongly recommend creating (free) accounts on the following platforms:
