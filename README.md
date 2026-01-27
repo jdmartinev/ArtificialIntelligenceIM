@@ -51,7 +51,7 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
 - Notebooks:
   - [L02_linear-regr-scratch.ipynb](Lecture02/notebooks/L02_linear-regr-scratch.ipynb) — Linear regression implemented from scratch
   - [L02b_softmax_regression_scratch.ipynb](Lecture02/notebooks/L02b_softmax_regression_scratch.ipynb) — Logistic and softmax regression from scratch
-  - [L02_fitting.ipynb](Lecture02/notebooks/L02_fitting.ipynb) — Model fitting and training dynamics
+  - [L02_fitting.ipynb](Lecture02/notebooks/L02_Fitting.ipynb) — Model fitting and training dynamics
   - [L02_regularization.ipynb](Lecture02/notebooks/L02_regularization.ipynb) — Regularization techniques
   - [L02_hyperparameter_tunning.ipynb](Lecture02/notebooks/L02_hyperparameter_tunning.ipynb) — Hyperparameter tuning basics
 
