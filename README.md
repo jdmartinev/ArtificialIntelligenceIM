@@ -60,6 +60,24 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
   - Run and modify the linear and softmax regression notebooks
   - Experiment with regularization strength and observe its effect on generalization
 
+### Lecture 03
+- [Lecture03.pdf](Lecture03/Lecture03.pdf) — Feed-Forward Neural Networks (FFNNs)
+- [Lecture03b.pdf](Lecture03/Lecture03b.pdf) — Optimization for Machine Learning  
+  *(SGD, Momentum, RMSProp, Adam, AdamW)*
+- [Lecture03c.pdf](Lecture03/Lecture03c.pdf) — Backpropagation and Regularization in Neural Networks
+
+- Notebooks:
+  - [L03_FFNNs.ipynb](Lecture03/notebooks/L03_FFNNs.ipynb) — Feed-forward neural networks from scratch
+  - [L03_mlp_pytorch_softmax_crossentr.ipynb](Lecture03/notebooks/L03_mlp_pytorch_softmax_crossentr.ipynb) — MLPs in PyTorch with softmax and cross-entropy loss
+  - [L03_sgd_scheduler_momentum.ipynb](Lecture03/notebooks/L03_sgd_scheduler_momentum.ipynb) — Optimization strategies: SGD, momentum, and learning-rate scheduling
+  - [L03-autograd_tutorial.ipynb](Lecture03/notebooks/L03-autograd_tutorial.ipynb) — PyTorch autograd and gradient computation
+
+- Homework:
+  - Explain the role of backpropagation in training neural networks
+  - Compare different optimizers (SGD vs Adam) in terms of convergence behavior
+  - Modify the MLP architecture (depth, width) and observe training dynamics
+  - Experiment with learning rates and schedulers and analyze their effect on performance
+
 # Resources:
 * Computational resources: I strongly recommend creating (free) accounts on the following platforms:
   - [Google collaborative](https://colab.research.google.com/)
