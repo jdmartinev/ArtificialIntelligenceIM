@@ -6,7 +6,7 @@
 ---
 
 ## Scenario 1 — Generalization breakdown (possible overfitting)
-![Scenario 1 — Training vs Validation Loss](figures/scenario1_overfitting.png)
+![Scenario 1 — Training vs Validation Loss](scenario1_overfitting.png)
 
 **Context:** You trained a model for a real business classification task (e.g., churn or fraud). You logged the training and validation loss across epochs.
 
@@ -20,7 +20,7 @@
 ---
 
 ## Scenario 2 — Unstable optimization
-![Scenario 2 — Oscillating Training Loss](figures/scenario2_oscillating_loss.png)
+![Scenario 2 — Oscillating Training Loss](scenario2_oscillating_loss.png)
 
 **Context:** You are training a deep network using **vanilla SGD**. The training loss behaves as shown.
 
@@ -34,7 +34,7 @@
 ---
 
 ## Scenario 3 — Backpropagation signal degradation (vanishing gradients)
-![Scenario 3 — Gradient Magnitude Across Layers](figures/scenario3_vanishing_gradients.png)
+![Scenario 3 — Gradient Magnitude Across Layers](scenario3_vanishing_gradients.png)
 
 **Context:** You are training a 30-layer MLP. You log the average gradient magnitude per layer (from output layer backward).
 
