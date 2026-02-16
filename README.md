@@ -77,6 +77,13 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
   - Compare different optimizers (SGD vs Adam) in terms of convergence behavior
   - Modify the MLP architecture (depth, width) and observe training dynamics
   - Experiment with learning rates and schedulers and analyze their effect on performance
+ 
+### Lecture 04
+- [Lecture04.pdf](Lecture04/Lecture04.pdf) — Training Neural Networks with PyTorch (Step-by-step)
+
+- Notebooks:
+  - [L04_mnist.ipynb](Lecture04/notebooks/L04_mnist.ipynb) — Step-by-step NN training in PyTorch (MNIST)
+  - [L04_asl.ipynb](Lecture04/notebooks/L04_asl.ipynb) — Homework: apply the training pipeline to the ASL dataset
 
 # Resources:
 * Computational resources: I strongly recommend creating (free) accounts on the following platforms:
