@@ -6,7 +6,7 @@
 https://github.com/jdmartinev/ArtificialIntelligenceIM/tree/main/Workshops/Workshop1 
 
 **Buzón**
-[Buzón](https://interactivavirtual.eafit.edu.co/d2l/lms/dropbox/admin/mark/folder_submissions_users.d2l?db=103492&ou=226102)
+[Interactiva](https://interactivavirtual.eafit.edu.co/d2l/lms/dropbox/admin/mark/folder_submissions_users.d2l?db=103492&ou=226102)
 
 **Deadline:**  
 🗓 **Tuesday, February 24, 2026**
