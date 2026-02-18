@@ -85,6 +85,16 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
   - [L04_mnist.ipynb](Lecture04/notebooks/L04_mnist.ipynb) — Step-by-step NN training in PyTorch (MNIST)
   - [L04_asl.ipynb](Lecture04/notebooks/L04_asl.ipynb) — Homework: apply the training pipeline to the ASL dataset
 
+ ### Lecture 05
+- [Lecture05.pdf](Lecture05/Lecture05.pdf) — Convolutional Neural Networks (CNNs) Basics  
+- [conv2D.pdf](Lecture05/conv2D.pdf) — Convolutions and Backpropagation (Mathematical Foundations)
+
+- Notebooks:
+  - [L05_Convolucion.ipynb](Lecture05/notebooks/L05_Convolucion.ipynb) — Understanding the convolution operation step-by-step
+  - [L05_CNNBackpropagation.ipynb](Lecture05/notebooks/L05_CNNBackpropagation.ipynb) — Backpropagation through convolutional layers
+  - [L05_ConvNetsPyTorch.ipynb](Lecture05/notebooks/L05_ConvNetsPyTorch.ipynb) — Building CNNs in PyTorch
+  - [L05_CNN-CIFAR-10.ipynb](Lecture05/notebooks/L05_CNN-CIFAR-10.ipynb) — **Homework:** Train and evaluate a CNN on CIFAR-10
+
 # Resources:
 * Computational resources: I strongly recommend creating (free) accounts on the following platforms:
   - [Google collaborative](https://colab.research.google.com/)
