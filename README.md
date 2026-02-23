@@ -94,6 +94,14 @@ Course Repository CM0091 Artificial Intelligence at Universidad EAFIT
   - [L05_CNNBackpropagation.ipynb](Lecture05/notebooks/L05_CNNBackpropagation.ipynb) — Backpropagation through convolutional layers
   - [L05_ConvNetsPyTorch.ipynb](Lecture05/notebooks/L05_ConvNetsPyTorch.ipynb) — Building CNNs in PyTorch
   - [L05_CNN-CIFAR-10.ipynb](Lecture05/notebooks/L05_CNN-CIFAR-10.ipynb) — **Homework:** Train and evaluate a CNN on CIFAR-10
+ 
+### Lecture 06
+- [Lecture06.pdf](Lecture06/Lecture06.pdf) — Common CNN Architectures and Transfer Learning  
+- [BatchNorm.pdf](Lecture06/BatchNorm.pdf) — Batch Normalization (1D and 2D)
+
+- Notebooks:
+  - [L06_CNN_Transfer.ipynb](Lecture06/notebooks/L06_CNN_Transfer.ipynb) — Example: applying transfer learning to an image dataset
+  - [L06_CNN_Transfer_HW.ipynb](Lecture06/notebooks/L06_CNN_Transfer_HW.ipynb) — **Homework:** Fine-tune a pretrained CNN on a new dataset
 
 # Resources:
 * Computational resources: I strongly recommend creating (free) accounts on the following platforms:
