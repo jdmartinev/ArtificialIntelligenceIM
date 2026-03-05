@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VAE ELBO and Reparameterization</title>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+body{font-family:Arial, sans-serif; max-width:900px; margin:auto; line-height:1.6;}
+h1,h2{color:#1a3a6e;}
+.box{background:#f2f6ff; padding:12px; border-left:4px solid #4a78ff;}
+code{background:#eee;padding:2px 4px;}
+</style>
+</head>
+<body>
+
+<h1>Variational Autoencoders</h1>
+<h2>ELBO and Reparameterization Trick</h2>
+
+<h2>1. Goal of a Generative Model</h2>
+<p>We want a model that can generate data similar to the training dataset.</p>
+
+<p>Assume a latent variable model:</p>
+
+\[ p(x,z) = p(x|z)p(z) \]
+
+<p>The probability of a datapoint is:</p>
+
+\[ p(x) = \int p(x,z)dz \]
+
+<p>Training ideally maximizes:</p>
+
+\[ \log p(x) \]
+
+<h2>2. Variational Inference</h2>
+
+<p>The posterior \(p(z|x)\) is usually intractable, so we approximate it with:</p>
+
+\[ q(z|x) \]
+
+<p>This is implemented as the encoder network.</p>
+
+<h2>3. Evidence Lower Bound (ELBO)</h2>
+
+\[
+\log p(x)
+= \log \int q(z|x) \frac{p(x,z)}{q(z|x)} dz
+\]
+
+<p>Using Jensen's inequality:</p>
+
+\[
+\log p(x)
+\ge
+E_{q(z|x)}\left[
+\log \frac{p(x,z)}{q(z|x)}
+\right]
+\]
+
+<div class="box">
+This expression is called the <b>Evidence Lower Bound (ELBO)</b>.
+</div>
+
+<h2>4. ELBO Decomposition</h2>
+
+\[
+ELBO =
+E_{q(z|x)}[\log p(x|z)] - KL(q(z|x)||p(z))
+\]
+
+<p>The first term encourages good reconstruction. The second term regularizes the latent space.</p>
+
+<h2>5. Reparameterization Trick</h2>
+
+<p>If:</p>
+
+\[ q(z|x) = N(\mu,\sigma^2) \]
+
+<p>Instead of sampling directly:</p>
+
+\[ z \sim N(\mu,\sigma^2) \]
+
+<p>We sample:</p>
+
+\[ \epsilon \sim N(0,1) \]
+
+<p>and compute:</p>
+
+\[ z = \mu + \sigma \epsilon \]
+
+<div class="box">
+This makes the sampling operation differentiable and allows gradients to flow through the network.
+</div>
+
+</body>
+</html>

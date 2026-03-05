@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Variational Autoencoders — A Deep Dive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js"></script>
+
+<style>
+  :root {
+    --ink: #0f0e0b;
+    --paper: #f5f2eb;
+    --cream: #ede8dc;
+    --teal: #1a6b72;
+    --teal-light: #2a8a92;
+    --gold: #c8a84b;
+    --steel: #4a5568;
+    --muted: #7a7264;
+    --border: #d4cfc2;
+    --code-bg: #0d1a1a;
+    --highlight: #e8f5f6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 19px;
+    line-height: 1.75;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 80px 60px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(26,107,114,0.22) 0%, transparent 70%);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 30%;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,168,75,0.08) 0%, transparent 70%);
+  }
+  .header-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(42px, 6vw, 78px);
+    font-weight: 300;
+    line-height: 1.05;
+    margin-bottom: 24px;
+  }
+  header h1 em { font-style: italic; color: var(--teal-light); }
+  .header-sub {
+    font-size: 17px;
+    color: #a09a8e;
+    max-width: 640px;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+  .course-tag {
+    display: inline-block;
+    margin-top: 32px;
+    padding: 6px 16px;
+    border: 1px solid #3a3530;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: #7a7264;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--ink);
+    border-top: 1px solid #2a2820;
+    padding: 0 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  nav a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6a6458;
+    text-decoration: none;
+    padding: 14px 20px;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+    border-bottom: 2px solid transparent;
+  }
+  nav a:hover { color: var(--gold); border-bottom-color: var(--teal); }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 860px; margin: 0 auto; padding: 0 40px; }
+  section { padding: 72px 0 48px; border-bottom: 1px solid var(--border); }
+  section:last-of-type { border-bottom: none; }
+
+  /* ── SECTION HEADERS ── */
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--teal);
+    margin-bottom: 12px;
+    display: block;
+  }
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 32px;
+    color: var(--ink);
+  }
+  h2 em { font-style: italic; color: var(--teal); }
+  h3 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 40px 0 16px;
+    color: var(--ink);
+  }
+  h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin: 32px 0 12px;
+  }
+  p { margin-bottom: 20px; }
+
+  /* ── MATH BLOCKS ── */
+  .math-block {
+    background: white;
+    border-left: 3px solid var(--teal);
+    padding: 24px 32px;
+    margin: 28px 0;
+    overflow-x: auto;
+    font-size: 17px;
+  }
+  .math-block.definition { border-left-color: var(--gold); background: #faf8f3; }
+  .math-block.key { border-left-color: #2d7d46; background: #f0f8f3; }
+  .math-block.derivation { border-left-color: var(--steel); background: #f6f8fa; }
+  .math-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  /* ── CALLOUTS ── */
+  .callout {
+    border: 1px solid var(--border);
+    background: var(--cream);
+    padding: 24px 28px;
+    margin: 28px 0;
+    position: relative;
+  }
+  .callout::before {
+    content: attr(data-icon);
+    position: absolute;
+    top: -12px; left: 20px;
+    background: var(--cream);
+    padding: 0 8px;
+    font-size: 14px;
+  }
+  .callout.intuition { border-color: var(--gold); background: #fdfaf0; }
+  .callout.intuition::before { background: #fdfaf0; }
+  .callout.warning { border-color: var(--teal); background: #f0f8f8; }
+  .callout.warning::before { background: #f0f8f8; }
+  .callout strong { color: var(--teal); }
+
+  /* ── ARCHITECTURE DIAGRAM ── */
+  .arch-diagram {
+    background: var(--ink);
+    padding: 32px;
+    margin: 32px 0;
+    overflow-x: auto;
+  }
+  .arch-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    min-width: 600px;
+  }
+  .arch-box {
+    padding: 14px 18px;
+    border: 1px solid;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.4;
+    flex-shrink: 0;
+  }
+  .arch-box.input { border-color: #3a4a3a; color: #8aaa8a; background: #1a2a1a; min-width: 90px; }
+  .arch-box.encoder { border-color: #1a5a62; color: #7acad2; background: #0d2a2e; min-width: 100px; }
+  .arch-box.latent { border-color: #8a7a20; color: #e8c850; background: #2a2510; min-width: 110px; }
+  .arch-box.sample { border-color: #5a3a6a; color: #c090e0; background: #1e1028; min-width: 100px; }
+  .arch-box.decoder { border-color: #6a2a1a; color: #e09070; background: #2a1008; min-width: 100px; }
+  .arch-box.output { border-color: #3a4a3a; color: #8aaa8a; background: #1a2a1a; min-width: 90px; }
+  .arch-arrow {
+    color: #3a3530;
+    font-size: 20px;
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+  .arch-arrow.teal { color: var(--teal-light); }
+  .arch-arrow.gold { color: var(--gold); opacity: 0.7; }
+  .arch-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #4a4540;
+    text-align: center;
+    margin-top: 10px;
+    letter-spacing: 0.1em;
+    min-width: 600px;
+  }
+
+  /* ── TERM CARDS ── */
+  .term-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin: 32px 0; }
+  .term-card { border: 1px solid var(--border); background: white; overflow: hidden; }
+  .term-header { padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
+  .term-header.recon { background: #0d2a2e; color: white; }
+  .term-header.kl { background: #2a2510; color: white; }
+  .term-label { font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.05em; }
+  .term-name { font-family: 'Crimson Pro', serif; font-size: 15px; opacity: 0.8; }
+  .term-body { padding: 20px 24px; font-size: 17px; }
+  .term-body p { margin-bottom: 10px; }
+  .term-body p:last-child { margin-bottom: 0; }
+
+  /* ── CODE ── */
+  .code-block { margin: 28px 0; overflow: hidden; border: 1px solid #1a3a3a; }
+  .code-header {
+    background: #060f0f;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #1a3a3a;
+  }
+  .code-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: #4a7a8a;
+    text-transform: uppercase;
+  }
+  .code-lang { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gold); opacity: 0.7; }
+  pre { margin: 0 !important; border-radius: 0 !important; font-size: 13px !important; line-height: 1.6 !important; }
+  code.hljs { padding: 24px !important; background: var(--code-bg) !important; }
+
+  /* ── COMPARE TABLE ── */
+  .compare-table { width: 100%; border-collapse: collapse; margin: 28px 0; font-size: 16px; }
+  .compare-table th {
+    background: var(--ink); color: var(--paper);
+    padding: 12px 18px; text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 400;
+  }
+  .compare-table td { padding: 12px 18px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .compare-table tr:nth-child(even) td { background: var(--cream); }
+
+  /* ── LATENT SPACE VIZ ── */
+  .latent-viz {
+    background: var(--ink);
+    padding: 24px;
+    margin: 28px 0;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .latent-canvas-wrap { text-align: center; }
+  .latent-canvas { display: block; }
+  .latent-caption {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #5a5450;
+    margin-top: 8px;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── SUMMARY BOX ── */
+  .summary-box { background: var(--ink); color: var(--paper); padding: 40px; margin: 40px 0; }
+  .summary-box h3 {
+    color: var(--gold); font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; margin: 0 0 20px;
+  }
+  .summary-box p { color: #c4bfb5; font-size: 17px; margin-bottom: 14px; }
+  .summary-box .highlight { color: var(--teal-light); font-style: italic; }
+
+  .footnote {
+    font-size: 15px; color: var(--muted);
+    border-top: 1px solid var(--border); padding-top: 16px; margin-top: 40px; font-style: italic;
+  }
+
+  @media (max-width: 700px) {
+    header { padding: 48px 24px 40px; }
+    nav { padding: 0 16px; }
+    .container { padding: 0 20px; }
+    section { padding: 48px 0 32px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-label">Lecture Notes · Generative Models · 2025</div>
+    <h1>Variational<br><em>Autoencoders</em></h1>
+    <p class="header-sub">Desde la inferencia variacional hasta el truco de reparametrización — una derivación completa del ELBO, sus dos términos, y la implementación en PyTorch.</p>
+    <div class="course-tag">CS 236 / 6.S978 · Deep Generative Models</div>
+  </div>
+</header>
+
+<nav>
+  <a href="#motivation">Motivación</a>
+  <a href="#latent">Modelos Latentes</a>
+  <a href="#intractability">Intratabilidad</a>
+  <a href="#vi">Inf. Variacional</a>
+  <a href="#elbo">ELBO</a>
+  <a href="#terms">Los Dos Términos</a>
+  <a href="#reparam">Reparametrización</a>
+  <a href="#architecture">Arquitectura</a>
+  <a href="#code">Código</a>
+</nav>
+
+<div class="container">
+
+<!-- ────────────────────────────────────────────────
+     §0  MOTIVACIÓN
+──────────────────────────────────────────────── -->
+<section id="motivation">
+  <span class="section-number">§ 00 — Motivación</span>
+  <h2>El problema de los <em>modelos generativos</em></h2>
+
+  <p>Dado un dataset \(\mathcal{D} = \{\mathbf{x}^{(i)}\}_{i=1}^N\), queremos aprender una distribución \(p_\theta(\mathbf{x})\) tal que podamos:</p>
+
+  <ul style="margin: 0 0 20px 28px; font-size: 18px; line-height: 2;">
+    <li><strong>Evaluar</strong> la densidad de nuevos datos (detección de anomalías, compresión)</li>
+    <li><strong>Generar</strong> nuevas muestras realistas</li>
+    <li><strong>Aprender representaciones</strong> en un espacio latente estructurado</li>
+  </ul>
+
+  <p>El autoencoder clásico aprende una representación comprimida pero <em>no es generativo</em>: el espacio latente no tiene estructura probabilística, y muestrear de él produce basura. Los VAEs resuelven esto exactamente.</p>
+
+  <div class="callout intuition" data-icon="💡 Intuición central">
+    Un VAE no aprende un punto en el espacio latente por imagen — aprende una <strong>distribución gaussiana</strong> en el espacio latente por imagen. Esto fuerza que el espacio latente sea continuo y estructurado, haciendo posible la generación.
+  </div>
+
+  <table class="compare-table">
+    <tr>
+      <th>Modelo</th>
+      <th>Espacio latente</th>
+      <th>Generación</th>
+      <th>Limitación</th>
+    </tr>
+    <tr>
+      <td><strong>Autoencoder</strong></td>
+      <td>Puntos arbitrarios</td>
+      <td>No nativa</td>
+      <td>Sin estructura probabilística</td>
+    </tr>
+    <tr>
+      <td><strong>VAE</strong></td>
+      <td>Distribuciones gaussianas</td>
+      <td>Sí, muestreando \(\mathbf{z} \sim p(\mathbf{z})\)</td>
+      <td>Imágenes algo borrosas</td>
+    </tr>
+    <tr>
+      <td><strong>GAN</strong></td>
+      <td>Implícito</td>
+      <td>Alta calidad</td>
+      <td>Sin likelihood, inestable</td>
+    </tr>
+    <tr>
+      <td><strong>Diffusion</strong></td>
+      <td>Trayectoria de ruido</td>
+      <td>Alta calidad</td>
+      <td>Lento en muestreo</td>
+    </tr>
+  </table>
+</section>
+
+<!-- ────────────────────────────────────────────────
+     §1  MODELOS CON VARIABLES LATENTES
+──────────────────────────────────────────────── -->
+<section id="latent">
+  <span class="section-number">§ 01 — Modelos con Variables Latentes</span>
+  <h2>El modelo <em>probabilístico</em></h2>
+
+  <p>Un VAE es un <strong>modelo generativo con variables latentes</strong>. Postulamos que cada dato observado \(\mathbf{x}\) fue generado por un proceso de dos pasos:</p>
+
+  <div class="math-block definition">
+    <span class="math-label">Proceso generativo</span>
+    $$\mathbf{z} \sim p(\mathbf{z}) = \mathcal{N}(0, \mathbf{I}) \qquad \text{(prior sobre latentes)}$$
+    $$\mathbf{x} \sim p_\theta(\mathbf{x} \mid \mathbf{z}) \qquad \text{(likelihood parametrizada por red neuronal)}$$
+  </div>
+
+  <p>La distribución conjunta del modelo es:</p>
+  <div class="math-block">
+    $$p_\theta(\mathbf{x}, \mathbf{z}) = p_\theta(\mathbf{x} \mid \mathbf{z})\, p(\mathbf{z})$$
+  </div>
+
+  <h3>Arquitectura: dos redes neuronales</h3>
+
+  <div class="arch-diagram">
+    <div class="arch-row">
+      <div class="arch-box input"><span>x</span><br><span style="font-size:9px; opacity:0.6">dato</span></div>
+      <span class="arch-arrow teal">→</span>
+      <div class="arch-box encoder">Encoder<br><span style="font-size:9px; opacity:0.7">q_φ(z|x)</span></div>
+      <span class="arch-arrow teal">→</span>
+      <div class="arch-box latent">μ, log σ²<br><span style="font-size:9px; opacity:0.7">paráms latente</span></div>
+      <span class="arch-arrow gold">→</span>
+      <div class="arch-box sample">z ~ q_φ<br><span style="font-size:9px; opacity:0.7">reparam.</span></div>
+      <span class="arch-arrow" style="color:#6a3a1a">→</span>
+      <div class="arch-box decoder">Decoder<br><span style="font-size:9px; opacity:0.7">p_θ(x|z)</span></div>
+      <span class="arch-arrow" style="color:#3a4a3a">→</span>
+      <div class="arch-box output">x̂<br><span style="font-size:9px; opacity:0.6">reconstruc.</span></div>
+    </div>
+    <div class="arch-label">← ENCODER (inferencia, φ) ——————————————————— DECODER (generación, θ) →</div>
+  </div>
+
+  <p><strong>El encoder</strong> \(q_\phi(\mathbf{z} \mid \mathbf{x})\) (también llamado <em>red de inferencia</em> o <em>approximate posterior</em>) mapea cada dato a una distribución gaussiana en el espacio latente.</p>
+
+  <p><strong>El decoder</strong> \(p_\theta(\mathbf{x} \mid \mathbf{z})\) (red generativa) mapea cada punto latente de regreso al espacio de los datos.</p>
+
+  <div class="math-block definition">
+    <span class="math-label">Distribuciones paramétricas</span>
+    $$q_\phi(\mathbf{z} \mid \mathbf{x}) = \mathcal{N}\!\left(\mathbf{z};\; \boldsymbol{\mu}_\phi(\mathbf{x}),\; \text{diag}(\boldsymbol{\sigma}^2_\phi(\mathbf{x}))\right)$$
+    $$p_\theta(\mathbf{x} \mid \mathbf{z}) = \begin{cases} \mathcal{N}(\boldsymbol{\mu}_\theta(\mathbf{z}), \sigma^2 \mathbf{I}) & \text{datos continuos} \\ \text{Bernoulli}(\boldsymbol{\pi}_\theta(\mathbf{z})) & \text{datos binarios / imágenes normalizadas} \end{cases}$$
+  </div>
+
+  <p>Ambas redes se entrenan <strong>conjuntamente</strong> — los parámetros \(\phi\) del encoder y \(\theta\) del decoder son optimizados al mismo tiempo con el mismo objetivo.</p>
+</section>
+
+<!-- ────────────────────────────────────────────────
+     §2  INTRATABILIDAD
+──────────────────────────────────────────────── -->
+<section id="intractability">
+  <span class="section-number">§ 02 — El Problema de la Intratabilidad</span>
+  <h2>¿Por qué no podemos <em>maximizar la likelihood</em> directamente?</h2>
+
+  <p>El objetivo natural es maximizar la log-verosimilitud marginal de los datos:</p>
+
+  <div class="math-block">
+    $$\log p_\theta(\mathbf{x}) = \log \int p_\theta(\mathbf{x} \mid \mathbf{z})\, p(\mathbf{z})\, d\mathbf{z}$$
+  </div>
+
+  <p>Esta integral es intratable por dos razones fundamentales:</p>
+
+  <div class="callout warning" data-icon="⚠️ Primer obstáculo: dimensionalidad">
+    El espacio latente tiene dimensión \(d_z\) (típicamente 64–512). La integral sobre un espacio continuo de alta dimensión no tiene solución analítica para redes neuronales no lineales. La cuadratura numérica es exponencial en \(d_z\).
+  </div>
+
+  <div class="callout warning" data-icon="⚠️ Segundo obstáculo: el posterior es intratable">
+    Tampoco podemos calcular el posterior verdadero \(p_\theta(\mathbf{z} \mid \mathbf{x})\) — que necesitaríamos para entrenar el encoder — ya que por Bayes:
+    $$p_\theta(\mathbf{z} \mid \mathbf{x}) = \frac{p_\theta(\mathbf{x} \mid \mathbf{z})\,p(\mathbf{z})}{p_\theta(\mathbf{x})}$$
+    y el denominador es exactamente la integral intratable de arriba.
+  </div>
+
+  <p>Este es el problema central que VAE resuelve: <strong>inferencia aproximada</strong> del posterior mediante una red neuronal, entrenada junto con el modelo generativo.</p>
+</section>
+
+<!-- ────────────────────────────────────────────────
+     §3  INFERENCIA VARIACIONAL
+──────────────────────────────────────────────── -->
+<section id="vi">
+  <span class="section-number">§ 03 — Inferencia Variacional</span>
+  <h2>Aproximar el posterior con <em>optimización</em></h2>
+
+  <p>La idea de la inferencia variacional (VI) es reemplazar el problema de inferencia por un problema de optimización. En lugar de calcular \(p_\theta(\mathbf{z} \mid \mathbf{x})\) exactamente, introducimos una familia de distribuciones \(\mathcal{Q}\) y buscamos el miembro más cercano al posterior verdadero:</p>
+
+  <div class="math-block definition">
+    <span class="math-label">Objetivo de la inferencia variacional</span>
+    $$q^*_\phi(\mathbf{z} \mid \mathbf{x}) = \arg\min_{q_\phi \in \mathcal{Q}}\; D_\text{KL}\!\left(q_\phi(\mathbf{z} \mid \mathbf{x})\;\|\;p_\theta(\mathbf{z} \mid \mathbf{x})\right)$$
+  </div>
+
+  <p>En VI clásica, \(\mathcal{Q}\) es una familia paramétrica simple y los parámetros se optimizan por separado para cada dato \(\mathbf{x}^{(i)}\). Esto es costoso (\(O(N)\) problemas de optimización).</p>
+
+  <p><strong>La innovación de los VAEs (Kingma & Welling, 2014)</strong> es usar una red neuronal (el encoder \(q_\phi(\mathbf{z}|\mathbf{x})\)) para <em>amortizar</em> la inferencia: los mismos parámetros \(\phi\) sirven para todos los datos. Se llama <strong>Amortized Variational Inference</strong>.</p>
+
+  <div class="callout intuition" data-icon="💡 Amortización">
+    En VI clásica: optimizar \(q_i\) separadamente para cada \(\mathbf{x}^{(i)}\) — \(O(N)\) optimizaciones.<br><br>
+    En VAE: el encoder \(q_\phi\) aprende a <em>mapear directamente</em> cualquier \(\mathbf{x}\) a los parámetros de su posterior aproximado — <strong>una sola optimización</strong> con gradiente estocástico.
+  </div>
+
+  <h3>¿Por qué minimizar la KL-divergencia es difícil directamente?</h3>
+
+  <div class="math-block derivation">
+    <span class="math-label">El obstáculo</span>
+    $$D_\text{KL}(q_\phi(\mathbf{z}|\mathbf{x})\,\|\,p_\theta(\mathbf{z}|\mathbf{x})) = \mathbb{E}_{q_\phi}\!\left[\log\frac{q_\phi(\mathbf{z}|\mathbf{x})}{p_\theta(\mathbf{z}|\mathbf{x})}\right]$$
+    $$= \mathbb{E}_{q_\phi}\!\left[\log q_\phi(\mathbf{z}|\mathbf{x}) - \log p_\theta(\mathbf{x}|\mathbf{z}) - \log p(\mathbf{z})\right] + \log p_\theta(\mathbf{x})$$
+  </div>
+
+  <p>El término \(\log p_\theta(\mathbf{x})\) es intratable — ¡estamos de vuelta al inicio! La solución es derivar el ELBO, que evita calcular \(p_\theta(\mathbf{x})\).</p>
+</section>
+
+<!-- ────────────────────────────────────────────────
+     §4  EL ELBO
+──────────────────────────────────────────────── -->
+<section id="elbo">
+  <span class="section-number">§ 04 — El ELBO</span>
+  <h2>Evidence Lower <em>Bound</em></h2>
+
+  <p>Derivamos el ELBO partiendo directamente de \(\log p_\theta(\mathbf{x})\). La clave es multiplicar y dividir por \(q_\phi(\mathbf{z}|\mathbf{x})\) dentro de la integral:</p>
+
+  <div class="math-block derivation">
+    <span class="math-label">Derivación vía Jensen's Inequality</span>
+    $$\log p_\theta(\mathbf{x}) = \log \int p_\theta(\mathbf{x}, \mathbf{z})\, d\mathbf{z}$$
+    $$= \log \int q_\phi(\mathbf{z}|\mathbf{x})\, \frac{p_\theta(\mathbf{x}, \mathbf{z})}{q_\phi(\mathbf{z}|\mathbf{x})}\, d\mathbf{z}$$
+    $$= \log\; \mathbb{E}_{q_\phi(\mathbf{z}|\mathbf{x})}\!\left[\frac{p_\theta(\mathbf{x}, \mathbf{z})}{q_\phi(\mathbf{z}|\mathbf{x})}\right]$$
+    $$\geq\; \mathbb{E}_{q_\phi(\mathbf{z}|\mathbf{x})}\!\left[\log\frac{p_\theta(\mathbf{x}, \mathbf{z})}{q_\phi(\mathbf{z}|\mathbf{x})}\right] \quad \leftarrow \textit{Jensen: } \log\mathbb{E}[X] \geq \mathbb{E}[\log X]$$
+    $$=:\; \mathcal{L}(\theta, \phi;\, \mathbf{x}) \qquad \text{(ELBO)}$$
+  </div>
+
+  <h3>Relación exacta entre ELBO y log-likelihood</h3>
+
+  <p>La brecha entre \(\log p_\theta(\mathbf{x})\) y el ELBO no es arbitraria — tiene un significado preciso:</p>
+
+  <div class="math-block key">
+    <span class="math-label">Identidad fundamental</span>
+    $$\log p_\theta(\mathbf{x}) = \underbrace{\mathcal{L}(\theta, \phi;\, \mathbf{x})}_{\text{ELBO}} + \underbrace{D_\text{KL}(q_\phi(\mathbf{z}|\mathbf{x})\,\|\,p_\theta(\mathbf{z}|\mathbf{x}))}_{\geq\, 0}$$
+  </div>
+
+  <div class="math-block derivation">
+    <span class="math-label">Demostración de la identidad</span>
+    $$\mathcal{L} = \mathbb{E}_{q_\phi}\!\left[\log\frac{p_\theta(\mathbf{x}, \mathbf{z})}{q_\phi(\mathbf{z}|\mathbf{x})}\right] = \mathbb{E}_{q_\phi}\!\left[\log\frac{p_\theta(\mathbf{z}|\mathbf{x})\,p_\theta(\mathbf{x})}{q_\phi(\mathbf{z}|\mathbf{x})}\right]$$
+    $$= \log p_\theta(\mathbf{x}) + \mathbb{E}_{q_\phi}\!\left[\log\frac{p_\theta(\mathbf{z}|\mathbf{x})}{q_\phi(\mathbf{z}|\mathbf{x})}\right] = \log p_\theta(\mathbf{x}) - D_\text{KL}(q_\phi \| p_\theta(\cdot|\mathbf{x}))$$
+    $$\implies \log p_\theta(\mathbf{x}) = \mathcal{L} + D_\text{KL}(q_\phi\|p_\theta(\cdot|\mathbf{x}))\;\;\blacksquare$$
+  </div>
+
+  <p>Como \(D_\text{KL} \geq 0\) siempre, el ELBO es una cota inferior de la log-likelihood. Maximizar el ELBO sirve dos propósitos simultáneamente:</p>
+
+  <ul style="margin: 0 0 20px 28px; font-size: 18px; line-height: 2.2;">
+    <li>Empuja hacia arriba \(\log p_\theta(\mathbf{x})\) — <strong>mejora el modelo generativo</strong></li>
+    <li>Reduce \(D_\text{KL}(q_\phi \| p_\theta(\cdot|\mathbf{x}))\) — <strong>mejora el encoder</strong></li>
+  </ul>
+</section>
+
+<!-- ────────────────────────────────────────────────
+     §5  LOS DOS TÉRMINOS
+──────────────────────────────────────────────── -->
+<section id="terms">
+  <span class="section-number">§ 05 — Los Dos Términos del ELBO</span>
+  <h2>Reconstrucción y <em>regularización</em></h2>
+
+  <p>Expandiendo el ELBO usando la descomposición \(p_\theta(\mathbf{x}, \mathbf{z}) = p_\theta(\mathbf{x}|\mathbf{z})\,p(\mathbf{z})\):</p>
+
+  <div class="math-block key">
+    <span class="math-label">Descomposición del ELBO</span>
+    $$\mathcal{L}(\theta, \phi;\, \mathbf{x}) = \underbrace{\mathbb{E}_{q_\phi(\mathbf{z}|\mathbf{x})}\!\left[\log p_\theta(\mathbf{x} \mid \mathbf{z})\right]}_{\text{término de reconstrucción}} - \underbrace{D_\text{KL}\!\left(q_\phi(\mathbf{z}|\mathbf{x})\;\|\;p(\mathbf{z})\right)}_{\text{término de regularización}}$$
+  </div>
+
+  <div class="math-block derivation">
+    <span class="math-label">Derivación de la descomposición</span>
+    $$\mathcal{L} = \mathbb{E}_{q_\phi}\!\left[\log\frac{p_\theta(\mathbf{x}|\mathbf{z})\,p(\mathbf{z})}{q_\phi(\mathbf{z}|\mathbf{x})}\right]$$
+    $$= \mathbb{E}_{q_\phi}[\log p_\theta(\mathbf{x}|\mathbf{z})] + \mathbb{E}_{q_\phi}\!\left[\log\frac{p(\mathbf{z})}{q_\phi(\mathbf{z}|\mathbf{x})}\right]$$
+    $$= \mathbb{E}_{q_\phi}[\log p_\theta(\mathbf{x}|\mathbf{z})] - D_\text{KL}(q_\phi(\mathbf{z}|\mathbf{x})\,\|\,p(\mathbf{z}))\;\;\blacksquare$$
+  </div>
+
+  <div class="term-grid">
+
+    <div class="term-card">
+      <div class="term-header recon">
+        <span class="term-label">\(\mathbb{E}_{q_\phi}[\log p_\theta(\mathbf{x}|\mathbf{z})]\)</span>
+        <span class="term-name">— Reconstruction Term</span>
+      </div>
+      <div class="term-body">
+        <p><strong>¿Qué mide?</strong> La log-verosimilitud esperada del dato \(\mathbf{x}\) bajo el decoder, promediada sobre el posterior aproximado del encoder. En otras palabras: ¿qué tan bien el decoder puede reconstruir \(\mathbf{x}\) a partir de las representaciones latentes que produce el encoder?</p>
+        <p><strong>Forma explícita para datos continuos:</strong>
+        $$\mathbb{E}_{q_\phi}\!\left[\log p_\theta(\mathbf{x}|\mathbf{z})\right] = -\frac{1}{2}\mathbb{E}_{q_\phi}\!\left[\|\mathbf{x} - \boldsymbol{\mu}_\theta(\mathbf{z})\|^2\right] + \text{const}$$
+        Es esencialmente la <strong>MSE entre input y reconstrucción</strong>.</p>
+        <p><strong>Para datos binarios</strong> (Bernoulli likelihood):
+        $$= \sum_j \left[x_j \log \pi_j + (1-x_j)\log(1-\pi_j)\right]$$
+        Es la <strong>binary cross-entropy</strong> entre input y reconstrucción.</p>
+        <p><strong>Intuición:</strong> Este término empuja al encoder y decoder a funcionar bien como autoencoder. Sin el término KL, el encoder colapsaría en una función determinística (autoencoder estándar).</p>
+      </div>
+    </div>
+
+    <div class="term-card">
+      <div class="term-header kl">
+        <span class="term-label">\(-D_\text{KL}(q_\phi(\mathbf{z}|\mathbf{x})\,\|\,p(\mathbf{z}))\)</span>
+        <span class="term-name">— Regularization Term (KL Term)</span>
+      </div>
+      <div class="term-body">
+        <p><strong>¿Qué mide?</strong> La divergencia entre el posterior aproximado del encoder \(q_\phi(\mathbf{z}|\mathbf{x})\) y el prior \(p(\mathbf{z}) = \mathcal{N}(0, \mathbf{I})\). Este término se <em>resta</em>, así que maximizar el ELBO implica <strong>minimizar esta divergencia</strong>.</p>
+        <p><strong>Forma cerrada (gaussianas):</strong> Como ambas distribuciones son gaussianas diagonales, la KL tiene solución analítica exacta — <strong>no necesita estimación Monte Carlo</strong>:
+        $$D_\text{KL} = -\frac{1}{2}\sum_{j=1}^{d_z}\!\left(1 + \log\sigma_j^2 - \mu_j^2 - \sigma_j^2\right)$$</p>
+        <p><strong>Intuición:</strong> Regula el espacio latente. Sin este término, el encoder aprendería a colapsar cada dato en un punto (varianza \(\to 0\)) — reconstrucción perfecta, espacio latente inútil para generación. El término KL fuerza que el posterior se parezca al prior: <em>distribuciones compactas, centradas en el origen</em>.</p>
+        <p><strong>Posterior collapse:</strong> Si este término domina demasiado (β-VAE), el encoder ignora \(\mathbf{x}\) y devuelve siempre el prior — el latente pierde información.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="summary-box">
+    <h3>La tensión fundamental del VAE</h3>
+    <p><span class="highlight">Reconstrucción</span>: "Aprende un código que permita reconstruir el input perfectamente."</p>
+    <p><span class="highlight">KL (regularización)</span>: "Pero ese código debe parecerse al prior gaussiano."</p>
+    <p>El entrenamiento balancea estas dos fuerzas opuestas. El resultado es un espacio latente <strong>suave y estructurado</strong>: puntos cercanos en el espacio latente corresponden a datos similares, y podemos interpolar o muestrear nuevas imágenes.</p>
+  </div>
+
+  <h3>El parámetro β: controlando el balance</h3>
+
+  <p>En el β-VAE (Higgins et al., 2017), se introduce un hiperparámetro \(\beta > 0\) que pondera el término KL:</p>
+
+  <div class="math-block">
+    $$\mathcal{L}_\beta = \mathbb{E}_{q_\phi}[\log p_\theta(\mathbf{x}|\mathbf{z})] - \beta\cdot D_\text{KL}(q_\phi(\mathbf{z}|\mathbf{x})\,\|\,p(\mathbf{z}))$$
+  </div>
+
+  <p>\(\beta = 1\) es el VAE estándar. \(\beta > 1\) fuerza mayor presión hacia representaciones disentangled (factorizadas). \(\beta < 1\) prioriza la reconstrucción.</p>
+</section>
+
+<!-- ────────────────────────────────────────────────
+     §6  TRUCO DE REPARAMETRIZACIÓN
+──────────────────────────────────────────────── -->
+<section id="reparam">
+  <span class="section-number">§ 06 — El Truco de Reparametrización</span>
+  <h2>Cómo hacer backprop <em>a través de una muestra</em></h2>
+
+  <p>El término de reconstrucción requiere computar:</p>
+  <div class="math-block">
+    $$\nabla_\phi\; \mathbb{E}_{q_\phi(\mathbf{z}|\mathbf{x})}\!\left[\log p_\theta(\mathbf{x}|\mathbf{z})\right]$$
+  </div>
+
+  <p>El problema: la distribución de la que muestreamos, \(q_\phi\), <em>depende de \(\phi\)</em> — los parámetros que queremos optimizar. No podemos simplemente mover el gradiente dentro de la esperanza.</p>
+
+  <div class="callout warning" data-icon="⚠️ El problema del gradiente estocástico">
+    <strong>El estimador naive (REINFORCE):</strong>
+    $$\nabla_\phi\,\mathbb{E}_{q_\phi}[f(\mathbf{z})] \approx \frac{1}{S}\sum_{s} f(\mathbf{z}^{(s)})\,\nabla_\phi\log q_\phi(\mathbf{z}^{(s)})$$
+    Esta estimación es <strong>correcta pero tiene varianza muy alta</strong> — el entrenamiento no converge.
+  </div>
+
+  <h3>La solución: reparametrizar el muestreo</h3>
+
+  <p>La idea central es <strong>separar el ruido de los parámetros</strong>. En lugar de muestrear \(\mathbf{z}\) directamente de \(q_\phi(\mathbf{z}|\mathbf{x})\), expresamos \(\mathbf{z}\) como una función determinística de \(\phi\) y un ruido externo \(\boldsymbol{\epsilon}\):</p>
+
+  <div class="math-block key">
+    <span class="math-label">Reparametrización para distribución gaussiana diagonal</span>
+    $$\mathbf{z} = \boldsymbol{\mu}_\phi(\mathbf{x}) + \boldsymbol{\sigma}_\phi(\mathbf{x}) \odot \boldsymbol{\epsilon}, \qquad \boldsymbol{\epsilon} \sim \mathcal{N}(0, \mathbf{I})$$
+  </div>
+
+  <p>Ahora \(\mathbf{z}\) es una función diferenciable de \(\phi\), y podemos usar backpropagation normalmente:</p>
+
+  <div class="math-block derivation">
+    <span class="math-label">Gradiente con reparametrización — bajo varianza</span>
+    $$\nabla_\phi\;\mathbb{E}_{q_\phi}[f(\mathbf{z})] = \nabla_\phi\;\mathbb{E}_{\boldsymbol{\epsilon}\sim\mathcal{N}(0,\mathbf{I})}\!\left[f(\boldsymbol{\mu}_\phi + \boldsymbol{\sigma}_\phi \odot \boldsymbol{\epsilon})\right]$$
+    $$= \mathbb{E}_{\boldsymbol{\epsilon}}\!\left[\nabla_\phi\, f(\boldsymbol{\mu}_\phi + \boldsymbol{\sigma}_\phi \odot \boldsymbol{\epsilon})\right]$$
+    $$\approx \frac{1}{S}\sum_{s=1}^S \nabla_\phi\, f\!\left(\boldsymbol{\mu}_\phi + \boldsymbol{\sigma}_\phi \odot \boldsymbol{\epsilon}^{(s)}\right), \quad \boldsymbol{\epsilon}^{(s)} \sim \mathcal{N}(0, \mathbf{I})$$
+  </div>
+
+  <p>En la práctica se usa \(S=1\) — <strong>una sola muestra por forward pass</strong> — y la varianza es suficientemente baja gracias al promediado sobre el batch.</p>
+
+  <div class="callout intuition" data-icon="💡 Por qué funciona">
+    Con reparametrización, el grafo computacional fluye así:<br><br>
+    <code style="font-family: 'JetBrains Mono', monospace; font-size: 13px; background: #f0f8f8; padding: 10px 14px; display: block; margin-top: 10px;">
+    x → Encoder → (μ, log σ²)    ε ~ N(0,I) [sin gradiente]<br>
+                          ↓               ↓<br>
+                    z = μ + σ·ε   ← operación diferenciable<br>
+                          ↓<br>
+                       Decoder → x̂ → Loss
+    </code>
+    <br>El gradiente fluye libremente a través de la operación <code>z = μ + σ·ε</code> hacia los parámetros del encoder \(\phi\).
+  </div>
+
+  <h3>¿Por qué codificar log σ² y no σ directamente?</h3>
+
+  <p>En la práctica, el encoder predice \(\log \sigma^2_j\) en lugar de \(\sigma_j\). Esto tiene dos ventajas: (1) \(\log \sigma^2\) puede tomar cualquier valor real mientras que \(\sigma > 0\) — sin restricciones de activación. (2) La forma cerrada de la KL se expresa naturalmente en términos de \(\log \sigma^2\).</p>
+</section>
+
+<!-- ────────────────────────────────────────────────
+     §7  ARQUITECTURA Y KL CERRADA
+──────────────────────────────────────────────── -->
+<section id="architecture">
+  <span class="section-number">§ 07 — Forma Cerrada de la KL</span>
+  <h2>La KL gaussiana tiene solución <em>analítica</em></h2>
+
+  <p>Cuando \(q_\phi(\mathbf{z}|\mathbf{x}) = \mathcal{N}(\boldsymbol{\mu}, \text{diag}(\boldsymbol{\sigma}^2))\) y \(p(\mathbf{z}) = \mathcal{N}(0, \mathbf{I})\), la KL-divergencia se puede calcular exactamente sin muestreo:</p>
+
+  <div class="math-block key">
+    <span class="math-label">KL cerrada — resultado esencial</span>
+    $$D_\text{KL}(q_\phi(\mathbf{z}|\mathbf{x})\,\|\,\mathcal{N}(0,\mathbf{I})) = -\frac{1}{2}\sum_{j=1}^{d_z}\!\left(1 + \log\sigma_j^2 - \mu_j^2 - \sigma_j^2\right)$$
+  </div>
+
+  <div class="math-block derivation">
+    <span class="math-label">Derivación para dimensión 1 (extensible a diagonal)</span>
+    $$D_\text{KL}(\mathcal{N}(\mu, \sigma^2)\,\|\,\mathcal{N}(0,1)) = \int \mathcal{N}(z;\mu,\sigma^2)\log\frac{\mathcal{N}(z;\mu,\sigma^2)}{\mathcal{N}(z;0,1)}\,dz$$
+    $$= \int \mathcal{N}(z;\mu,\sigma^2)\!\left[-\frac{(z-\mu)^2}{2\sigma^2} + \frac{z^2}{2} + \frac{1}{2}\log\sigma^2\right]\!dz$$
+    $$= -\frac{1}{2} + \frac{\mu^2 + \sigma^2}{2} + \frac{1}{2}\log\sigma^2$$
+    <p>Usando \(\mathbb{E}[Z^2] = \mu^2 + \sigma^2\) y la entropía de una gaussiana. Para \(d_z\) dimensiones independientes, se suma sobre \(j\):
+    \(= -\frac{1}{2}\sum_j(1 + \log\sigma_j^2 - \mu_j^2 - \sigma_j^2)\;\blacksquare\)</p>
+  </div>
+
+  <p>Este resultado es crucial: el término KL del ELBO se computa exactamente, y solo el término de reconstrucción requiere estimación Monte Carlo (con \(S=1\) muestra vía reparametrización).</p>
+
+  <h3>Visualización del espacio latente</h3>
+
+  <div class="latent-viz">
+    <div class="latent-canvas-wrap">
+      <canvas id="latentBad" class="latent-canvas" width="200" height="200"></canvas>
+      <div class="latent-caption">sin KL — espacio colapsado</div>
+    </div>
+    <div class="latent-canvas-wrap">
+      <canvas id="latentGood" class="latent-canvas" width="200" height="200"></canvas>
+      <div class="latent-caption">con KL — espacio estructurado</div>
+    </div>
+    <div class="latent-canvas-wrap">
+      <canvas id="latentInterp" class="latent-canvas" width="200" height="200"></canvas>
+      <div class="latent-caption">interpolación en latente</div>
+    </div>
+  </div>
+
+  <h3>ELBO objetivo de entrenamiento — forma final</h3>
+
+  <div class="math-block key">
+    <span class="math-label">Objetivo VAE completo (aproximación Monte Carlo con S=1)</span>
+    $$\mathcal{L}(\theta, \phi;\, \mathbf{x}) \approx \log p_\theta(\mathbf{x} \mid \mathbf{z}) + \frac{1}{2}\sum_{j=1}^{d_z}\!\left(1 + \log\sigma_j^2 - \mu_j^2 - \sigma_j^2\right)$$
+    $$\text{donde}\quad \mathbf{z} = \boldsymbol{\mu}_\phi(\mathbf{x}) + \boldsymbol{\sigma}_\phi(\mathbf{x}) \odot \boldsymbol{\epsilon},\quad \boldsymbol{\epsilon} \sim \mathcal{N}(0, \mathbf{I})$$
+  </div>
+
+  <p>El objetivo de entrenamiento total sobre el dataset es la suma (o media) sobre todos los datos:</p>
+  <div class="math-block">
+    $$\mathcal{L}(\theta, \phi) = \sum_{i=1}^N \mathcal{L}(\theta, \phi;\, \mathbf{x}^{(i)})$$
+  </div>
+</section>
+
+<!-- ────────────────────────────────────────────────
+     §8  CÓDIGO
+──────────────────────────────────────────────── -->
+<section id="code">
+  <span class="section-number">§ 08 — Implementación</span>
+  <h2>Código completo en <em>PyTorch</em></h2>
+
+  <h3>1. El modelo VAE completo</h3>
+
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-title">vae_model.py</span>
+      <span class="code-lang">Python · PyTorch</span>
+    </div>
+    <pre><code class="language-python">import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from typing import Tuple
+
+
+class Encoder(nn.Module):
+    """
+    Red de inferencia: q_φ(z|x)
+    
+    Mapea x -> (μ, log σ²) — los parámetros del posterior aproximado.
+    Usamos log σ² (no σ) para que el output sea sin restricciones.
+    """
+    def __init__(self, input_dim: int, hidden_dim: int, latent_dim: int):
+        super().__init__()
+        
+        self.net = nn.Sequential(
+            nn.Linear(input_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.ReLU(),
+        )
+        
+        # Dos cabezas: una para μ, otra para log σ²
+        self.fc_mu = nn.Linear(hidden_dim, latent_dim)
+        self.fc_logvar = nn.Linear(hidden_dim, latent_dim)
+    
+    def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+        """
+        Returns:
+            mu:     (B, latent_dim) — media del posterior
+            logvar: (B, latent_dim) — log varianza del posterior (= log σ²)
+        """
+        h = self.net(x)
+        mu = self.fc_mu(h)
+        logvar = self.fc_logvar(h)  # sin restricción: puede ser cualquier real
+        return mu, logvar
+
+
+class Decoder(nn.Module):
+    """
+    Red generativa: p_θ(x|z)
+    
+    Para MNIST usamos Bernoulli likelihood:
+        p_θ(x|z) = Bernoulli(π_θ(z))
+    -> Loss = Binary Cross Entropy
+    
+    Para datos continuos se usaría:
+        p_θ(x|z) = N(μ_θ(z), σ²I)
+    -> Loss = MSE (o equivalentemente Gaussian NLL)
+    """
+    def __init__(self, latent_dim: int, hidden_dim: int, output_dim: int):
+        super().__init__()
+        
+        self.net = nn.Sequential(
+            nn.Linear(latent_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, output_dim),
+            # Sin activación final — usaremos BCEWithLogitsLoss
+        )
+    
+    def forward(self, z: torch.Tensor) -> torch.Tensor:
+        """
+        Returns:
+            logits: (B, output_dim) — logits de la Bernoulli (pre-sigmoid)
+        """
+        return self.net(z)
+
+
+class VAE(nn.Module):
+    """
+    Variational Autoencoder completo.
+    
+    Arquitectura:
+        x -> Encoder -> (μ, log σ²) -> z = μ + σ·ε -> Decoder -> x̂
+    
+    Objetivo (ELBO):
+        L(θ, φ; x) = E_q[log p_θ(x|z)] - KL(q_φ(z|x) || N(0,I))
+                   = -Recon_Loss          + KL_Loss (negativo, se suma)
+    """
+    def __init__(
+        self,
+        input_dim: int = 784,    # 28*28 para MNIST
+        hidden_dim: int = 512,
+        latent_dim: int = 20,
+    ):
+        super().__init__()
+        self.latent_dim = latent_dim
+        self.encoder = Encoder(input_dim, hidden_dim, latent_dim)
+        self.decoder = Decoder(latent_dim, hidden_dim, input_dim)
+    
+    def reparametrize(
+        self, mu: torch.Tensor, logvar: torch.Tensor
+    ) -> torch.Tensor:
+        """
+        Truco de reparametrización:
+            z = μ + σ · ε,   ε ~ N(0, I)
+        
+        Durante inferencia (eval mode) retornamos simplemente μ.
+        """
+        if self.training:
+            std = torch.exp(0.5 * logvar)   # σ = exp(log σ) = exp(0.5 · log σ²)
+            eps = torch.randn_like(std)      # ε ~ N(0, I), sin gradiente
+            return mu + std * eps            # z — diferenciable respecto a μ, logvar
+        else:
+            return mu  # máxima verosimilitud en eval
+    
+    def forward(
+        self, x: torch.Tensor
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        """
+        Forward completo del VAE.
+        
+        Returns:
+            recon_logits: (B, input_dim) — logits de reconstrucción
+            mu:           (B, latent_dim) — media del posterior
+            logvar:       (B, latent_dim) — log varianza del posterior
+        """
+        # Codificar: x -> (μ, log σ²)
+        mu, logvar = self.encoder(x)
+        
+        # Reparametrizar: muestrear z ~ q_φ(z|x)
+        z = self.reparametrize(mu, logvar)
+        
+        # Decodificar: z -> x̂ (logits)
+        recon_logits = self.decoder(z)
+        
+        return recon_logits, mu, logvar
+    
+    @torch.no_grad()
+    def generate(self, n_samples: int, device: str = 'cpu') -> torch.Tensor:
+        """
+        Generación: muestrea z ~ p(z) = N(0,I) y decodifica.
+        Este es el proceso generativo del modelo.
+        """
+        z = torch.randn(n_samples, self.latent_dim, device=device)
+        logits = self.decoder(z)
+        return torch.sigmoid(logits)  # probabilidades Bernoulli
+    
+    @torch.no_grad()
+    def reconstruct(self, x: torch.Tensor) -> torch.Tensor:
+        """Reconstruye usando la media del posterior (sin ruido)."""
+        self.eval()
+        mu, _ = self.encoder(x)
+        logits = self.decoder(mu)
+        return torch.sigmoid(logits)
+</code></pre>
+  </div>
+
+  <h3>2. La función de pérdida — ELBO</h3>
+
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-title">vae_loss.py</span>
+      <span class="code-lang">Python · PyTorch</span>
+    </div>
+    <pre><code class="language-python">import torch
+import torch.nn.functional as F
+
+
+def vae_elbo_loss(
+    recon_logits: torch.Tensor,   # (B, D) — output del decoder (pre-sigmoid)
+    x: torch.Tensor,              # (B, D) — input original
+    mu: torch.Tensor,             # (B, latent_dim)
+    logvar: torch.Tensor,         # (B, latent_dim)
+    beta: float = 1.0,            # peso del término KL (β-VAE si β > 1)
+    reduction: str = 'mean'       # 'mean' o 'sum'
+) -> dict:
+    """
+    Computa el ELBO del VAE:
+    
+        ELBO = E_q[log p(x|z)] - β · KL(q_φ(z|x) || N(0,I))
+    
+    Implementación:
+        - Reconstrucción: Binary Cross Entropy (Bernoulli likelihood)
+        - KL: forma cerrada analítica
+    
+    Returns:
+        dict con 'loss' (negativo ELBO), 'recon_loss', 'kl_loss'
+    """
+    B = x.shape[0]
+    
+    # ── Término de reconstrucción ──────────────────────────────────────────
+    # E_q[log p_θ(x|z)] ≈ -BCE(sigmoid(recon_logits), x)
+    # 
+    # BCEWithLogitsLoss es numéricamente más estable que 
+    # sigmoid + BCELoss, y es equivalente.
+    # reduction='sum' divide por batch size después para consistencia.
+    recon_loss = F.binary_cross_entropy_with_logits(
+        recon_logits, x, reduction='sum'
+    ) / B  # normalizar por batch
+    
+    # ── Término KL (forma cerrada) ─────────────────────────────────────────
+    # KL(N(μ, σ²) || N(0, 1)) = -½ · Σ_j (1 + log σ²_j - μ²_j - σ²_j)
+    #
+    # Nota: logvar = log(σ²), por tanto σ² = exp(logvar)
+    kl_per_dim = 1 + logvar - mu.pow(2) - logvar.exp()  # (B, latent_dim)
+    kl_loss = -0.5 * kl_per_dim.sum(dim=1).mean()       # escalar
+    
+    # ── ELBO total (negativo para minimizar) ──────────────────────────────
+    # Minimizamos -ELBO = recon_loss + β · kl_loss
+    loss = recon_loss + beta * kl_loss
+    
+    return {
+        'loss': loss,
+        'recon_loss': recon_loss,
+        'kl_loss': kl_loss,
+        'elbo': -(recon_loss + kl_loss),  # ELBO verdadero (para monitorear)
+    }
+
+
+def kl_analytical(mu: torch.Tensor, logvar: torch.Tensor) -> torch.Tensor:
+    """
+    KL-divergencia analítica, versión standalone.
+    
+    KL(N(μ,σ²) || N(0,1)) = -½ Σ_j (1 + log σ²_j - μ²_j - σ²_j)
+    
+    Valores de referencia:
+        μ=0, σ²=1 → KL = 0        (posterior = prior, sin información)
+        μ=0, σ²→0 → KL → ∞        (posterior colapsa, overfitting)
+        |μ|→∞    → KL → ∞        (posterior lejos del prior)
+    """
+    return -0.5 * (1 + logvar - mu.pow(2) - logvar.exp()).sum(dim=-1)
+
+
+def gaussian_nll_loss(
+    x: torch.Tensor,
+    mu_recon: torch.Tensor,
+    log_var_recon: float = 0.0   # log σ² del decoder (fijo = 0 → σ²=1)
+) -> torch.Tensor:
+    """
+    Negative log-likelihood gaussiana para datos continuos.
+    
+    p_θ(x|z) = N(μ_θ(z), σ²I)
+    -log p_θ(x|z) = ½ log(2πσ²) + ||x - μ||² / (2σ²)
+    ∝ MSE(x, μ_recon)   (cuando σ² es constante)
+    """
+    sigma_sq = torch.exp(torch.tensor(log_var_recon))
+    nll = 0.5 * (
+        torch.log(2 * torch.pi * sigma_sq) 
+        + (x - mu_recon).pow(2) / sigma_sq
+    )
+    return nll.sum(dim=-1).mean()
+</code></pre>
+  </div>
+
+  <h3>3. Training loop completo</h3>
+
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-title">train_vae.py</span>
+      <span class="code-lang">Python · PyTorch</span>
+    </div>
+    <pre><code class="language-python">import torch
+import torch.optim as optim
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+
+
+def train_vae(
+    latent_dim: int = 20,
+    hidden_dim: int = 512,
+    epochs: int = 30,
+    batch_size: int = 128,
+    lr: float = 1e-3,
+    beta: float = 1.0,
+    device: str = 'cuda' if torch.cuda.is_available() else 'cpu'
+):
+    print(f"Training VAE | latent_dim={latent_dim} | β={beta} | device={device}")
+    
+    # ── Dataset ──────────────────────────────────────────────────────────
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Lambda(lambda x: x.view(-1))  # aplanar a (784,)
+    ])
+    train_data = datasets.MNIST('.', train=True, download=True, transform=transform)
+    val_data   = datasets.MNIST('.', train=False, download=True, transform=transform)
+    
+    train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True,
+                              num_workers=4, pin_memory=True)
+    val_loader   = DataLoader(val_data, batch_size=batch_size, shuffle=False)
+    
+    # ── Modelo y optimizador ─────────────────────────────────────────────
+    model = VAE(input_dim=784, hidden_dim=hidden_dim, latent_dim=latent_dim)
+    model = model.to(device)
+    optimizer = optim.Adam(model.parameters(), lr=lr)
+    
+    history = {'train_loss': [], 'val_elbo': [], 'kl': [], 'recon': []}
+    
+    for epoch in range(epochs):
+        # ── Training ────────────────────────────────────────────────────
+        model.train()
+        train_losses = []
+        
+        for x, _ in tqdm(train_loader, desc=f'Epoch {epoch+1}/{epochs}', 
+                          leave=False):
+            x = x.to(device)
+            optimizer.zero_grad()
+            
+            # Forward: x -> (recon_logits, μ, log σ²) -> z
+            recon_logits, mu, logvar = model(x)
+            
+            # Computar ELBO
+            losses = vae_elbo_loss(recon_logits, x, mu, logvar, beta=beta)
+            
+            # Backprop — gradientes fluyen a través de reparametrización
+            losses['loss'].backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+            optimizer.step()
+            
+            train_losses.append({k: v.item() for k, v in losses.items()})
+        
+        # ── Validation ─────────────────────────────────────────────────
+        model.eval()
+        val_elbos = []
+        with torch.no_grad():
+            for x, _ in val_loader:
+                x = x.to(device)
+                recon_logits, mu, logvar = model(x)
+                losses = vae_elbo_loss(recon_logits, x, mu, logvar)
+                val_elbos.append(losses['elbo'].item())
+        
+        # ── Logging ────────────────────────────────────────────────────
+        avg_train = sum(d['loss'] for d in train_losses) / len(train_losses)
+        avg_kl    = sum(d['kl_loss'] for d in train_losses) / len(train_losses)
+        avg_recon = sum(d['recon_loss'] for d in train_losses) / len(train_losses)
+        avg_val   = sum(val_elbos) / len(val_elbos)
+        
+        history['train_loss'].append(avg_train)
+        history['val_elbo'].append(avg_val)
+        history['kl'].append(avg_kl)
+        history['recon'].append(avg_recon)
+        
+        print(f"Epoch {epoch+1:3d} | "
+              f"Loss={avg_train:.2f} | "
+              f"Recon={avg_recon:.2f} | "
+              f"KL={avg_kl:.2f} | "
+              f"Val ELBO={avg_val:.2f}")
+    
+    return model, history
+
+
+# ── Visualizaciones ──────────────────────────────────────────────────────────
+
+@torch.no_grad()
+def plot_reconstructions(model, data_loader, device, n=8):
+    """Compara inputs originales con reconstrucciones."""
+    model.eval()
+    x, _ = next(iter(data_loader))
+    x = x[:n].to(device)
+    
+    recon_logits, mu, logvar = model(x)
+    recon = torch.sigmoid(recon_logits)
+    
+    fig, axes = plt.subplots(2, n, figsize=(n * 1.5, 3))
+    for i in range(n):
+        axes[0, i].imshow(x[i].cpu().view(28, 28), cmap='gray')
+        axes[0, i].axis('off')
+        axes[1, i].imshow(recon[i].cpu().view(28, 28), cmap='gray')
+        axes[1, i].axis('off')
+    
+    axes[0, 0].set_ylabel('Original', fontsize=10)
+    axes[1, 0].set_ylabel('Reconstrucción', fontsize=10)
+    plt.tight_layout()
+    plt.show()
+
+
+@torch.no_grad()
+def plot_latent_space(model, data_loader, device, n_points=2000):
+    """
+    Visualiza el espacio latente 2D (solo funciona bien con latent_dim=2).
+    Muestra cómo el prior N(0,I) organiza las clases.
+    """
+    model.eval()
+    mus, labels = [], []
+    
+    for x, y in data_loader:
+        mu, _ = model.encoder(x.to(device))
+        mus.append(mu.cpu())
+        labels.append(y)
+        if sum(len(m) for m in mus) >= n_points:
+            break
+    
+    mus = torch.cat(mus)[:n_points]
+    labels = torch.cat(labels)[:n_points]
+    
+    plt.figure(figsize=(8, 6))
+    scatter = plt.scatter(mus[:, 0], mus[:, 1], c=labels, 
+                           cmap='tab10', alpha=0.5, s=8)
+    plt.colorbar(scatter)
+    plt.title('Espacio latente 2D — medias del posterior q_φ(z|x)')
+    plt.xlabel('z₁'); plt.ylabel('z₂')
+    
+    # Mostrar el prior N(0,I) como círculo
+    theta = torch.linspace(0, 2*3.14159, 100)
+    plt.plot(torch.cos(theta), torch.sin(theta), 'k--', 
+             alpha=0.3, label='1σ prior')
+    plt.plot(2*torch.cos(theta), 2*torch.sin(theta), 'k:', 
+             alpha=0.2, label='2σ prior')
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+
+@torch.no_grad()
+def interpolate_latents(model, x1, x2, device, n_steps=10):
+    """
+    Interpolación lineal entre dos imágenes en el espacio latente.
+    Demuestra la suavidad del espacio latente aprendido.
+    """
+    model.eval()
+    x1, x2 = x1.to(device), x2.to(device)
+    
+    mu1, _ = model.encoder(x1.unsqueeze(0))
+    mu2, _ = model.encoder(x2.unsqueeze(0))
+    
+    alphas = torch.linspace(0, 1, n_steps)
+    
+    fig, axes = plt.subplots(1, n_steps, figsize=(n_steps * 1.5, 2))
+    for i, alpha in enumerate(alphas):
+        z_interp = (1 - alpha) * mu1 + alpha * mu2
+        recon = torch.sigmoid(model.decoder(z_interp))
+        axes[i].imshow(recon.cpu().view(28, 28), cmap='gray')
+        axes[i].axis('off')
+        axes[i].set_title(f'{alpha:.1f}', fontsize=8)
+    
+    plt.suptitle('Interpolación en espacio latente', fontsize=11)
+    plt.tight_layout()
+    plt.show()
+
+
+# ── Verificación del ELBO y sus componentes ──────────────────────────────────
+
+def analyze_elbo_components(model, data_loader, device, n_batches=10):
+    """
+    Análisis cuantitativo del ELBO y sus componentes.
+    Verifica que ELBO = Recon + KL, y monitorea el balance.
+    """
+    model.eval()
+    stats = {'elbo': [], 'recon': [], 'kl': [], 'kl_per_dim': []}
+    
+    with torch.no_grad():
+        for i, (x, _) in enumerate(data_loader):
+            if i >= n_batches:
+                break
+            x = x.to(device)
+            recon_logits, mu, logvar = model(x)
+            losses = vae_elbo_loss(recon_logits, x, mu, logvar)
+            
+            stats['elbo'].append(losses['elbo'].item())
+            stats['recon'].append(losses['recon_loss'].item())
+            stats['kl'].append(losses['kl_loss'].item())
+            # KL por dimensión latente (identifica dims informativas)
+            kl_dims = kl_analytical(mu, logvar).mean(dim=0)  # per-sample average
+            stats['kl_per_dim'].append(kl_dims.cpu())
+    
+    print("\n" + "="*50)
+    print("ELBO Components Analysis")
+    print("="*50)
+    print(f"ELBO (↑ mejor): {sum(stats['elbo'])/len(stats['elbo']):.3f}")
+    print(f"Recon loss (↓): {sum(stats['recon'])/len(stats['recon']):.3f}")
+    print(f"KL loss   (↓):  {sum(stats['kl'])/len(stats['kl']):.3f}")
+    
+    # KL por dimensión — dimensiones con KL≈0 son "inactivas" (posterior collapse)
+    kl_per_dim = torch.stack(stats['kl_per_dim']).mean(dim=0)
+    n_active = (kl_per_dim > 0.1).sum().item()
+    print(f"\nDimensiones latentes activas: {n_active}/{len(kl_per_dim)}")
+    print(f"KL promedio por dim: {kl_per_dim.mean():.3f}")
+    print(f"Min KL por dim: {kl_per_dim.min():.4f}")
+    print(f"Max KL por dim: {kl_per_dim.max():.3f}")
+    
+    return stats
+
+
+# ── Ejemplo de uso ────────────────────────────────────────────────────────────
+
+if __name__ == '__main__':
+    # Entrenar con latent_dim=2 para visualización del espacio latente
+    model, history = train_vae(
+        latent_dim=2,       # 2D para visualizar
+        hidden_dim=512,
+        epochs=30,
+        beta=1.0,           # VAE estándar
+    )
+    
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Lambda(lambda x: x.view(-1))
+    ])
+    val_data   = datasets.MNIST('.', train=False, transform=transform)
+    val_loader = DataLoader(val_data, batch_size=128, shuffle=False)
+    
+    # Visualizaciones
+    plot_reconstructions(model, val_loader, device)
+    plot_latent_space(model, val_loader, device)
+    analyze_elbo_components(model, val_loader, device)
+    
+    # Interpolación entre dos dígitos
+    x1 = val_data[0][0]  # primer dígito
+    x2 = val_data[5][0]  # segundo dígito
+    interpolate_latents(model, x1, x2, device)
+    
+    # Generar nuevas imágenes desde el prior N(0,I)
+    with torch.no_grad():
+        samples = model.generate(16, device)
+        # samples: (16, 784) — nuevas imágenes generadas
+    print(f"\nGeneradas {len(samples)} imágenes nuevas desde z ~ N(0,I)")
+</code></pre>
+  </div>
+
+  <h3>4. Variante convolucional para imágenes</h3>
+
+  <div class="code-block">
+    <div class="code-header">
+      <span class="code-title">conv_vae.py</span>
+      <span class="code-lang">Python · PyTorch — ConvVAE para imágenes</span>
+    </div>
+    <pre><code class="language-python">import torch
+import torch.nn as nn
+
+
+class ConvEncoder(nn.Module):
+    """
+    Encoder convolucional: x (B,C,H,W) -> (μ, log σ²)
+    Apropiado para imágenes de mayor resolución.
+    """
+    def __init__(self, in_channels: int = 1, latent_dim: int = 128):
+        super().__init__()
+        
+        # Extractor convolucional de features
+        self.conv = nn.Sequential(
+            # (B, 1, 28, 28) -> (B, 32, 14, 14)
+            nn.Conv2d(in_channels, 32, 4, stride=2, padding=1),
+            nn.BatchNorm2d(32), nn.LeakyReLU(0.2),
+            
+            # -> (B, 64, 7, 7)
+            nn.Conv2d(32, 64, 4, stride=2, padding=1),
+            nn.BatchNorm2d(64), nn.LeakyReLU(0.2),
+            
+            # -> (B, 128, 4, 4) (con padding ajustado)
+            nn.Conv2d(64, 128, 3, stride=1, padding=1),
+            nn.BatchNorm2d(128), nn.LeakyReLU(0.2),
+        )
+        
+        # Dimensión del feature map aplanado: 128 * 7 * 7
+        self.flat_dim = 128 * 7 * 7
+        
+        self.fc_mu     = nn.Linear(self.flat_dim, latent_dim)
+        self.fc_logvar = nn.Linear(self.flat_dim, latent_dim)
+    
+    def forward(self, x):
+        h = self.conv(x).flatten(start_dim=1)   # (B, flat_dim)
+        return self.fc_mu(h), self.fc_logvar(h)
+
+
+class ConvDecoder(nn.Module):
+    """
+    Decoder convolucional: z -> x̂ (B,C,H,W)
+    Usa ConvTranspose2d para "upsampling aprendido".
+    """
+    def __init__(self, latent_dim: int = 128, out_channels: int = 1):
+        super().__init__()
+        
+        self.flat_dim = 128 * 7 * 7
+        self.fc = nn.Linear(latent_dim, self.flat_dim)
+        
+        self.deconv = nn.Sequential(
+            nn.BatchNorm2d(128), nn.LeakyReLU(0.2),
+            
+            # (B, 128, 7, 7) -> (B, 64, 7, 7)
+            nn.ConvTranspose2d(128, 64, 3, stride=1, padding=1),
+            nn.BatchNorm2d(64), nn.LeakyReLU(0.2),
+            
+            # -> (B, 32, 14, 14)
+            nn.ConvTranspose2d(64, 32, 4, stride=2, padding=1),
+            nn.BatchNorm2d(32), nn.LeakyReLU(0.2),
+            
+            # -> (B, 1, 28, 28)
+            nn.ConvTranspose2d(32, out_channels, 4, stride=2, padding=1),
+            # Sin activación: usamos BCEWithLogitsLoss
+        )
+    
+    def forward(self, z):
+        h = self.fc(z).view(-1, 128, 7, 7)
+        return self.deconv(h)
+
+
+class ConvVAE(nn.Module):
+    """VAE completamente convolucional."""
+    
+    def __init__(self, in_channels=1, latent_dim=128):
+        super().__init__()
+        self.latent_dim = latent_dim
+        self.encoder = ConvEncoder(in_channels, latent_dim)
+        self.decoder = ConvDecoder(latent_dim, in_channels)
+    
+    def reparametrize(self, mu, logvar):
+        if self.training:
+            return mu + torch.exp(0.5 * logvar) * torch.randn_like(mu)
+        return mu
+    
+    def forward(self, x):
+        mu, logvar = self.encoder(x)
+        z = self.reparametrize(mu, logvar)
+        return self.decoder(z), mu, logvar
+    
+    @torch.no_grad()
+    def generate(self, n, device='cpu'):
+        z = torch.randn(n, self.latent_dim, device=device)
+        return torch.sigmoid(self.decoder(z))
+</code></pre>
+  </div>
+
+  <p class="footnote">Implementación basada en Kingma & Welling, "Auto-Encoding Variational Bayes" (ICLR 2014), y Higgins et al., "β-VAE" (ICLR 2017). Para aplicaciones avanzadas explorar: VQ-VAE (van den Oord et al., 2017), Hierarchical VAEs (NVAE, 2020), y Latent Diffusion Models (Rombach et al., 2022) que combinan VAE + Diffusion.</p>
+</section>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<footer style="background: var(--ink); color: #6a6458; padding: 48px 60px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.05em; border-top: 1px solid #2a2820;">
+  <div style="max-width: 860px; margin: 0 auto; display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 24px;">
+    <div>
+      <div style="color: var(--gold); margin-bottom: 10px;">Referencias</div>
+      <div>Kingma & Welling (2014) — Auto-Encoding Variational Bayes</div>
+      <div>Rezende et al. (2014) — Stochastic Backpropagation</div>
+      <div>Higgins et al. (2017) — β-VAE: Learning Basic Visual Concepts</div>
+      <div>van den Oord et al. (2017) — VQ-VAE</div>
+      <div>Rombach et al. (2022) — Latent Diffusion Models</div>
+    </div>
+    <div style="text-align: right;">
+      <div style="color: var(--teal-light); margin-bottom: 10px;">VAE</div>
+      <div>ELBO · Reparametrización</div>
+      <div style="margin-top: 8px; color: #3a3530;">Deep Generative Models</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Syntax highlighting ──
+document.addEventListener('DOMContentLoaded', () => { hljs.highlightAll(); });
+
+// ── Active nav ──
+const sections = document.querySelectorAll('section[id]');
+const navLinks  = document.querySelectorAll('nav a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+  navLinks.forEach(a => {
+    const active = a.getAttribute('href') === '#' + cur;
+    a.style.color = active ? '#c8a84b' : '';
+    a.style.borderBottomColor = active ? '#1a6b72' : '';
+  });
+});
+
+// ── Latent space canvas visualizations ──
+function drawLatentSpace(canvasId, mode) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 200, H = 200;
+  canvas.width = W; canvas.height = H;
+
+  ctx.fillStyle = '#0a1a1a';
+  ctx.fillRect(0, 0, W, H);
+
+  const cx = W / 2, cy = H / 2;
+  const colors10 = [
+    '#e74c3c','#3498db','#2ecc71','#f39c12','#9b59b6',
+    '#1abc9c','#e67e22','#ecf0f1','#e91e63','#00bcd4'
+  ];
+
+  const rng = (seed) => {
+    let s = seed;
+    return () => { s = (s * 1664525 + 1013904223) & 0xffffffff; return (s >>> 0) / 0xffffffff; };
+  };
+
+  if (mode === 'bad') {
+    // Sin KL: puntos colapsan en clusters dispersos y pequeños
+    for (let cls = 0; cls < 10; cls++) {
+      const r = rng(cls * 137);
+      const cx_ = (r() - 0.5) * 160 + cx;
+      const cy_ = (r() - 0.5) * 160 + cy;
+      for (let i = 0; i < 40; i++) {
+        const r2 = rng(cls * 500 + i);
+        const x = cx_ + (r2() - 0.5) * 8;
+        const y = cy_ + (r2() - 0.5) * 8;
+        ctx.beginPath();
+        ctx.arc(x, y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = colors10[cls] + 'cc';
+        ctx.fill();
+      }
+    }
+    // Línea de "prior ignorado"
+    ctx.strokeStyle = '#ffffff22';
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.arc(cx, cy, 45, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+  } else if (mode === 'good') {
+    // Con KL: clusters dentro del prior N(0,I)
+    for (let cls = 0; cls < 10; cls++) {
+      const r = rng(cls * 97 + 42);
+      const angle = (cls / 10) * Math.PI * 2;
+      const rad = r() * 28 + 20;
+      const cx_ = Math.cos(angle) * rad + cx;
+      const cy_ = Math.sin(angle) * rad + cy;
+      for (let i = 0; i < 50; i++) {
+        const r2 = rng(cls * 300 + i);
+        const dx = (r2() - 0.5) * 22;
+        const dy = (rng(cls*300+i+1)() - 0.5) * 22;
+        ctx.beginPath();
+        ctx.arc(cx_ + dx, cy_ + dy, 2, 0, Math.PI * 2);
+        ctx.fillStyle = colors10[cls] + 'cc';
+        ctx.fill();
+      }
+    }
+    // Prior N(0,I)
+    ctx.strokeStyle = '#2a8a9288';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.arc(cx, cy, 45, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx, cy, 90, 0, Math.PI * 2); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.lineWidth = 1;
+
+  } else if (mode === 'interp') {
+    // Interpolación: línea suave entre dos puntos
+    const r = rng(42);
+    const p1 = { x: cx - 60, y: cy - 40 };
+    const p2 = { x: cx + 55, y: cy + 50 };
+
+    // Cluster de origen y destino
+    for (let i = 0; i < 25; i++) {
+      const r2 = rng(i * 17);
+      ctx.beginPath();
+      ctx.arc(p1.x + (r2()-0.5)*18, p1.y + (rng(i*17+1)()-0.5)*18, 2.5, 0, Math.PI*2);
+      ctx.fillStyle = '#e74c3cbb';
+      ctx.fill();
+    }
+    for (let i = 0; i < 25; i++) {
+      const r2 = rng(i * 23 + 100);
+      ctx.beginPath();
+      ctx.arc(p2.x + (r2()-0.5)*18, p2.y + (rng(i*23+101)()-0.5)*18, 2.5, 0, Math.PI*2);
+      ctx.fillStyle = '#3498dbbb';
+      ctx.fill();
+    }
+
+    // Línea de interpolación
+    const steps = 10;
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const ix = p1.x + (p2.x - p1.x) * t;
+      const iy = p1.y + (p2.y - p1.y) * t;
+      ctx.beginPath();
+      ctx.arc(ix, iy, 3.5, 0, Math.PI * 2);
+      const c1 = [231, 76, 60], c2 = [52, 152, 219];
+      const r_ = Math.round(c1[0] + (c2[0]-c1[0])*t);
+      const g_ = Math.round(c1[1] + (c2[1]-c1[1])*t);
+      const b_ = Math.round(c1[2] + (c2[2]-c1[2])*t);
+      ctx.fillStyle = `rgb(${r_},${g_},${b_})`;
+      ctx.fill();
+    }
+
+    // Flechas
+    ctx.strokeStyle = '#ffffff44';
+    ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Labels
+    ctx.fillStyle = '#e74c3ccc';
+    ctx.font = '10px JetBrains Mono, monospace';
+    ctx.fillText('z₁', p1.x - 18, p1.y - 8);
+    ctx.fillStyle = '#3498dbcc';
+    ctx.fillText('z₂', p2.x + 4, p2.y - 8);
+  }
+}
+
+drawLatentSpace('latentBad', 'bad');
+drawLatentSpace('latentGood', 'good');
+drawLatentSpace('latentInterp', 'interp');
+</script>
+</body>
+</html>

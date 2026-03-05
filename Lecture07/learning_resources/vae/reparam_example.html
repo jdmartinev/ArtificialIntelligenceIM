@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Reparameterization Example</title>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+body{font-family:Arial, sans-serif; max-width:900px; margin:auto; line-height:1.6;}
+h1,h2{color:#1a3a6e;}
+table{border-collapse:collapse; margin-top:20px;}
+td,th{border:1px solid #ccc; padding:8px;}
+.box{background:#eaf3ff; padding:12px; border-left:4px solid #4a78ff;}
+</style>
+</head>
+<body>
+
+<h1>Reparameterization Trick – Numerical Example</h1>
+
+<h2>1. Assume Encoder Output</h2>
+
+\[ \mu = 2 \]
+\[ \sigma = 0.5 \]
+
+<p>The encoder predicts a Gaussian distribution:</p>
+
+\[ q(z|x) = N(2, 0.5^2) \]
+
+<h2>2. Sample Standard Noise</h2>
+
+<p>Instead of sampling from the Gaussian directly, we sample:</p>
+
+\[ \epsilon \sim N(0,1) \]
+
+<p>Example values:</p>
+
+<table>
+<tr><th>ε</th><th>z = μ + σ ε</th></tr>
+<tr><td>-1</td><td>1.5</td></tr>
+<tr><td>0</td><td>2.0</td></tr>
+<tr><td>1</td><td>2.5</td></tr>
+<tr><td>2</td><td>3.0</td></tr>
+</table>
+
+<h2>3. Gradient Intuition</h2>
+
+<p>Now the sampled variable is computed as:</p>
+
+\[ z = \mu + \sigma \epsilon \]
+
+<p>So gradients exist:</p>
+
+\[ \frac{\partial z}{\partial \mu} = 1 \]
+
+\[ \frac{\partial z}{\partial \sigma} = \epsilon \]
+
+<div class="box">
+The randomness is isolated in ε, which does not depend on network parameters.
+Therefore gradients can propagate through μ and σ.
+</div>
+
+<h2>4. Intuition</h2>
+
+<p>A Gaussian sample can always be expressed as:</p>
+
+\[
+sample = location + scale \times noise
+\]
+
+<p>This simple idea is what makes Variational Autoencoders trainable.</p>
+
+</body>
+</html>

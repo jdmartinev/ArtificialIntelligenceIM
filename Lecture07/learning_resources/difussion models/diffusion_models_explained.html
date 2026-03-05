@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diffusion Models & Variational Inference</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js"></script>
+<style>
+  :root {
+    --bg: #0b0c10;
+    --surface: #12141a;
+    --surface2: #1a1d26;
+    --border: #252836;
+    --accent: #e8c97a;
+    --accent2: #7ab8e8;
+    --accent3: #c97ae8;
+    --text: #d4d8e8;
+    --text-muted: #6b7194;
+    --text-dim: #3d4260;
+    --green: #7ae8b8;
+    --red: #e87a7a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(116,144,232,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(116,144,232,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Hero */
+  .hero {
+    padding: 5rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4rem;
+  }
+
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.1s;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.2s;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 560px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.35s;
+  }
+
+  /* Sections */
+  .section {
+    margin-bottom: 3.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .section.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .section-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.2em;
+    margin-bottom: 0.4rem;
+  }
+
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    color: #fff;
+  }
+
+  .section h2 .accent { color: var(--accent); }
+  .section h2 .accent2 { color: var(--accent2); }
+  .section h2 .accent3 { color: var(--accent3); }
+
+  p {
+    font-size: 0.96rem;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  /* Math blocks */
+  .math-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.2rem 0;
+    overflow-x: auto;
+    font-size: 1.05rem;
+  }
+
+  .math-block.blue { border-left-color: var(--accent2); }
+  .math-block.purple { border-left-color: var(--accent3); }
+  .math-block.green { border-left-color: var(--green); }
+  .math-block.red { border-left-color: var(--red); }
+
+  .math-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Callout */
+  .callout {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .callout-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .callout p { margin: 0; font-size: 0.9rem; color: var(--text-muted); }
+  .callout strong { color: var(--text); }
+
+  /* Chain diagram */
+  .chain {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+    row-gap: 0.8rem;
+  }
+
+  .chain-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.7rem 1rem;
+    font-size: 0.82rem;
+    text-align: center;
+    flex: 1;
+    min-width: 130px;
+  }
+
+  .chain-item .top {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.1em;
+  }
+
+  .chain-item .bottom {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+    font-style: italic;
+  }
+
+  .chain-item.c1 { border-top: 2px solid var(--red); }
+  .chain-item.c2 { border-top: 2px solid var(--accent3); }
+  .chain-item.c3 { border-top: 2px solid var(--accent2); }
+  .chain-item.c4 { border-top: 2px solid var(--green); }
+
+  .chain-arrow {
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    padding: 0 0.3rem;
+    flex-shrink: 0;
+  }
+
+  .chain-arrow .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--text-dim);
+    display: block;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.88rem;
+  }
+
+  th {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-align: left;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    vertical-align: top;
+  }
+
+  td:first-child { color: var(--red); font-family: 'DM Mono', monospace; font-size: 0.82rem; }
+  td:last-child { color: var(--green); }
+
+  tr:last-child td { border-bottom: none; }
+
+  /* Divider */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 3rem 0;
+  }
+
+  /* Final box */
+  .final-box {
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-top: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .final-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .final-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+
+  .final-box p {
+    font-size: 0.93rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* Steps */
+  .steps { counter-reset: step; }
+  .step {
+    display: flex;
+    gap: 1.2rem;
+    margin-bottom: 1.8rem;
+    align-items: flex-start;
+  }
+  .step-num {
+    counter-increment: step;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+    background: var(--surface);
+  }
+  .step-num::before { content: counter(step); }
+  .step-content { flex: 1; }
+  .step-content h4 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 0.4rem;
+  }
+  .step-content p { font-size: 0.88rem; margin: 0; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-label">Deep Generative Models · Lecture Notes</div>
+    <h1>Why the Loss is<br><em>Noise Prediction Error</em></h1>
+    <p class="hero-sub">A step-by-step derivation of how variational inference on a Gaussian diffusion process collapses into a simple MSE objective.</p>
+  </div>
+
+  <!-- Section 1: The Problem -->
+  <div class="section" id="s1">
+    <div class="section-number">01 / 04</div>
+    <h2>The <span class="accent">Intractable</span> Problem</h2>
+    <p>Given data \(x_0\), a diffusion model defines a <strong>forward process</strong> that gradually corrupts it into noise, and a <strong>reverse process</strong> that attempts to undo the corruption step by step.</p>
+    <p>The forward process is a fixed Markov chain:</p>
+
+    <div class="math-block red">
+      <div class="math-label">Forward Process</div>
+      \[ q(x_{1:T} \mid x_0) = \prod_{t=1}^{T} q(x_t \mid x_{t-1}), \quad q(x_t \mid x_{t-1}) = \mathcal{N}(x_t;\, \sqrt{1-\beta_t}\, x_{t-1},\, \beta_t I) \]
+    </div>
+
+    <p>The reverse process is what we want to learn:</p>
+
+    <div class="math-block blue">
+      <div class="math-label">Reverse Process (learned)</div>
+      \[ p_\theta(x_{0:T}) = p(x_T) \prod_{t=1}^{T} p_\theta(x_{t-1} \mid x_t) \]
+    </div>
+
+    <div class="callout">
+      <div class="callout-icon">⚠️</div>
+      <p>The <strong>true log-likelihood</strong> \(\log p_\theta(x_0)\) requires marginalizing over all latent trajectories \(x_{1:T}\) — a sum over an exponentially large space. This is <strong>completely intractable</strong>.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Section 2: VI -->
+  <div class="section" id="s2">
+    <div class="section-number">02 / 04</div>
+    <h2>Variational Inference &amp; the <span class="accent3">ELBO</span></h2>
+    <p>Variational inference sidesteps intractability by introducing a tractable distribution \(q\) to approximate the true posterior, then optimizing a lower bound instead.</p>
+    <p>The <strong>ELBO</strong> (Evidence Lower Bound) follows from Jensen's inequality:</p>
+
+    <div class="math-block purple">
+      <div class="math-label">ELBO</div>
+      \[ \log p_\theta(x_0) \;\geq\; \mathbb{E}_q\!\left[\log \frac{p_\theta(x_{0:T})}{q(x_{1:T} \mid x_0)}\right] = \mathcal{L}_\text{ELBO} \]
+    </div>
+
+    <p>The gap between the bound and the true likelihood is exactly the KL divergence:</p>
+
+    <div class="math-block purple">
+      <div class="math-label">KL Gap</div>
+      \[ \log p_\theta(x_0) = \mathcal{L}_\text{ELBO} + D_{KL}\!\left(q(x_{1:T}\mid x_0) \,\|\, p_\theta(x_{1:T}\mid x_0)\right) \]
+    </div>
+
+    <p>After algebraic manipulation, the ELBO decomposes into interpretable per-timestep terms:</p>
+
+    <div class="math-block purple">
+      <div class="math-label">ELBO Decomposition (DDPM)</div>
+      \[ \mathcal{L} = \underbrace{D_{KL}(q(x_T\mid x_0) \| p(x_T))}_{\mathcal{L}_T \text{ — prior matching}} \;+\; \sum_{t=2}^{T} \underbrace{D_{KL}(q(x_{t-1}\mid x_t, x_0) \| p_\theta(x_{t-1}\mid x_t))}_{\mathcal{L}_{t-1} \text{ — denoising}} \;-\; \underbrace{\log p_\theta(x_0\mid x_1)}_{\mathcal{L}_0 \text{ — reconstruction}} \]
+    </div>
+
+    <p>\(\mathcal{L}_T\) is constant (no parameters). The dominant terms are \(\mathcal{L}_{t-1}\): train \(p_\theta\) to match the true reverse step \(q(x_{t-1}\mid x_t, x_0)\).</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Section 3: Derivation -->
+  <div class="section" id="s3">
+    <div class="section-number">03 / 04</div>
+    <h2>From <span class="accent2">KL Divergence</span> to MSE</h2>
+    <p>Here is where the loss function crystallizes. Each step follows necessarily from the previous.</p>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h4>Both distributions are Gaussian</h4>
+          <p>The forward posterior \(q(x_{t-1}\mid x_t, x_0)\) is tractable and Gaussian — this is the key property of the Markov chain. The model \(p_\theta\) is also parameterized as Gaussian:</p>
+          <div class="math-block blue" style="margin-top:0.8rem">
+            \[ q(x_{t-1}\mid x_t, x_0) = \mathcal{N}\!\left(\tilde{\mu}_t,\; \tilde{\beta}_t I\right), \qquad p_\theta(x_{t-1}\mid x_t) = \mathcal{N}\!\left(\mu_\theta(x_t, t),\; \sigma_t^2 I\right) \]
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h4>KL of two Gaussians = squared mean difference</h4>
+          <p>When two Gaussians share the same variance, their KL reduces to:</p>
+          <div class="math-block blue" style="margin-top:0.8rem">
+            \[ D_{KL}\!\left(\mathcal{N}(\mu_1, \sigma^2) \,\|\, \mathcal{N}(\mu_2, \sigma^2)\right) = \frac{1}{2\sigma^2}\|\mu_1 - \mu_2\|^2 \]
+          </div>
+          <p style="margin-top:0.6rem">So the denoising objective becomes: <em>minimize the squared distance between the predicted mean and the true mean.</em></p>
+          <div class="math-block blue" style="margin-top:0.8rem">
+            \[ \mathcal{L}_{t-1} \;\propto\; \|\tilde{\mu}_t(x_t, x_0) - \mu_\theta(x_t, t)\|^2 \]
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h4>Reparametrize \(x_0\) in terms of noise</h4>
+          <p>The forward process satisfies a closed-form marginal (using \(\bar{\alpha}_t = \prod_{s=1}^t \alpha_s\)):</p>
+          <div class="math-block green" style="margin-top:0.8rem">
+            \[ x_t = \sqrt{\bar{\alpha}_t}\, x_0 + \sqrt{1-\bar{\alpha}_t}\;\epsilon, \qquad \epsilon \sim \mathcal{N}(0, I) \]
+          </div>
+          <p style="margin-top:0.6rem">Solving for \(x_0\):</p>
+          <div class="math-block green" style="margin-top:0.8rem">
+            \[ x_0 = \frac{1}{\sqrt{\bar{\alpha}_t}}\!\left(x_t - \sqrt{1-\bar{\alpha}_t}\;\epsilon\right) \]
+          </div>
+          <p style="margin-top:0.6rem">Substituting into \(\tilde{\mu}_t\) and simplifying:</p>
+          <div class="math-block green" style="margin-top:0.8rem">
+            \[ \tilde{\mu}_t = \frac{1}{\sqrt{\alpha_t}}\!\left(x_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}}\;\epsilon\right) \]
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h4>Matching means ≡ predicting the noise</h4>
+          <p>Parametrize the model's mean to have the same form:</p>
+          <div class="math-block" style="margin-top:0.8rem; border-left-color: var(--accent)">
+            \[ \mu_\theta(x_t, t) = \frac{1}{\sqrt{\alpha_t}}\!\left(x_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}}\;\epsilon_\theta(x_t, t)\right) \]
+          </div>
+          <p style="margin-top:0.6rem">Substituting into the mean-matching objective, all shared terms cancel:</p>
+          <div class="math-block" style="margin-top:0.8rem; border-left-color: var(--accent)">
+            \[ \|\tilde{\mu}_t - \mu_\theta\|^2 \;\propto\; \|\epsilon - \epsilon_\theta(x_t, t)\|^2 \]
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Section 4: Final Loss -->
+  <div class="section" id="s4">
+    <div class="section-number">04 / 04</div>
+    <h2>The <span class="accent">Final Loss</span></h2>
+    <p>Ho et al. (DDPM, 2020) further simplify by dropping the time-dependent weighting across steps, treating all timesteps uniformly. This "simple" loss works better in practice:</p>
+
+    <div class="math-block" style="border-left-color: var(--accent); font-size:1.15rem">
+      <div class="math-label">DDPM Simple Loss — The Training Objective</div>
+      \[ \boxed{\mathcal{L}_\text{simple} = \mathbb{E}_{t,\, x_0,\, \epsilon}\!\left[\,\|\epsilon - \epsilon_\theta(x_t, t)\|^2\,\right]} \]
+    </div>
+
+    <p>This tells us: sample a random timestep \(t\), add the corresponding noise \(\epsilon\) to \(x_0\) to get \(x_t\), and train the network to predict what noise was added.</p>
+
+    <!-- What is approximated table -->
+    <h3 style="font-family:'Playfair Display',serif; font-size:1.1rem; margin: 2rem 0 0.8rem; color:#fff">What variational inference approximates</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Intractable (true)</th>
+          <th>Approximated by VI</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>\(\log p_\theta(x_0)\)</td>
+          <td>ELBO — a tractable lower bound</td>
+        </tr>
+        <tr>
+          <td>\(p_\theta(x_{1:T}\mid x_0)\) — true posterior over all latents</td>
+          <td>\(q(x_{1:T}\mid x_0)\) — fixed forward noising chain</td>
+        </tr>
+        <tr>
+          <td>\(p_\theta(x_{t-1}\mid x_t)\) — true reverse step</td>
+          <td>\(\mathcal{N}(\mu_\theta, \sigma_t^2 I)\) — learned Gaussian</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Chain diagram -->
+    <h3 style="font-family:'Playfair Display',serif; font-size:1.1rem; margin: 2rem 0 0.8rem; color:#fff">The chain of equivalences</h3>
+    <div class="chain">
+      <div class="chain-item c1">
+        <div class="top">intractable</div>
+        Maximize \(\log p_\theta(x_0)\)
+        <div class="bottom">true likelihood</div>
+      </div>
+      <div class="chain-arrow">
+        →<span class="label">VI / ELBO</span>
+      </div>
+      <div class="chain-item c2">
+        <div class="top">sum of KLs</div>
+        Maximize ELBO
+        <div class="bottom">lower bound</div>
+      </div>
+      <div class="chain-arrow">
+        →<span class="label">Gaussian KL</span>
+      </div>
+      <div class="chain-item c3">
+        <div class="top">mean-matching</div>
+        \(\|\tilde\mu_t - \mu_\theta\|^2\)
+        <div class="bottom">squared means</div>
+      </div>
+      <div class="chain-arrow">
+        →<span class="label">reparametrize</span>
+      </div>
+      <div class="chain-item c4">
+        <div class="top">final loss</div>
+        \(\|\epsilon - \epsilon_\theta\|^2\)
+        <div class="bottom">noise MSE</div>
+      </div>
+    </div>
+
+    <!-- Final insight box -->
+    <div class="final-box">
+      <h3>Key Insight</h3>
+      <p>The noise prediction MSE is <em>not</em> an arbitrary or heuristic choice — it is the <strong>exact algebraic consequence</strong> of applying variational inference to a Gaussian Markov diffusion chain, then reparametrizing the mean prediction in terms of the added noise. Every step is forced by the math.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  // Intersection observer for section animations
+  const sections = document.querySelectorAll('.section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  sections.forEach(s => observer.observe(s));
+
+  // MathJax config
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+  };
+</script>
+</body>
+</html>
