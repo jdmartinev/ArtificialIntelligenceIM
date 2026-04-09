@@ -1,0 +1,2698 @@
+{
+  "version": "1.0",
+  "truncation": null,
+  "padding": null,
+  "added_tokens": [
+    {
+      "id": 0,
+      "content": "<pad>",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
+      "special": true
+    },
+    {
+      "id": 1,
+      "content": "<unk>",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
+      "special": true
+    },
+    {
+      "id": 2,
+      "content": "<bos>",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
+      "special": true
+    },
+    {
+      "id": 3,
+      "content": "<eos>",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
+      "special": true
+    }
+  ],
+  "normalizer": null,
+  "pre_tokenizer": {
+    "type": "Whitespace"
+  },
+  "post_processor": {
+    "type": "TemplateProcessing",
+    "single": [
+      {
+        "SpecialToken": {
+          "id": "<bos>",
+          "type_id": 0
+        }
+      },
+      {
+        "Sequence": {
+          "id": "A",
+          "type_id": 0
+        }
+      },
+      {
+        "SpecialToken": {
+          "id": "<eos>",
+          "type_id": 0
+        }
+      }
+    ],
+    "pair": [
+      {
+        "Sequence": {
+          "id": "A",
+          "type_id": 0
+        }
+      },
+      {
+        "Sequence": {
+          "id": "B",
+          "type_id": 1
+        }
+      }
+    ],
+    "special_tokens": {
+      "<bos>": {
+        "id": "<bos>",
+        "ids": [
+          2
+        ],
+        "tokens": [
+          "<bos>"
+        ]
+      },
+      "<eos>": {
+        "id": "<eos>",
+        "ids": [
+          3
+        ],
+        "tokens": [
+          "<eos>"
+        ]
+      }
+    }
+  },
+  "decoder": null,
+  "model": {
+    "type": "BPE",
+    "dropout": null,
+    "unk_token": "<unk>",
+    "continuing_subword_prefix": null,
+    "end_of_word_suffix": null,
+    "fuse_unk": false,
+    "byte_fallback": false,
+    "ignore_merges": false,
+    "vocab": {
+      "<pad>": 0,
+      "<unk>": 1,
+      "<bos>": 2,
+      "<eos>": 3,
+      ",": 4,
+      "-": 5,
+      ".": 6,
+      "A": 7,
+      "B": 8,
+      "C": 9,
+      "D": 10,
+      "E": 11,
+      "G": 12,
+      "H": 13,
+      "I": 14,
+      "L": 15,
+      "M": 16,
+      "N": 17,
+      "P": 18,
+      "Q": 19,
+      "R": 20,
+      "S": 21,
+      "T": 22,
+      "U": 23,
+      "a": 24,
+      "b": 25,
+      "c": 26,
+      "d": 27,
+      "e": 28,
+      "f": 29,
+      "g": 30,
+      "h": 31,
+      "i": 32,
+      "k": 33,
+      "l": 34,
+      "m": 35,
+      "n": 36,
+      "o": 37,
+      "p": 38,
+      "q": 39,
+      "r": 40,
+      "s": 41,
+      "t": 42,
+      "u": 43,
+      "v": 44,
+      "w": 45,
+      "x": 46,
+      "y": 47,
+      "z": 48,
+      "an": 49,
+      "er": 50,
+      "in": 51,
+      "re": 52,
+      "th": 53,
+      "en": 54,
+      "ti": 55,
+      "on": 56,
+      "or": 57,
+      "the": 58,
+      "es": 59,
+      "to": 60,
+      "ne": 61,
+      "ro": 62,
+      "and": 63,
+      "tion": 64,
+      "at": 65,
+      "ra": 66,
+      "el": 67,
+      "ed": 68,
+      "mp": 69,
+      "ar": 70,
+      "ch": 71,
+      "mo": 72,
+      "ut": 73,
+      "ing": 74,
+      "del": 75,
+      "for": 76,
+      "ge": 77,
+      "is": 78,
+      "ken": 79,
+      "of": 80,
+      "us": 81,
+      "token": 82,
+      "model": 83,
+      "al": 84,
+      "co": 85,
+      "ks": 86,
+      "le": 87,
+      "os": 88,
+      "tw": 89,
+      "as": 90,
+      "ay": 91,
+      "di": 92,
+      "me": 93,
+      "pro": 94,
+      "netw": 95,
+      "networ": 96,
+      "ac": 97,
+      "ation": 98,
+      "age": 99,
+      "ces": 100,
+      "te": 101,
+      "ure": 102,
+      "ura": 103,
+      "ers": 104,
+      "comp": 105,
+      "networks": 106,
+      "ural": 107,
+      "are": 108,
+      "ce": 109,
+      "ct": 110,
+      "du": 111,
+      "gh": 112,
+      "gu": 113,
+      "he": 114,
+      "lan": 115,
+      "los": 116,
+      "lay": 117,
+      "pre": 118,
+      "put": 119,
+      "ran": 120,
+      "st": 121,
+      "ter": 122,
+      "xt": 123,
+      "erat": 124,
+      "ent": 125,
+      "neural": 126,
+      "rain": 127,
+      "arn": 128,
+      "uses": 129,
+      "learn": 130,
+      "comput": 131,
+      "guage": 132,
+      "language": 133,
+      "LL": 134,
+      "MA": 135,
+      "The": 136,
+      "ach": 137,
+      "aMA": 138,
+      "by": 139,
+      "ction": 140,
+      "dat": 141,
+      "ev": 142,
+      "fro": 143,
+      "iz": 144,
+      "ition": 145,
+      "igh": 146,
+      "min": 147,
+      "op": 148,
+      "ow": 149,
+      "qu": 150,
+      "sa": 151,
+      "sp": 152,
+      "sfor": 153,
+      "ten": 154,
+      "um": 155,
+      "ery": 156,
+      "input": 157,
+      "ence": 158,
+      "orm": 159,
+      "mpl": 160,
+      "mperat": 161,
+      "tokens": 162,
+      "duces": 163,
+      "loss": 164,
+      "ransfor": 165,
+      "LLaMA": 166,
+      "from": 167,
+      "tention": 168,
+      "mperature": 169,
+      "ransform": 170,
+      "At": 171,
+      "Norm": 172,
+      "Ro": 173,
+      "ab": 174,
+      "be": 175,
+      "cu": 176,
+      "cre": 177,
+      "des": 178,
+      "ee": 179,
+      "ey": 180,
+      "eed": 181,
+      "eigh": 182,
+      "equ": 183,
+      "fer": 184,
+      "feed": 185,
+      "gra": 186,
+      "how": 187,
+      "im": 188,
+      "ion": 189,
+      "key": 190,
+      "nt": 191,
+      "pa": 192,
+      "ru": 193,
+      "rre": 194,
+      "sequ": 195,
+      "tas": 196,
+      "train": 197,
+      "transform": 198,
+      "up": 199,
+      "ve": 200,
+      "val": 201,
+      "wi": 202,
+      "weigh": 203,
+      "that": 204,
+      "time": 205,
+      "next": 206,
+      "attention": 207,
+      "elf": 208,
+      "arch": 209,
+      "arge": 210,
+      "used": 211,
+      "osition": 212,
+      "dient": 213,
+      "proces": 214,
+      "produces": 215,
+      "ack": 216,
+      "text": 217,
+      "temperature": 218,
+      "cture": 219,
+      "layer": 220,
+      "layers": 221,
+      "predi": 222,
+      "learns": 223,
+      "learning": 224,
+      "computes": 225,
+      "data": 226,
+      "every": 227,
+      "sampl": 228,
+      "curre": 229,
+      "ference": 230,
+      "gradient": 231,
+      "tasks": 232,
+      "trained": 233,
+      "valu": 234,
+      "weight": 235,
+      "process": 236,
+      "current": 237,
+      "gradients": 238,
+      "AI": 239,
+      "Back": 240,
+      "Con": 241,
+      "Dee": 242,
+      "Em": 243,
+      "Each": 244,
+      "GL": 245,
+      "Gro": 246,
+      "High": 247,
+      "In": 248,
+      "Lay": 249,
+      "Large": 250,
+      "MS": 251,
+      "Me": 252,
+      "Ne": 253,
+      "PE": 254,
+      "Position": 255,
+      "Qu": 256,
+      "Re": 257,
+      "Res": 258,
+      "RMS": 259,
+      "Swi": 260,
+      "Self": 261,
+      "Te": 262,
+      "Train": 263,
+      "Transform": 264,
+      "ad": 265,
+      "ak": 266,
+      "ati": 267,
+      "ame": 268,
+      "bi": 269,
+      "ber": 270,
+      "bed": 271,
+      "bran": 272,
+      "brain": 273,
+      "bab": 274,
+      "back": 275,
+      "ck": 276,
+      "con": 277,
+      "cro": 278,
+      "clos": 279,
+      "came": 280,
+      "de": 281,
+      "do": 282,
+      "ding": 283,
+      "dev": 284,
+      "een": 285,
+      "each": 286,
+      "earch": 287,
+      "fu": 288,
+      "fas": 289,
+      "gi": 290,
+      "gn": 291,
+      "gen": 292,
+      "gne": 293,
+      "gation": 294,
+      "hi": 295,
+      "hand": 296,
+      "hum": 297,
+      "io": 298,
+      "it": 299,
+      "ire": 300,
+      "ies": 301,
+      "ite": 302,
+      "impl": 303,
+      "ick": 304,
+      "igne": 305,
+      "ll": 306,
+      "ls": 307,
+      "lu": 308,
+      "ly": 309,
+      "lat": 310,
+      "lac": 311,
+      "low": 312,
+      "large": 313,
+      "man": 314,
+      "mor": 315,
+      "mach": 316,
+      "miz": 317,
+      "mak": 318,
+      "nction": 319,
+      "num": 320,
+      "norm": 321,
+      "om": 322,
+      "oth": 323,
+      "out": 324,
+      "olu": 325,
+      "py": 326,
+      "position": 327,
+      "pick": 328,
+      "plac": 329,
+      "rand": 330,
+      "ss": 331,
+      "su": 332,
+      "sent": 333,
+      "sum": 334,
+      "self": 335,
+      "simpl": 336,
+      "ta": 337,
+      "tro": 338,
+      "tel": 339,
+      "tar": 340,
+      "tation": 341,
+      "tru": 342,
+      "ugh": 343,
+      "ven": 344,
+      "vis": 345,
+      "vation": 346,
+      "vers": 347,
+      "vio": 348,
+      "volu": 349,
+      "war": 350,
+      "way": 351,
+      "whi": 352,
+      "zer": 353,
+      "ans": 354,
+      "ant": 355,
+      "ange": 356,
+      "erNorm": 357,
+      "eries": 358,
+      "ine": 359,
+      "inter": 360,
+      "insp": 361,
+      "incre": 362,
+      "inference": 363,
+      "reco": 364,
+      "redu": 365,
+      "repre": 366,
+      "rection": 367,
+      "reduces": 368,
+      "recurrent": 369,
+      "relat": 370,
+      "replac": 371,
+      "than": 372,
+      "thro": 373,
+      "thos": 374,
+      "enti": 375,
+      "enco": 376,
+      "tic": 377,
+      "timiz": 378,
+      "tivation": 379,
+      "one": 380,
+      "net": 381,
+      "new": 382,
+      "ropy": 383,
+      "rotation": 384,
+      "ands": 385,
+      "tional": 386,
+      "rame": 387,
+      "ract": 388,
+      "elop": 389,
+      "change": 390,
+      "more": 391,
+      "most": 392,
+      "ingly": 393,
+      "forwar": 394,
+      "istic": 395,
+      "using": 396,
+      "models": 397,
+      "all": 398,
+      "aliz": 399,
+      "alway": 400,
+      "lex": 401,
+      "tween": 402,
+      "asingly": 403,
+      "divers": 404,
+      "direction": 405,
+      "memor": 406,
+      "means": 407,
+      "propa": 408,
+      "probab": 409,
+      "network": 410,
+      "ace": 411,
+      "activation": 412,
+      "ations": 413,
+      "complex": 414,
+      "cting": 415,
+      "head": 416,
+      "previo": 417,
+      "puts": 418,
+      "stru": 419,
+      "stands": 420,
+      "stract": 421,
+      "termin": 422,
+      "erate": 423,
+      "entropy": 424,
+      "compute": 425,
+      "computer": 426,
+      "ctions": 427,
+      "date": 428,
+      "izing": 429,
+      "minim": 430,
+      "minant": 431,
+      "open": 432,
+      "optimiz": 433,
+      "queries": 434,
+      "save": 435,
+      "spee": 436,
+      "space": 437,
+      "Attention": 438,
+      "RoPE": 439,
+      "Rotar": 440,
+      "abstract": 441,
+      "became": 442,
+      "between": 443,
+      "creati": 444,
+      "designe": 445,
+      "feeds": 446,
+      "image": 447,
+      "ions": 448,
+      "keys": 449,
+      "parame": 450,
+      "sequence": 451,
+      "sequenti": 452,
+      "transformer": 453,
+      "transformers": 454,
+      "uped": 455,
+      "update": 456,
+      "with": 457,
+      "archite": 458,
+      "predicting": 459,
+      "predictions": 460,
+      "samples": 461,
+      "sampling": 462,
+      "value": 463,
+      "values": 464,
+      "weights": 465,
+      "weighted": 466,
+      "Backpropa": 467,
+      "Convolu": 468,
+      "Deep": 469,
+      "Embed": 470,
+      "GLU": 471,
+      "Grouped": 472,
+      "Higher": 473,
+      "Inference": 474,
+      "LayerNorm": 475,
+      "Meta": 476,
+      "Neural": 477,
+      "Query": 478,
+      "Recurrent": 479,
+      "Research": 480,
+      "RMSNorm": 481,
+      "SwiGLU": 482,
+      "Temperature": 483,
+      "Training": 484,
+      "Transformers": 485,
+      "bill": 486,
+      "branch": 487,
+      "contro": 488,
+      "cross": 489,
+      "close": 490,
+      "determin": 491,
+      "dominant": 492,
+      "develop": 493,
+      "function": 494,
+      "faster": 495,
+      "given": 496,
+      "gnition": 497,
+      "generate": 498,
+      "handle": 499,
+      "human": 500,
+      "ired": 501,
+      "lower": 502,
+      "many": 503,
+      "machine": 504,
+      "makes": 505,
+      "number": 506,
+      "normaliz": 507,
+      "other": 508,
+      "outputs": 509,
+      "random": 510,
+      "such": 511,
+      "sentations": 512,
+      "simpler": 513,
+      "tell": 514,
+      "true": 515,
+      "vision": 516,
+      "which": 517,
+      "zero": 518,
+      "internet": 519,
+      "inspired": 520,
+      "increasingly": 521,
+      "recognition": 522,
+      "reduce": 523,
+      "representations": 524,
+      "relate": 525,
+      "replaced": 526,
+      "through": 527,
+      "those": 528,
+      "encodes": 529,
+      "forward": 530,
+      "always": 531,
+      "diverse": 532,
+      "memory": 533,
+      "probable": 534,
+      "heads": 535,
+      "previous": 536,
+      "structure": 537,
+      "minimizing": 538,
+      "optimizer": 539,
+      "speech": 540,
+      "Rotary": 541,
+      "creative": 542,
+      "designed": 543,
+      "parameter": 544,
+      "sequential": 545,
+      "architecture": 546,
+      "Backpropagation": 547,
+      "Convolutional": 548,
+      "Embedding": 549,
+      "billions": 550,
+      "controls": 551,
+      "deterministic": 552,
+      "developed": 553,
+      "normalization": 554
+    },
+    "merges": [
+      [
+        "a",
+        "n"
+      ],
+      [
+        "e",
+        "r"
+      ],
+      [
+        "i",
+        "n"
+      ],
+      [
+        "r",
+        "e"
+      ],
+      [
+        "t",
+        "h"
+      ],
+      [
+        "e",
+        "n"
+      ],
+      [
+        "t",
+        "i"
+      ],
+      [
+        "o",
+        "n"
+      ],
+      [
+        "o",
+        "r"
+      ],
+      [
+        "th",
+        "e"
+      ],
+      [
+        "e",
+        "s"
+      ],
+      [
+        "t",
+        "o"
+      ],
+      [
+        "n",
+        "e"
+      ],
+      [
+        "r",
+        "o"
+      ],
+      [
+        "an",
+        "d"
+      ],
+      [
+        "ti",
+        "on"
+      ],
+      [
+        "a",
+        "t"
+      ],
+      [
+        "r",
+        "a"
+      ],
+      [
+        "e",
+        "l"
+      ],
+      [
+        "e",
+        "d"
+      ],
+      [
+        "m",
+        "p"
+      ],
+      [
+        "a",
+        "r"
+      ],
+      [
+        "c",
+        "h"
+      ],
+      [
+        "m",
+        "o"
+      ],
+      [
+        "u",
+        "t"
+      ],
+      [
+        "in",
+        "g"
+      ],
+      [
+        "d",
+        "el"
+      ],
+      [
+        "f",
+        "or"
+      ],
+      [
+        "g",
+        "e"
+      ],
+      [
+        "i",
+        "s"
+      ],
+      [
+        "k",
+        "en"
+      ],
+      [
+        "o",
+        "f"
+      ],
+      [
+        "u",
+        "s"
+      ],
+      [
+        "to",
+        "ken"
+      ],
+      [
+        "mo",
+        "del"
+      ],
+      [
+        "a",
+        "l"
+      ],
+      [
+        "c",
+        "o"
+      ],
+      [
+        "k",
+        "s"
+      ],
+      [
+        "l",
+        "e"
+      ],
+      [
+        "o",
+        "s"
+      ],
+      [
+        "t",
+        "w"
+      ],
+      [
+        "a",
+        "s"
+      ],
+      [
+        "a",
+        "y"
+      ],
+      [
+        "d",
+        "i"
+      ],
+      [
+        "m",
+        "e"
+      ],
+      [
+        "p",
+        "ro"
+      ],
+      [
+        "ne",
+        "tw"
+      ],
+      [
+        "netw",
+        "or"
+      ],
+      [
+        "a",
+        "c"
+      ],
+      [
+        "a",
+        "tion"
+      ],
+      [
+        "a",
+        "ge"
+      ],
+      [
+        "c",
+        "es"
+      ],
+      [
+        "t",
+        "e"
+      ],
+      [
+        "u",
+        "re"
+      ],
+      [
+        "u",
+        "ra"
+      ],
+      [
+        "er",
+        "s"
+      ],
+      [
+        "co",
+        "mp"
+      ],
+      [
+        "networ",
+        "ks"
+      ],
+      [
+        "ura",
+        "l"
+      ],
+      [
+        "a",
+        "re"
+      ],
+      [
+        "c",
+        "e"
+      ],
+      [
+        "c",
+        "t"
+      ],
+      [
+        "d",
+        "u"
+      ],
+      [
+        "g",
+        "h"
+      ],
+      [
+        "g",
+        "u"
+      ],
+      [
+        "h",
+        "e"
+      ],
+      [
+        "l",
+        "an"
+      ],
+      [
+        "l",
+        "os"
+      ],
+      [
+        "l",
+        "ay"
+      ],
+      [
+        "p",
+        "re"
+      ],
+      [
+        "p",
+        "ut"
+      ],
+      [
+        "r",
+        "an"
+      ],
+      [
+        "s",
+        "t"
+      ],
+      [
+        "t",
+        "er"
+      ],
+      [
+        "x",
+        "t"
+      ],
+      [
+        "er",
+        "at"
+      ],
+      [
+        "en",
+        "t"
+      ],
+      [
+        "ne",
+        "ural"
+      ],
+      [
+        "ra",
+        "in"
+      ],
+      [
+        "ar",
+        "n"
+      ],
+      [
+        "us",
+        "es"
+      ],
+      [
+        "le",
+        "arn"
+      ],
+      [
+        "comp",
+        "ut"
+      ],
+      [
+        "gu",
+        "age"
+      ],
+      [
+        "lan",
+        "guage"
+      ],
+      [
+        "L",
+        "L"
+      ],
+      [
+        "M",
+        "A"
+      ],
+      [
+        "T",
+        "he"
+      ],
+      [
+        "a",
+        "ch"
+      ],
+      [
+        "a",
+        "MA"
+      ],
+      [
+        "b",
+        "y"
+      ],
+      [
+        "c",
+        "tion"
+      ],
+      [
+        "d",
+        "at"
+      ],
+      [
+        "e",
+        "v"
+      ],
+      [
+        "f",
+        "ro"
+      ],
+      [
+        "i",
+        "z"
+      ],
+      [
+        "i",
+        "tion"
+      ],
+      [
+        "i",
+        "gh"
+      ],
+      [
+        "m",
+        "in"
+      ],
+      [
+        "o",
+        "p"
+      ],
+      [
+        "o",
+        "w"
+      ],
+      [
+        "q",
+        "u"
+      ],
+      [
+        "s",
+        "a"
+      ],
+      [
+        "s",
+        "p"
+      ],
+      [
+        "s",
+        "for"
+      ],
+      [
+        "t",
+        "en"
+      ],
+      [
+        "u",
+        "m"
+      ],
+      [
+        "er",
+        "y"
+      ],
+      [
+        "in",
+        "put"
+      ],
+      [
+        "en",
+        "ce"
+      ],
+      [
+        "or",
+        "m"
+      ],
+      [
+        "mp",
+        "l"
+      ],
+      [
+        "mp",
+        "erat"
+      ],
+      [
+        "token",
+        "s"
+      ],
+      [
+        "du",
+        "ces"
+      ],
+      [
+        "los",
+        "s"
+      ],
+      [
+        "ran",
+        "sfor"
+      ],
+      [
+        "LL",
+        "aMA"
+      ],
+      [
+        "fro",
+        "m"
+      ],
+      [
+        "ten",
+        "tion"
+      ],
+      [
+        "mperat",
+        "ure"
+      ],
+      [
+        "ransfor",
+        "m"
+      ],
+      [
+        "A",
+        "t"
+      ],
+      [
+        "N",
+        "orm"
+      ],
+      [
+        "R",
+        "o"
+      ],
+      [
+        "a",
+        "b"
+      ],
+      [
+        "b",
+        "e"
+      ],
+      [
+        "c",
+        "u"
+      ],
+      [
+        "c",
+        "re"
+      ],
+      [
+        "d",
+        "es"
+      ],
+      [
+        "e",
+        "e"
+      ],
+      [
+        "e",
+        "y"
+      ],
+      [
+        "e",
+        "ed"
+      ],
+      [
+        "e",
+        "igh"
+      ],
+      [
+        "e",
+        "qu"
+      ],
+      [
+        "f",
+        "er"
+      ],
+      [
+        "f",
+        "eed"
+      ],
+      [
+        "g",
+        "ra"
+      ],
+      [
+        "h",
+        "ow"
+      ],
+      [
+        "i",
+        "m"
+      ],
+      [
+        "i",
+        "on"
+      ],
+      [
+        "k",
+        "ey"
+      ],
+      [
+        "n",
+        "t"
+      ],
+      [
+        "p",
+        "a"
+      ],
+      [
+        "r",
+        "u"
+      ],
+      [
+        "r",
+        "re"
+      ],
+      [
+        "s",
+        "equ"
+      ],
+      [
+        "t",
+        "as"
+      ],
+      [
+        "t",
+        "rain"
+      ],
+      [
+        "t",
+        "ransform"
+      ],
+      [
+        "u",
+        "p"
+      ],
+      [
+        "v",
+        "e"
+      ],
+      [
+        "v",
+        "al"
+      ],
+      [
+        "w",
+        "i"
+      ],
+      [
+        "w",
+        "eigh"
+      ],
+      [
+        "th",
+        "at"
+      ],
+      [
+        "ti",
+        "me"
+      ],
+      [
+        "ne",
+        "xt"
+      ],
+      [
+        "at",
+        "tention"
+      ],
+      [
+        "el",
+        "f"
+      ],
+      [
+        "ar",
+        "ch"
+      ],
+      [
+        "ar",
+        "ge"
+      ],
+      [
+        "us",
+        "ed"
+      ],
+      [
+        "os",
+        "ition"
+      ],
+      [
+        "di",
+        "ent"
+      ],
+      [
+        "pro",
+        "ces"
+      ],
+      [
+        "pro",
+        "duces"
+      ],
+      [
+        "ac",
+        "k"
+      ],
+      [
+        "te",
+        "xt"
+      ],
+      [
+        "te",
+        "mperature"
+      ],
+      [
+        "ct",
+        "ure"
+      ],
+      [
+        "lay",
+        "er"
+      ],
+      [
+        "lay",
+        "ers"
+      ],
+      [
+        "pre",
+        "di"
+      ],
+      [
+        "learn",
+        "s"
+      ],
+      [
+        "learn",
+        "ing"
+      ],
+      [
+        "comput",
+        "es"
+      ],
+      [
+        "dat",
+        "a"
+      ],
+      [
+        "ev",
+        "ery"
+      ],
+      [
+        "sa",
+        "mpl"
+      ],
+      [
+        "cu",
+        "rre"
+      ],
+      [
+        "fer",
+        "ence"
+      ],
+      [
+        "gra",
+        "dient"
+      ],
+      [
+        "tas",
+        "ks"
+      ],
+      [
+        "train",
+        "ed"
+      ],
+      [
+        "val",
+        "u"
+      ],
+      [
+        "weigh",
+        "t"
+      ],
+      [
+        "proces",
+        "s"
+      ],
+      [
+        "curre",
+        "nt"
+      ],
+      [
+        "gradient",
+        "s"
+      ],
+      [
+        "A",
+        "I"
+      ],
+      [
+        "B",
+        "ack"
+      ],
+      [
+        "C",
+        "on"
+      ],
+      [
+        "D",
+        "ee"
+      ],
+      [
+        "E",
+        "m"
+      ],
+      [
+        "E",
+        "ach"
+      ],
+      [
+        "G",
+        "L"
+      ],
+      [
+        "G",
+        "ro"
+      ],
+      [
+        "H",
+        "igh"
+      ],
+      [
+        "I",
+        "n"
+      ],
+      [
+        "L",
+        "ay"
+      ],
+      [
+        "L",
+        "arge"
+      ],
+      [
+        "M",
+        "S"
+      ],
+      [
+        "M",
+        "e"
+      ],
+      [
+        "N",
+        "e"
+      ],
+      [
+        "P",
+        "E"
+      ],
+      [
+        "P",
+        "osition"
+      ],
+      [
+        "Q",
+        "u"
+      ],
+      [
+        "R",
+        "e"
+      ],
+      [
+        "R",
+        "es"
+      ],
+      [
+        "R",
+        "MS"
+      ],
+      [
+        "S",
+        "wi"
+      ],
+      [
+        "S",
+        "elf"
+      ],
+      [
+        "T",
+        "e"
+      ],
+      [
+        "T",
+        "rain"
+      ],
+      [
+        "T",
+        "ransform"
+      ],
+      [
+        "a",
+        "d"
+      ],
+      [
+        "a",
+        "k"
+      ],
+      [
+        "a",
+        "ti"
+      ],
+      [
+        "a",
+        "me"
+      ],
+      [
+        "b",
+        "i"
+      ],
+      [
+        "b",
+        "er"
+      ],
+      [
+        "b",
+        "ed"
+      ],
+      [
+        "b",
+        "ran"
+      ],
+      [
+        "b",
+        "rain"
+      ],
+      [
+        "b",
+        "ab"
+      ],
+      [
+        "b",
+        "ack"
+      ],
+      [
+        "c",
+        "k"
+      ],
+      [
+        "c",
+        "on"
+      ],
+      [
+        "c",
+        "ro"
+      ],
+      [
+        "c",
+        "los"
+      ],
+      [
+        "c",
+        "ame"
+      ],
+      [
+        "d",
+        "e"
+      ],
+      [
+        "d",
+        "o"
+      ],
+      [
+        "d",
+        "ing"
+      ],
+      [
+        "d",
+        "ev"
+      ],
+      [
+        "e",
+        "en"
+      ],
+      [
+        "e",
+        "ach"
+      ],
+      [
+        "e",
+        "arch"
+      ],
+      [
+        "f",
+        "u"
+      ],
+      [
+        "f",
+        "as"
+      ],
+      [
+        "g",
+        "i"
+      ],
+      [
+        "g",
+        "n"
+      ],
+      [
+        "g",
+        "en"
+      ],
+      [
+        "g",
+        "ne"
+      ],
+      [
+        "g",
+        "ation"
+      ],
+      [
+        "h",
+        "i"
+      ],
+      [
+        "h",
+        "and"
+      ],
+      [
+        "h",
+        "um"
+      ],
+      [
+        "i",
+        "o"
+      ],
+      [
+        "i",
+        "t"
+      ],
+      [
+        "i",
+        "re"
+      ],
+      [
+        "i",
+        "es"
+      ],
+      [
+        "i",
+        "te"
+      ],
+      [
+        "i",
+        "mpl"
+      ],
+      [
+        "i",
+        "ck"
+      ],
+      [
+        "i",
+        "gne"
+      ],
+      [
+        "l",
+        "l"
+      ],
+      [
+        "l",
+        "s"
+      ],
+      [
+        "l",
+        "u"
+      ],
+      [
+        "l",
+        "y"
+      ],
+      [
+        "l",
+        "at"
+      ],
+      [
+        "l",
+        "ac"
+      ],
+      [
+        "l",
+        "ow"
+      ],
+      [
+        "l",
+        "arge"
+      ],
+      [
+        "m",
+        "an"
+      ],
+      [
+        "m",
+        "or"
+      ],
+      [
+        "m",
+        "ach"
+      ],
+      [
+        "m",
+        "iz"
+      ],
+      [
+        "m",
+        "ak"
+      ],
+      [
+        "n",
+        "ction"
+      ],
+      [
+        "n",
+        "um"
+      ],
+      [
+        "n",
+        "orm"
+      ],
+      [
+        "o",
+        "m"
+      ],
+      [
+        "o",
+        "th"
+      ],
+      [
+        "o",
+        "ut"
+      ],
+      [
+        "o",
+        "lu"
+      ],
+      [
+        "p",
+        "y"
+      ],
+      [
+        "p",
+        "osition"
+      ],
+      [
+        "p",
+        "ick"
+      ],
+      [
+        "p",
+        "lac"
+      ],
+      [
+        "r",
+        "and"
+      ],
+      [
+        "s",
+        "s"
+      ],
+      [
+        "s",
+        "u"
+      ],
+      [
+        "s",
+        "ent"
+      ],
+      [
+        "s",
+        "um"
+      ],
+      [
+        "s",
+        "elf"
+      ],
+      [
+        "s",
+        "impl"
+      ],
+      [
+        "t",
+        "a"
+      ],
+      [
+        "t",
+        "ro"
+      ],
+      [
+        "t",
+        "el"
+      ],
+      [
+        "t",
+        "ar"
+      ],
+      [
+        "t",
+        "ation"
+      ],
+      [
+        "t",
+        "ru"
+      ],
+      [
+        "u",
+        "gh"
+      ],
+      [
+        "v",
+        "en"
+      ],
+      [
+        "v",
+        "is"
+      ],
+      [
+        "v",
+        "ation"
+      ],
+      [
+        "v",
+        "ers"
+      ],
+      [
+        "v",
+        "io"
+      ],
+      [
+        "v",
+        "olu"
+      ],
+      [
+        "w",
+        "ar"
+      ],
+      [
+        "w",
+        "ay"
+      ],
+      [
+        "w",
+        "hi"
+      ],
+      [
+        "z",
+        "er"
+      ],
+      [
+        "an",
+        "s"
+      ],
+      [
+        "an",
+        "t"
+      ],
+      [
+        "an",
+        "ge"
+      ],
+      [
+        "er",
+        "Norm"
+      ],
+      [
+        "er",
+        "ies"
+      ],
+      [
+        "in",
+        "e"
+      ],
+      [
+        "in",
+        "ter"
+      ],
+      [
+        "in",
+        "sp"
+      ],
+      [
+        "in",
+        "cre"
+      ],
+      [
+        "in",
+        "ference"
+      ],
+      [
+        "re",
+        "co"
+      ],
+      [
+        "re",
+        "du"
+      ],
+      [
+        "re",
+        "pre"
+      ],
+      [
+        "re",
+        "ction"
+      ],
+      [
+        "re",
+        "duces"
+      ],
+      [
+        "re",
+        "current"
+      ],
+      [
+        "re",
+        "lat"
+      ],
+      [
+        "re",
+        "plac"
+      ],
+      [
+        "th",
+        "an"
+      ],
+      [
+        "th",
+        "ro"
+      ],
+      [
+        "th",
+        "os"
+      ],
+      [
+        "en",
+        "ti"
+      ],
+      [
+        "en",
+        "co"
+      ],
+      [
+        "ti",
+        "c"
+      ],
+      [
+        "ti",
+        "miz"
+      ],
+      [
+        "ti",
+        "vation"
+      ],
+      [
+        "on",
+        "e"
+      ],
+      [
+        "ne",
+        "t"
+      ],
+      [
+        "ne",
+        "w"
+      ],
+      [
+        "ro",
+        "py"
+      ],
+      [
+        "ro",
+        "tation"
+      ],
+      [
+        "and",
+        "s"
+      ],
+      [
+        "tion",
+        "al"
+      ],
+      [
+        "ra",
+        "me"
+      ],
+      [
+        "ra",
+        "ct"
+      ],
+      [
+        "el",
+        "op"
+      ],
+      [
+        "ch",
+        "ange"
+      ],
+      [
+        "mo",
+        "re"
+      ],
+      [
+        "mo",
+        "st"
+      ],
+      [
+        "ing",
+        "ly"
+      ],
+      [
+        "for",
+        "war"
+      ],
+      [
+        "is",
+        "tic"
+      ],
+      [
+        "us",
+        "ing"
+      ],
+      [
+        "model",
+        "s"
+      ],
+      [
+        "al",
+        "l"
+      ],
+      [
+        "al",
+        "iz"
+      ],
+      [
+        "al",
+        "way"
+      ],
+      [
+        "le",
+        "x"
+      ],
+      [
+        "tw",
+        "een"
+      ],
+      [
+        "as",
+        "ingly"
+      ],
+      [
+        "di",
+        "vers"
+      ],
+      [
+        "di",
+        "rection"
+      ],
+      [
+        "me",
+        "mor"
+      ],
+      [
+        "me",
+        "ans"
+      ],
+      [
+        "pro",
+        "pa"
+      ],
+      [
+        "pro",
+        "bab"
+      ],
+      [
+        "networ",
+        "k"
+      ],
+      [
+        "ac",
+        "e"
+      ],
+      [
+        "ac",
+        "tivation"
+      ],
+      [
+        "ation",
+        "s"
+      ],
+      [
+        "comp",
+        "lex"
+      ],
+      [
+        "ct",
+        "ing"
+      ],
+      [
+        "he",
+        "ad"
+      ],
+      [
+        "pre",
+        "vio"
+      ],
+      [
+        "put",
+        "s"
+      ],
+      [
+        "st",
+        "ru"
+      ],
+      [
+        "st",
+        "ands"
+      ],
+      [
+        "st",
+        "ract"
+      ],
+      [
+        "ter",
+        "min"
+      ],
+      [
+        "erat",
+        "e"
+      ],
+      [
+        "ent",
+        "ropy"
+      ],
+      [
+        "comput",
+        "e"
+      ],
+      [
+        "comput",
+        "er"
+      ],
+      [
+        "ction",
+        "s"
+      ],
+      [
+        "dat",
+        "e"
+      ],
+      [
+        "iz",
+        "ing"
+      ],
+      [
+        "min",
+        "im"
+      ],
+      [
+        "min",
+        "ant"
+      ],
+      [
+        "op",
+        "en"
+      ],
+      [
+        "op",
+        "timiz"
+      ],
+      [
+        "qu",
+        "eries"
+      ],
+      [
+        "sa",
+        "ve"
+      ],
+      [
+        "sp",
+        "ee"
+      ],
+      [
+        "sp",
+        "ace"
+      ],
+      [
+        "At",
+        "tention"
+      ],
+      [
+        "Ro",
+        "PE"
+      ],
+      [
+        "Ro",
+        "tar"
+      ],
+      [
+        "ab",
+        "stract"
+      ],
+      [
+        "be",
+        "came"
+      ],
+      [
+        "be",
+        "tween"
+      ],
+      [
+        "cre",
+        "ati"
+      ],
+      [
+        "des",
+        "igne"
+      ],
+      [
+        "feed",
+        "s"
+      ],
+      [
+        "im",
+        "age"
+      ],
+      [
+        "ion",
+        "s"
+      ],
+      [
+        "key",
+        "s"
+      ],
+      [
+        "pa",
+        "rame"
+      ],
+      [
+        "sequ",
+        "ence"
+      ],
+      [
+        "sequ",
+        "enti"
+      ],
+      [
+        "transform",
+        "er"
+      ],
+      [
+        "transform",
+        "ers"
+      ],
+      [
+        "up",
+        "ed"
+      ],
+      [
+        "up",
+        "date"
+      ],
+      [
+        "wi",
+        "th"
+      ],
+      [
+        "arch",
+        "ite"
+      ],
+      [
+        "predi",
+        "cting"
+      ],
+      [
+        "predi",
+        "ctions"
+      ],
+      [
+        "sampl",
+        "es"
+      ],
+      [
+        "sampl",
+        "ing"
+      ],
+      [
+        "valu",
+        "e"
+      ],
+      [
+        "valu",
+        "es"
+      ],
+      [
+        "weight",
+        "s"
+      ],
+      [
+        "weight",
+        "ed"
+      ],
+      [
+        "Back",
+        "propa"
+      ],
+      [
+        "Con",
+        "volu"
+      ],
+      [
+        "Dee",
+        "p"
+      ],
+      [
+        "Em",
+        "bed"
+      ],
+      [
+        "GL",
+        "U"
+      ],
+      [
+        "Gro",
+        "uped"
+      ],
+      [
+        "High",
+        "er"
+      ],
+      [
+        "In",
+        "ference"
+      ],
+      [
+        "Lay",
+        "erNorm"
+      ],
+      [
+        "Me",
+        "ta"
+      ],
+      [
+        "Ne",
+        "ural"
+      ],
+      [
+        "Qu",
+        "ery"
+      ],
+      [
+        "Re",
+        "current"
+      ],
+      [
+        "Res",
+        "earch"
+      ],
+      [
+        "RMS",
+        "Norm"
+      ],
+      [
+        "Swi",
+        "GLU"
+      ],
+      [
+        "Te",
+        "mperature"
+      ],
+      [
+        "Train",
+        "ing"
+      ],
+      [
+        "Transform",
+        "ers"
+      ],
+      [
+        "bi",
+        "ll"
+      ],
+      [
+        "bran",
+        "ch"
+      ],
+      [
+        "con",
+        "tro"
+      ],
+      [
+        "cro",
+        "ss"
+      ],
+      [
+        "clos",
+        "e"
+      ],
+      [
+        "de",
+        "termin"
+      ],
+      [
+        "do",
+        "minant"
+      ],
+      [
+        "dev",
+        "elop"
+      ],
+      [
+        "fu",
+        "nction"
+      ],
+      [
+        "fas",
+        "ter"
+      ],
+      [
+        "gi",
+        "ven"
+      ],
+      [
+        "gn",
+        "ition"
+      ],
+      [
+        "gen",
+        "erate"
+      ],
+      [
+        "hand",
+        "le"
+      ],
+      [
+        "hum",
+        "an"
+      ],
+      [
+        "ire",
+        "d"
+      ],
+      [
+        "low",
+        "er"
+      ],
+      [
+        "man",
+        "y"
+      ],
+      [
+        "mach",
+        "ine"
+      ],
+      [
+        "mak",
+        "es"
+      ],
+      [
+        "num",
+        "ber"
+      ],
+      [
+        "norm",
+        "aliz"
+      ],
+      [
+        "oth",
+        "er"
+      ],
+      [
+        "out",
+        "puts"
+      ],
+      [
+        "rand",
+        "om"
+      ],
+      [
+        "su",
+        "ch"
+      ],
+      [
+        "sent",
+        "ations"
+      ],
+      [
+        "simpl",
+        "er"
+      ],
+      [
+        "tel",
+        "l"
+      ],
+      [
+        "tru",
+        "e"
+      ],
+      [
+        "vis",
+        "ion"
+      ],
+      [
+        "whi",
+        "ch"
+      ],
+      [
+        "zer",
+        "o"
+      ],
+      [
+        "inter",
+        "net"
+      ],
+      [
+        "insp",
+        "ired"
+      ],
+      [
+        "incre",
+        "asingly"
+      ],
+      [
+        "reco",
+        "gnition"
+      ],
+      [
+        "redu",
+        "ce"
+      ],
+      [
+        "repre",
+        "sentations"
+      ],
+      [
+        "relat",
+        "e"
+      ],
+      [
+        "replac",
+        "ed"
+      ],
+      [
+        "thro",
+        "ugh"
+      ],
+      [
+        "thos",
+        "e"
+      ],
+      [
+        "enco",
+        "des"
+      ],
+      [
+        "forwar",
+        "d"
+      ],
+      [
+        "alway",
+        "s"
+      ],
+      [
+        "divers",
+        "e"
+      ],
+      [
+        "memor",
+        "y"
+      ],
+      [
+        "probab",
+        "le"
+      ],
+      [
+        "head",
+        "s"
+      ],
+      [
+        "previo",
+        "us"
+      ],
+      [
+        "stru",
+        "cture"
+      ],
+      [
+        "minim",
+        "izing"
+      ],
+      [
+        "optimiz",
+        "er"
+      ],
+      [
+        "spee",
+        "ch"
+      ],
+      [
+        "Rotar",
+        "y"
+      ],
+      [
+        "creati",
+        "ve"
+      ],
+      [
+        "designe",
+        "d"
+      ],
+      [
+        "parame",
+        "ter"
+      ],
+      [
+        "sequenti",
+        "al"
+      ],
+      [
+        "archite",
+        "cture"
+      ],
+      [
+        "Backpropa",
+        "gation"
+      ],
+      [
+        "Convolu",
+        "tional"
+      ],
+      [
+        "Embed",
+        "ding"
+      ],
+      [
+        "bill",
+        "ions"
+      ],
+      [
+        "contro",
+        "ls"
+      ],
+      [
+        "determin",
+        "istic"
+      ],
+      [
+        "develop",
+        "ed"
+      ],
+      [
+        "normaliz",
+        "ation"
+      ]
+    ]
+  }
+}

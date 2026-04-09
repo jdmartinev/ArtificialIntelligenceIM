@@ -1,0 +1,23 @@
+Deep learning is a branch of machine learning that uses neural networks with many layers.
+Neural networks are inspired by the structure of the human brain.
+Each layer in a neural network learns increasingly abstract representations of the input data.
+Convolutional neural networks are used for image recognition and computer vision tasks.
+Recurrent neural networks are designed to handle sequential data such as text and speech.
+Transformers replaced recurrent networks and became the dominant architecture for language tasks.
+The transformer uses self-attention to relate every token in a sequence to every other token.
+Self-attention computes queries, keys and values from the input and produces a weighted sum.
+Large language models are transformers trained on billions of tokens from the internet.
+Training a language model means predicting the next token given all previous tokens.
+The model learns by minimizing the cross-entropy loss between predictions and true tokens.
+Backpropagation computes gradients that tell each parameter how to change to reduce the loss.
+The optimizer uses those gradients to update the weights in the direction of lower loss.
+LLaMA is an open large language model developed by Meta AI Research.
+LLaMA uses RMSNorm for layer normalization, which is simpler and faster than LayerNorm.
+RoPE stands for Rotary Position Embedding and encodes position through rotation in complex space.
+SwiGLU is an activation function used in the feed-forward layers of LLaMA.
+Grouped Query Attention reduces the number of key and value heads to save memory and compute.
+Inference is the process of using a trained model to generate new text.
+At inference time the model samples one token at a time and feeds it back as input.
+Temperature controls how random or deterministic the sampling process is.
+A temperature close to zero makes the model always pick the most probable next token.
+Higher temperature produces more creative and diverse outputs from the model.
