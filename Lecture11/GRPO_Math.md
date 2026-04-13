@@ -98,7 +98,7 @@ $$\boxed{L_\text{GRPO} = \frac{1}{G} \sum_{i=1}^{G} \left( L_\text{clip}^{(i)} +
 
 Expanding fully:
 
-$$L_\text{GRPO} = \frac{1}{G} \sum_{i=1}^{G} \frac{1}{T_i} \sum_{t=1}^{T_i} \left[ -\min\left( r_t A_i,\ \operatorname{clip}(r_t, 1-\varepsilon, 1+\varepsilon) A_i \right) + \beta \log \frac{\pi_\theta(a_t)}{\pi_\text{ref}(a_t)} \right]$$
+$$L_\text{GRPO} = \frac{1}{G} \sum_{i=1}^{G} \frac{1}{T_i} \sum_{t=1}^{T_i} \left[ -\min\left( r_t A_i,\ clip(r_t, 1-\varepsilon, 1+\varepsilon) A_i \right) + \beta \log \frac{\pi_\theta(a_t)}{\pi_\text{ref}(a_t)} \right]$$
 
 ---
 
