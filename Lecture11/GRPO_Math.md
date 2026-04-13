@@ -82,7 +82,7 @@ $$r_t = \frac{\pi_\theta(a_t \mid s_t)}{\pi_\text{old}(a_t \mid s_t)} = \exp(\lo
 
 The clipped actor loss for response $i$:
 
-$$L_\text{clip}^{(i)} = -\frac{1}{T_i} \sum_{t=1}^{T_i} \min\!\left( r_t \cdot A_i,\ \operatorname{clip}(r_t, 1-\varepsilon, 1+\varepsilon) \cdot A_i \right)$$
+$$L_\text{clip}^{(i)} = -\frac{1}{T_i} \sum_{t=1}^{T_i} \min\left( r_t \cdot A_i,\ \operatorname{clip}(r_t, 1-\varepsilon, 1+\varepsilon) \cdot A_i \right)$$
 
 Note $A_i$ is **constant across all tokens in response $i$** — the whole response gets one score, unlike PPO where $A_t$ differs per token.
 
