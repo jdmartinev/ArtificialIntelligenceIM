@@ -44,7 +44,7 @@ No critic. No $G_t$. No $\delta_t$. No backwards loop. Just statistics across th
 
 Recall from script 1: any baseline $b$ with $\mathbb{E}\left[b \cdot \nabla_{\theta} \log \pi_{\theta}\right] = 0$ can be subtracted without introducing bias.
 
-$\text{mean}(R_1, \ldots, R_G)$ satisfies this — it is an estimate of $\mathbb{E}_{\pi}$, the expected reward for **this specific prompt**.
+$\text{mean}(R_1, \ldots, R_G)$ satisfies this — it is an estimate of $\mathbb{E}_{\pi}[R \mid x]$, the expected reward for **this specific prompt**.
 
 This is strictly better than the flat batch mean $\bar{R}$ used in script 1:
 
