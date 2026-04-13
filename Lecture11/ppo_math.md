@@ -37,14 +37,11 @@ where $\tau = (a_1, \ldots, a_{T_r})$ is a full response sampled autoregressivel
 
 Because sampling is non-differentiable, we use:
 
-$$\nabla_\theta \mathbb{E}_\tau [R(\tau)]
-= \mathbb{E}_\tau \!\left[ R(\tau) \cdot \nabla_\theta \log \pi_\theta(\tau) \right]$$
+$$\nabla_\theta \mathbb{E}_\tau [R(\tau)] = \mathbb{E}_\tau [ R(\tau) \cdot \nabla_\theta \log \pi_\theta(\tau) ]$$
 
 **Derivation sketch:**
 
-$$\nabla_\theta \mathbb{E}_\tau [R] = \nabla_\theta \sum_\tau R(\tau)\,\pi_\theta(\tau)
-= \sum_\tau R(\tau)\,\pi_\theta(\tau) \cdot \frac{\nabla_\theta \pi_\theta(\tau)}{\pi_\theta(\tau)}
-= \mathbb{E}_\tau \!\left[ R(\tau)\,\nabla_\theta \log \pi_\theta(\tau) \right]$$
+$$\nabla_\theta \mathbb{E}_\tau [R] = \nabla_\theta \sum_\tau R(\tau)\,\pi_\theta(\tau) = \sum_\tau R(\tau)\,\pi_\theta(\tau) \cdot \frac{\nabla_\theta \pi_\theta(\tau)}{\pi_\theta(\tau)} = \mathbb{E}_\tau [ R(\tau)\,\nabla_\theta \log \pi_\theta(\tau) ]$$
 
 Since the policy factorises autoregressively:
 
@@ -52,7 +49,7 @@ $$\log \pi_\theta(\tau) = \sum_{t=1}^{T_r} \log \pi_\theta(a_t \mid s_t)$$
 
 so:
 
-$$\nabla_\theta J(\theta) = \mathbb{E}_\tau \!\left[ R(\tau) \cdot \sum_{t=1}^{T_r} \nabla_\theta \log \pi_\theta(a_t \mid s_t) \right]$$
+$$\nabla_\theta J(\theta) = \mathbb{E}_\tau \left[ R(\tau) \cdot \sum_{t=1}^{T_r} \nabla_\theta \log \pi_\theta(a_t \mid s_t) \right]$$
 
 This is the **REINFORCE** estimator. In code:
 
@@ -69,14 +66,11 @@ $R(\tau) \geq 0$ always (in our rule-based reward). Every gradient step pushes *
 
 For any baseline $b$ that does not depend on $a_t$:
 
-$$\mathbb{E}_\tau \!\left[ b \cdot \nabla_\theta \log \pi_\theta(\tau) \right] = 0$$
+$$\mathbb{E}_\tau [ b \cdot \nabla_\theta \log \pi_\theta(\tau) ] = 0$$
 
 **Proof:**
 
-$$\mathbb{E}_\tau \!\left[ b \cdot \nabla_\theta \log \pi_\theta(\tau) \right]
-= b \cdot \nabla_\theta \mathbb{E}_\tau[1]
-= b \cdot \nabla_\theta \sum_\tau \pi_\theta(\tau)
-= b \cdot \nabla_\theta\, 1 = 0$$
+$$\mathbb{E}_\tau [ b \cdot \nabla_\theta \log \pi_\theta(\tau) ] = b \cdot \nabla_\theta \mathbb{E}_\tau[1] = b \cdot \nabla_\theta \sum_\tau \pi_\theta(\tau) = b \cdot \nabla_\theta\, 1 = 0$$
 
 Therefore subtracting $b$ from $R$ leaves the gradient **unbiased** but reduces variance.
 The quantity $R(\tau) - b$ is called the **advantage** $A$:
@@ -85,7 +79,7 @@ $$A = R(\tau) - b$$
 
 It measures how much better (or worse) this particular rollout was **relative to the baseline expectation**. The gradient update becomes:
 
-$$\nabla_\theta J(\theta) = \mathbb{E}_\tau \!\left[ A \cdot \sum_t \nabla_\theta \log \pi_\theta(a_t \mid s_t) \right]$$
+$$\nabla_\theta J(\theta) = \mathbb{E}_\tau \left[ A \cdot \sum_t \nabla_\theta \log \pi_\theta(a_t \mid s_t) \right]$$
 
 - $A > 0$ → this rollout was **better than expected** → increase the probability of all its tokens
 - $A < 0$ → this rollout was **worse than expected** → decrease the probability of all its tokens
@@ -173,11 +167,15 @@ If the critic is perfect, $\mathbb{E}[\delta_t] = 0$ — no surprise, no gradien
 We have two extreme options to estimate $A_t$:
 
 **Monte Carlo:**
+
 $$A_t^{\text{MC}} = G_t - V_\phi(s_t) = \sum_{k=0}^{T_r-t-1} \gamma^k r_{t+k} - V_\phi(s_t)$$
+
 ✅ Unbiased — no assumptions about $V_\phi$ &nbsp;&nbsp; ❌ High variance — sum of many random future rewards
 
 **Pure TD(0):**
+
 $$A_t^{\text{TD}} = \delta_t = r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)$$
+
 ✅ Low variance — only one random term $r_t$ &nbsp;&nbsp; ❌ Biased — errors in $V_\phi$ propagate directly
 
 GAE interpolates between both.
@@ -191,7 +189,9 @@ $$A_t^{(k)} = \sum_{i=0}^{k-1} \gamma^i r_{t+i} + \gamma^k V_\phi(s_{t+k}) - V_\
 Notice this can be written as a sum of TD errors:
 
 $$A_t^{(1)} = \delta_t$$
+
 $$A_t^{(2)} = \delta_t + \gamma \delta_{t+1}$$
+
 $$A_t^{(k)} = \sum_{i=0}^{k-1} \gamma^i \delta_{t+i}$$
 
 So **a $k$-step advantage is exactly the sum of the first $k$ TD errors from step $t$**. The full MC advantage ($k = T_r - t$) is all TD errors to the end.
@@ -202,7 +202,7 @@ $$A_t^{\text{GAE}}(\lambda) = (1-\lambda)\sum_{k=1}^{\infty} \lambda^{k-1} A_t^{
 
 Substituting $A_t^{(k)} = \sum_{i=0}^{k-1} \gamma^i \delta_{t+i}$ and collecting terms by $\delta_{t+j}$:
 
-$$\boxed{A_t^{\text{GAE}} = \sum_{k=0}^{T_r-t-1} (\gamma \lambda)^k\, \delta_{t+k}}$$
+$$A_t^{\text{GAE}} = \sum_{k=0}^{T_r-t-1} (\gamma \lambda)^k\, \delta_{t+k}$$
 
 The weight on $\delta_{t+k}$ decays as $(\gamma\lambda)^k$ — near TD errors get higher weight, far-future ones are discounted.
 
@@ -217,10 +217,6 @@ The weight on $\delta_{t+k}$ decays as $(\gamma\lambda)^k$ — near TD errors ge
 **Key insight:** $\lambda$ is not about how many steps ahead you look — it controls **how much you trust the critic vs. real sampled returns**. A perfect critic → small $\lambda$ is safe. An inaccurate critic (early training) → larger $\lambda$ is safer.
 
 #### Recursive computation — why backwards
-
-$$A_t^{\text{GAE}} = \delta_t + \gamma\lambda \cdot \underbrace{\sum_{k=0}^{T_r-t-2} (\gamma\lambda)^k \delta_{t+1+k}}_{= A_{t+1}^{\text{GAE}}}$$
-
-Therefore:
 
 $$A_t^{\text{GAE}} = \delta_t + \gamma\lambda\, A_{t+1}^{\text{GAE}}, \qquad A_{T_r}^{\text{GAE}} = 0$$
 
@@ -258,7 +254,7 @@ $$\mathcal{L}_{\text{actor}} = -\sum_{t=1}^{T_r} A_t^{\text{GAE}} \cdot \log \pi
 
 **Critic loss** — regress $V_\phi$ onto actual returns:
 
-$$\mathcal{L}_{\text{critic}} = \sum_{t=1}^{T_r} \left( V_\phi(s_t) - G_t \right)^2$$
+$$\mathcal{L}_{\text{critic}} = \sum_{t=1}^{T_r} ( V_\phi(s_t) - G_t )^2$$
 
 **Joint loss:**
 
@@ -312,17 +308,17 @@ After collecting data under $\pi_{\text{old}}$, we want multiple gradient steps 
 
 ### The probability ratio
 
-$$r_t(\theta) = \frac{\pi_\theta(a_t \mid s_t)}{\pi_{\text{old}}(a_t \mid s_t)} = \exp\!\left(\log \pi_\theta(a_t \mid s_t) - \log \pi_{\text{old}}(a_t \mid s_t)\right)$$
+$$r_t(\theta) = \frac{\pi_\theta(a_t \mid s_t)}{\pi_{\text{old}}(a_t \mid s_t)} = \exp(\log \pi_\theta(a_t \mid s_t) - \log \pi_{\text{old}}(a_t \mid s_t))$$
 
 - $r_t = 1$ at the start of each PPO epoch
 - $r_t > 1$: $\pi_\theta$ assigns more probability to $a_t$ than $\pi_{\text{old}}$
 - $r_t < 1$: less probability
 
-The **unclipped** surrogate: $L^{\text{PG}}(\theta) = \mathbb{E}_t \!\left[ r_t(\theta) \cdot A_t \right]$
+The **unclipped** surrogate: $L^{\text{PG}}(\theta) = \mathbb{E}_t [ r_t(\theta) \cdot A_t ]$
 
 ### The clipped surrogate
 
-$$L^{\text{CLIP}}(\theta) = \mathbb{E}_t \!\left[ \min\!\left( r_t(\theta) \cdot A_t,\ \operatorname{clip}(r_t(\theta),\, 1-\varepsilon,\, 1+\varepsilon) \cdot A_t \right) \right]$$
+$$L^{\text{CLIP}}(\theta) = \mathbb{E}_t \left[ \min\left( r_t(\theta) \cdot A_t,\ \text{clip}(r_t(\theta),\, 1-\varepsilon,\, 1+\varepsilon) \cdot A_t \right) \right]$$
 
 **Case $A_t > 0$:** gradient is zero when $r_t > 1+\varepsilon$ — already pushed enough.
 
@@ -332,9 +328,9 @@ The clip only fires when going too far in the beneficial direction — never blo
 
 ### Full PPO loss
 
-$$\boxed{
-\mathcal{L}^{\text{PPO}}(\theta) = \underbrace{-\mathbb{E}_t\!\left[\min\!\left(r_t A_t,\; \operatorname{clip}(r_t, 1-\varepsilon, 1+\varepsilon) A_t\right)\right]}_{\text{actor — clipped surrogate}} + \underbrace{c_v \cdot \mathbb{E}_t\!\left[(V_\phi(s_t) - G_t)^2\right]}_{\text{critic — value regression}} - \underbrace{c_e \cdot H[\pi_\theta(\cdot \mid s_t)]}_{\text{entropy bonus (optional)}}
-}$$
+$$\mathcal{L}^{\text{PPO}}(\theta) = -\mathbb{E}_t \left[ \min\left( r_t A_t,\ \text{clip}(r_t, 1-\varepsilon, 1+\varepsilon) A_t \right) \right] + c_v \cdot \mathbb{E}_t \left[ (V_\phi(s_t) - G_t)^2 \right] - c_e \cdot H[\pi_\theta(\cdot \mid s_t)]$$
+
+Where the three terms are: actor (clipped surrogate) + critic (value regression) - entropy bonus (optional).
 
 ### Tensor shapes — Script 3
 
