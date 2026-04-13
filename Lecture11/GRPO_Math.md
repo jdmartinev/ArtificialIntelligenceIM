@@ -42,7 +42,7 @@ No critic. No $G_t$. No $\delta_t$. No backwards loop. Just statistics across th
 
 ## Why This Works as a Baseline
 
-Recall from script 1: any baseline $b$ with $\mathbb{E} = 0$ can be subtracted without introducing bias.
+Recall from script 1: any baseline $b$ with $\mathbb{E}[b \cdot \nabla] = 0$ can be subtracted without introducing bias.
 
 $\text{mean}(R_1, \ldots, R_G)$ satisfies this — it is an estimate of $\mathbb{E}_{\pi_\theta}[R \mid x]$, the expected reward for **this specific prompt**.
 
