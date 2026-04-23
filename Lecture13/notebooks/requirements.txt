@@ -1,0 +1,15 @@
+python-dotenv
+
+sentence-transformers
+qdrant-client
+
+langchain-core
+langchain-google-genai
+langchain-ollama
+langchain-qdrant
+langchain-text-splitters
+
+google-generativeai
+deepeval
+gradio
+markitdown

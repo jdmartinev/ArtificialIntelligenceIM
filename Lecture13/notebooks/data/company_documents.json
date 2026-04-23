@@ -1,0 +1,38 @@
+[
+  {
+    "id": "product_001",
+    "title": "CloudSync Pro — Plan Enterprise",
+    "content": "CloudSync Pro Enterprise ofrece almacenamiento ilimitado, colaboración en tiempo real para hasta 500 usuarios y soporte prioritario 24/7. Precio: $49/mes por usuario con compromiso anual. Incluye: control de versiones avanzado, registros de auditoría, integración SSO, y SLA de 99.9% de disponibilidad. El plan mensual sin compromiso está disponible a $59/mes por usuario.",
+    "metadata": {
+      "department": "product",
+      "type": "pricing"
+    }
+  },
+  {
+    "id": "policy_001",
+    "title": "Política de Trabajo Remoto 2024",
+    "content": "Vigente desde enero 2024. Los empleados pueden trabajar de forma remota hasta 3 días por semana. El trabajo remoto requiere aprobación del jefe directo. Estipendio de equipos: $500 anuales para adecuación de oficina en casa. Las videollamadas son obligatorias en reuniones de equipo. Horario base de colaboración: 10:00–15:00 hora local del empleado.",
+    "metadata": {
+      "department": "hr",
+      "type": "policy"
+    }
+  },
+  {
+    "id": "process_001",
+    "title": "Proceso de Reembolso a Clientes",
+    "content": "Paso 1: El cliente envía solicitud de reembolso por el portal de soporte. Paso 2: El agente revisa la solicitud en máximo 24 horas. Paso 3: Montos menores a $100 se aprueban automáticamente. Paso 4: Montos mayores a $100 requieren aprobación del supervisor. Paso 5: El reembolso se procesa en 3–5 días hábiles al método de pago original. Reembolso completo disponible dentro de los 30 días posteriores a la compra.",
+    "metadata": {
+      "department": "support",
+      "type": "process"
+    }
+  },
+  {
+    "id": "guide_001",
+    "title": "Checklist de Onboarding para Nuevos Empleados",
+    "content": "Día 1: Configuración de TI y acceso a sistemas. Día 2: Orientación departamental con el equipo. Semana 1: Completar módulos de entrenamiento obligatorios (seguridad, cumplimiento, cultura). Semana 2: Acompañar a compañeros y revisar documentación de proyectos activos. Mes 1: Evaluación de período de prueba y definición de objetivos a 90 días.",
+    "metadata": {
+      "department": "hr",
+      "type": "guide"
+    }
+  }
+]

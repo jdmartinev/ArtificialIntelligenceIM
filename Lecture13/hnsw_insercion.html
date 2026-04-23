@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HNSW — Inserción de un vector</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --card: #f1f5f9;
+  --border: #cbd5e1;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #0284c7;
+  --accent2: #6366f1;
+  --accent3: #059669;
+  --warn: #ea580c;
+  --mono: 'Space Mono', monospace;
+  --sans: 'Syne', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.7;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding: 0 24px 100px; }
+
+/* Hero */
+.hero { padding: 60px 0 40px; text-align: center; }
+.hero-tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 4px 14px;
+  border-radius: 99px;
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #0f172a 0%, var(--accent) 60%, var(--accent2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero p { color: var(--muted); max-width: 560px; margin: 0 auto; }
+
+/* Sections */
+.section { margin-bottom: 64px; }
+.section-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.section h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 14px; letter-spacing: -.02em; }
+.section p { color: #334155; margin-bottom: 12px; }
+.section p strong { color: var(--text); }
+
+/* Callout */
+.callout {
+  border-left: 3px solid var(--accent);
+  background: #e0f2fe;
+  padding: 14px 18px;
+  border-radius: 0 10px 10px 0;
+  margin: 16px 0;
+  font-size: .9rem;
+}
+.callout.orange { border-color: var(--warn); background: #fff7ed; }
+.callout.green  { border-color: var(--accent3); background: #ecfdf5; }
+.callout strong { color: var(--text); }
+
+/* Steps */
+.steps { margin: 20px 0; }
+.step { display: flex; gap: 14px; margin-bottom: 16px; align-items: flex-start; }
+.step-num {
+  flex-shrink: 0; width: 30px; height: 30px;
+  border-radius: 50%; border: 2px solid var(--accent);
+  color: var(--accent); font-family: var(--mono); font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.step-body { padding-top: 4px; }
+.step-body strong { color: var(--text); display: block; margin-bottom: 2px; }
+.step-body span { color: #475569; font-size: .9rem; }
+
+/* Canvas card */
+.canvas-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 24px 0;
+}
+.canvas-card canvas { display: block; width: 100%; }
+.canvas-toolbar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.canvas-label { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-right: auto; }
+
+/* Buttons */
+.btn {
+  font-family: var(--mono); font-size: 11px;
+  padding: 6px 16px; border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent; color: var(--text);
+  cursor: pointer; transition: all .15s; letter-spacing: .04em;
+}
+.btn:hover { background: var(--border); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn.primary {
+  background: var(--accent); border-color: var(--accent);
+  color: #fff; font-weight: 700;
+}
+.btn.primary:hover:not(:disabled) { opacity: .85; }
+
+/* Animation panel */
+.anim-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 24px 0;
+}
+.anim-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+}
+.anim-title { font-weight: 700; font-size: .95rem; }
+.anim-step-counter { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.anim-canvas-wrap { position: relative; }
+.anim-canvas-wrap canvas { display: block; width: 100%; }
+.anim-explanation {
+  padding: 16px 18px;
+  border-top: 1px solid var(--border);
+  min-height: 80px;
+}
+.anim-explanation .step-title {
+  font-weight: 700; font-size: .95rem; margin-bottom: 6px; color: var(--accent);
+}
+.anim-explanation .step-desc { color: #334155; font-size: .9rem; line-height: 1.6; }
+.anim-controls {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 18px; border-top: 1px solid var(--border);
+}
+.progress-bar-wrap {
+  flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden;
+}
+.progress-bar { height: 100%; background: var(--accent); transition: width .3s; border-radius: 2px; }
+
+/* Math block */
+.math-block {
+  background: #f1f5f9; border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 18px;
+  font-family: var(--mono); font-size: .82rem; color: #065f46;
+  overflow-x: auto; white-space: pre; margin: 14px 0;
+}
+
+/* Table */
+.compare-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: .875rem; }
+.compare-table th {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted);
+  padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border);
+}
+.compare-table td { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; color: #475569; }
+.compare-table td:first-child { color: var(--text); font-weight: 600; }
+.compare-table tr:last-child td { border-bottom: none; }
+
+/* Pill */
+.pill { display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 11px; font-family: var(--mono); }
+.pill.blue   { background: #dbeafe; color: #1e40af; }
+.pill.green  { background: #d1fae5; color: #065f46; }
+.pill.orange { background: #ffedd5; color: #9a3412; }
+.pill.purple { background: #ede9fe; color: #4c1d95; }
+
+/* Reveal */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity .4s, transform .4s; }
+.reveal.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-tag">HNSW — Hierarchical Navigable Small World</div>
+  <h1>Inserción de un vector</h1>
+  <p>Paso a paso: qué ocurre internamente cuando un nuevo vector entra al índice HNSW.</p>
+</div>
+
+<!-- S1: Contexto -->
+<div class="section reveal">
+  <div class="section-label">01 — Contexto</div>
+  <h2>¿Cuándo ocurre la inserción?</h2>
+  <p>La inserción ocurre durante la <strong>construcción del índice</strong> — cuando llamas a <code style="font-family:var(--mono);font-size:.85em">ingest_documents()</code> en el lab. Cada chunk de texto se convierte en un vector y pasa por este proceso.</p>
+  <p>No confundir con la <strong>búsqueda</strong> (query), que ocurre cuando un usuario hace una pregunta. Son dos operaciones distintas.</p>
+  <div class="callout">
+    <strong>En Qdrant:</strong> cuando haces <code style="font-family:var(--mono);font-size:.85em">qdrant.upsert(...)</code>, Qdrant ejecuta este proceso internamente para cada vector que insertas. Tú no lo ves, pero ocurre.
+  </div>
+</div>
+
+<!-- S2: Estructura -->
+<div class="section reveal">
+  <div class="section-label">02 — Estructura del índice</div>
+  <h2>Múltiples capas independientes</h2>
+  <p>HNSW mantiene <strong>L grafos apilados</strong>. Cada capa es un grafo independiente — no hay aristas entre capas. Lo que los conecta es que <strong>el mismo nodo puede existir en múltiples capas</strong>.</p>
+
+  <div class="canvas-card">
+    <canvas id="structureCanvas" height="260"></canvas>
+    <div class="canvas-toolbar">
+      <span class="canvas-label">Estructura de capas — un nodo puede existir en varias capas</span>
+    </div>
+  </div>
+
+  <p>La proporción de nodos por capa decae exponencialmente. La mayoría solo existen en la capa 0.</p>
+  <div class="math-block">Capa 0:  ████████████████████  (todos los nodos)
+Capa 1:  ████████              (~37% de los nodos)
+Capa 2:  ████                  (~14% de los nodos)
+Capa 3:  ██                    (~5%  de los nodos)</div>
+</div>
+
+<!-- S3: Paso 1 — Sorteo -->
+<div class="section reveal">
+  <div class="section-label">03 — Paso 1</div>
+  <h2>Sortear la capa máxima de v</h2>
+  <p>Lo primero que se hace al recibir el vector <strong>v</strong> es determinar hasta qué capa va a existir.</p>
+
+  <div class="math-block">l = ⌊ -ln(uniform(0,1)) · mL ⌋
+
+uniform(0,1) → número aleatorio entre 0 y 1
+mL           → parámetro que controla la distribución (≈ 1/ln(M))
+l            → capa máxima asignada a v</div>
+
+  <p>La distribución exponencial garantiza que:</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">↓</div>
+      <div class="step-body">
+        <strong>l = 0 ocurre ~63% de las veces</strong>
+        <span>La mayoría de vectores solo existen en la capa base. Son los nodos "locales".</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">↑</div>
+      <div class="step-body">
+        <strong>l = 1 ocurre ~23% de las veces</strong>
+        <span>Existen en capa 0 y capa 1. Tienen conexiones de medio alcance.</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">★</div>
+      <div class="step-body">
+        <strong>l ≥ 2 ocurre ~14% de las veces</strong>
+        <span>Estos se convierten en hubs — conectan zonas distantes del espacio.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout orange">
+    <strong>¿Por qué aleatorio?</strong> Si los hubs fueran siempre los primeros vectores insertados (como en NSW), el grafo dependería del orden de inserción. La asignación aleatoria hace el índice robusto independientemente del orden.
+  </div>
+</div>
+
+<!-- S4: Paso 2 — Descenso -->
+<div class="section reveal">
+  <div class="section-label">04 — Paso 2</div>
+  <h2>Descender hasta la capa l (greedy rápido)</h2>
+  <p>El índice ya tiene nodos de inserciones anteriores. Necesitas encontrar dónde conectar <strong>v</strong>. Para eso, bajas desde la capa más alta hasta la capa <code style="font-family:var(--mono);font-size:.85em">l</code> usando búsqueda greedy simple.</p>
+
+  <div class="callout green">
+    <strong>Búsqueda greedy:</strong> estás en un nodo. Miras todos sus vecinos. Te mueves al más cercano a <strong>v</strong>. Repites hasta que ningún vecino esté más cerca que tú — eso es el mínimo local.
+  </div>
+
+  <p>En esta fase usas <strong>ef = 1</strong> — solo guardas el mejor candidato en cada momento. No necesitas precisión, solo aproximarte a la zona de <strong>v</strong> rápidamente.</p>
+
+  <div class="math-block">Para cada capa desde L_max hasta l+1:
+    entry_point = greedy_search(capa, entry_point, ef=1)
+    
+    # greedy_search con ef=1:
+    # → moverse siempre al vecino más cercano a v
+    # → parar en el mínimo local
+    # → retornar ese nodo como nuevo entry_point</div>
+
+  <div class="callout">
+    <strong>No insertas nada en esta fase.</strong> Solo buscas un buen punto de entrada para la siguiente fase. El entry_point final es el nodo más cercano a <strong>v</strong> que pudiste encontrar en la capa l+1.
+  </div>
+</div>
+
+<!-- S5: Paso 3 — Inserción -->
+<div class="section reveal">
+  <div class="section-label">05 — Paso 3</div>
+  <h2>Insertar v desde la capa l hasta la capa 0</h2>
+  <p>Ahora sí insertas <strong>v</strong> en cada capa, empezando desde <code style="font-family:var(--mono);font-size:.85em">l</code> y bajando hasta 0. Aquí entra <code style="font-family:var(--mono);font-size:.85em">ef_construction</code>.</p>
+
+  <p>En lugar de guardar solo 1 candidato, mantienes una cola con los <strong>ef_construction mejores candidatos</strong> vistos. La búsqueda es más exhaustiva y produce conexiones de mejor calidad.</p>
+
+  <div class="math-block">Para cada capa desde l hasta 0:
+    candidatos = greedy_search(capa, entry_point, ef=ef_construction)
+    vecinos    = seleccionar_M_mejores(candidatos)
+    
+    para cada vecino en vecinos:
+        conectar(v ↔ vecino)   # bidireccional
+        si vecino.grado > M_max:
+            pruning(vecino)    # eliminar la conexión más débil
+    
+    entry_point = vecinos[0]   # el más cercano → entry_point para la capa inferior</div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Búsqueda con ef_construction candidatos</strong>
+        <span>Exploración exhaustiva desde el entry_point. Guardas los ef_construction nodos más cercanos a v que encuentres.</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Seleccionar los M mejores</strong>
+        <span>De los ef_construction candidatos, conectas v solo a los M más cercanos. Siempre ef_construction ≥ M.</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Conexión bidireccional + pruning</strong>
+        <span>Cada arista es bidireccional. Si un vecino supera M_max conexiones, se elimina su arista más débil.</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <strong>Bajar a la siguiente capa</strong>
+        <span>El vecino más cercano a v se convierte en entry_point para la capa inferior. Repites.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S6: Animación -->
+<div class="section reveal">
+  <div class="section-label">06 — Animación</div>
+  <h2>Proceso completo paso a paso</h2>
+  <p>Inserta el vector <strong>v★</strong> en un índice con 3 capas. Sigue cada fase del proceso.</p>
+
+  <div class="anim-panel">
+    <div class="anim-header">
+      <span class="anim-title">Inserción de v★ en HNSW</span>
+      <span class="anim-step-counter" id="stepCounter">Paso 0 / 7</span>
+    </div>
+    <div class="anim-canvas-wrap">
+      <canvas id="animCanvas" height="400"></canvas>
+    </div>
+    <div class="anim-explanation">
+      <div class="step-title" id="animTitle">Listo para comenzar</div>
+      <div class="step-desc" id="animDesc">Presiona "Siguiente" para ver el proceso de inserción paso a paso.</div>
+    </div>
+    <div class="anim-controls">
+      <button class="btn" id="animPrev" onclick="animStep(-1)" disabled>← Anterior</button>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="progressBar" style="width:0%"></div>
+      </div>
+      <button class="btn primary" id="animNext" onclick="animStep(1)">Siguiente →</button>
+      <button class="btn" onclick="animReset()">Reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- S7: Parámetros -->
+<div class="section reveal">
+  <div class="section-label">07 — Parámetros</div>
+  <h2>Resumen de parámetros involucrados</h2>
+
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Parámetro</th>
+        <th>Qué controla</th>
+        <th>Afecta</th>
+        <th>Típico</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>M</td>
+        <td>Conexiones por nodo por capa</td>
+        <td><span class="pill orange">Build + Memoria</span></td>
+        <td>16</td>
+      </tr>
+      <tr>
+        <td>M_max</td>
+        <td>Máximo de conexiones (capa 0 = 2·M)</td>
+        <td><span class="pill orange">Build + Memoria</span></td>
+        <td>32</td>
+      </tr>
+      <tr>
+        <td>ef_construction</td>
+        <td>Candidatos en búsqueda durante inserción</td>
+        <td><span class="pill orange">Build time</span></td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <td>mL</td>
+        <td>Factor de la distribución exponencial</td>
+        <td><span class="pill orange">Build</span></td>
+        <td>1/ln(M)</td>
+      </tr>
+      <tr>
+        <td>ef (search)</td>
+        <td>Candidatos en búsqueda durante query</td>
+        <td><span class="pill blue">Query time</span></td>
+        <td>50</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout green">
+    <strong>Regla práctica:</strong> <code style="font-family:var(--mono);font-size:.85em">ef_construction</code> solo afecta la calidad del grafo al construirlo. Una vez construido, solo <code style="font-family:var(--mono);font-size:.85em">ef</code> y <code style="font-family:var(--mono);font-size:.85em">M</code> importan para las búsquedas.
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+// ── Scroll reveal ──────────────────────────────────────────
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: .1 });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+// ── Helpers ───────────────────────────────────────────────
+function dpr(canvas) {
+  const ratio = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width  = rect.width  * ratio;
+  canvas.height = rect.height * ratio;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(ratio, ratio);
+  return { ctx, w: rect.width, h: rect.height };
+}
+function rnd(a, b) { return Math.random() * (b - a) + a; }
+function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+
+// ── S2: Structure canvas ──────────────────────────────────
+function drawStructure() {
+  const canvas = document.getElementById('structureCanvas');
+  const { ctx, w, h } = dpr(canvas);
+  ctx.clearRect(0, 0, w, h);
+
+  const layers = [
+    { y: h * .18, count: 3,  color: '#0284c7', label: 'Capa 2', bg: 'rgba(2,132,199,.07)' },
+    { y: h * .50, count: 7,  color: '#6366f1', label: 'Capa 1', bg: 'rgba(99,102,241,.06)' },
+    { y: h * .82, count: 14, color: '#059669', label: 'Capa 0', bg: 'rgba(5,150,105,.05)' },
+  ];
+
+  // Band backgrounds
+  layers.forEach(l => {
+    ctx.fillStyle = l.bg;
+    ctx.fillRect(0, l.y - 28, w, 56);
+  });
+
+  // Shared nodes (node index 0 and 2 exist in all layers)
+  const sharedIndices = [0, 2];
+
+  layers.forEach(layer => {
+    const spacing = w / (layer.count + 1);
+    const nodes = Array.from({ length: layer.count }, (_, i) => ({
+      x: spacing * (i + 1), y: layer.y, i
+    }));
+
+    // Edges between adjacent nodes
+    for (let i = 0; i < nodes.length - 1; i++) {
+      ctx.beginPath();
+      ctx.moveTo(nodes[i].x, nodes[i].y);
+      ctx.lineTo(nodes[i + 1].x, nodes[i + 1].y);
+      ctx.strokeStyle = `${layer.color}33`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Nodes
+    nodes.forEach(n => {
+      const isShared = sharedIndices.includes(n.i);
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, isShared ? 10 : 7, 0, Math.PI * 2);
+      ctx.fillStyle = isShared ? layer.color : `${layer.color}44`;
+      ctx.fill();
+      ctx.strokeStyle = layer.color;
+      ctx.lineWidth = isShared ? 2 : 1;
+      ctx.stroke();
+    });
+
+    // Vertical dashed lines for shared nodes
+    if (layer !== layers[layers.length - 1]) {
+      sharedIndices.forEach(si => {
+        if (si < layer.count) {
+          const nx = spacing * (si + 1);
+          const nextLayer = layers[layers.indexOf(layer) + 1];
+          if (nextLayer) {
+            const nextSpacing = w / (nextLayer.count + 1);
+            const nx2 = nextSpacing * (si + 1);
+            ctx.beginPath();
+            ctx.moveTo(nx, layer.y + 10);
+            ctx.lineTo(nx2, nextLayer.y - 10);
+            ctx.strokeStyle = '#94a3b880';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([4, 4]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+          }
+        }
+      });
+    }
+
+    // Label
+    ctx.fillStyle = layer.color;
+    ctx.globalAlpha = .7;
+    ctx.font = 'bold 11px Space Mono';
+    ctx.fillText(layer.label, 10, layer.y + 4);
+    ctx.globalAlpha = 1;
+  });
+
+  // Legend
+  ctx.fillStyle = '#475569';
+  ctx.font = '11px Space Mono';
+  ctx.fillText('● nodo en esta capa', w - 200, h - 10);
+  ctx.fillStyle = '#0284c7';
+  ctx.fillText('● mismo nodo en múltiples capas', w - 300, h - 10);
+}
+
+// ── S6: Animation ──────────────────────────────────────────
+let animIdx = 0;
+
+// Fixed node positions per layer
+const NODES = {
+  2: [
+    { x: 120, y: 60,  id: 'A' },
+    { x: 340, y: 55,  id: 'B' },
+    { x: 580, y: 65,  id: 'C' },
+  ],
+  1: [
+    { x: 80,  y: 190, id: 'D' },
+    { x: 190, y: 200, id: 'E' },
+    { x: 300, y: 185, id: 'F' },
+    { x: 420, y: 195, id: 'G' },
+    { x: 540, y: 190, id: 'H' },
+    { x: 650, y: 200, id: 'I' },
+  ],
+  0: [
+    { x: 50,  y: 320, id: 'J' },
+    { x: 130, y: 330, id: 'K' },
+    { x: 200, y: 315, id: 'L' },
+    { x: 280, y: 325, id: 'M' },
+    { x: 360, y: 310, id: 'N' },
+    { x: 440, y: 325, id: 'O' },
+    { x: 510, y: 315, id: 'P' },
+    { x: 590, y: 320, id: 'Q' },
+    { x: 660, y: 330, id: 'R' },
+  ]
+};
+
+// New vector v
+const V = { x: 390, y: 190, id: 'v★' };
+// l = 1 (v exists in layers 0 and 1)
+
+const LAYER_COLORS = { 2: '#0284c7', 1: '#6366f1', 0: '#059669' };
+const LAYER_Y_BANDS = { 2: [30, 120], 1: [155, 245], 0: [280, 370] };
+
+const ANIM_STEPS = [
+  {
+    title: "Estado inicial del índice",
+    desc: "El índice HNSW tiene 3 capas con nodos ya insertados. El vector v★ (en naranja) va a ser insertado. Su capa máxima sorteada es l = 1, lo que significa que existirá en la capa 1 y la capa 0.",
+    phase: 'initial',
+    highlight: [],
+    entryPoint: null,
+    activeLayer: null,
+    showV: true,
+    vInIndex: false,
+  },
+  {
+    title: "Fase 1 — Entrar por la capa más alta (capa 2)",
+    desc: "Empezamos en la capa 2 desde un nodo de entrada arbitrario (A). Hacemos búsqueda greedy con ef=1: nos movemos al vecino más cercano a v★. El objetivo es encontrar el mínimo local en esta capa.",
+    phase: 'descend',
+    highlight: ['A', 'B', 'C'],
+    path: ['A', 'B'],
+    entryPoint: 'B',
+    activeLayer: 2,
+    showV: true,
+    vInIndex: false,
+  },
+  {
+    title: "Fase 1 — Bajar a la capa 1 (greedy ef=1)",
+    desc: "El mínimo local en la capa 2 fue B. Usamos B como punto de entrada para la capa 1. Hacemos greedy ef=1 nuevamente y encontramos el nodo más cercano a v★ en la capa 1: G.",
+    phase: 'descend',
+    highlight: ['F', 'G', 'H'],
+    path: ['F', 'G'],
+    entryPoint: 'G',
+    activeLayer: 1,
+    showV: true,
+    vInIndex: false,
+  },
+  {
+    title: "Llegamos a la capa l=1 — empieza la inserción",
+    desc: "Hemos llegado a la capa máxima de v★ (l=1). Ahora cambia el modo: en lugar de ef=1, usamos ef_construction=200. Exploramos más candidatos para encontrar los M mejores vecinos y crear conexiones de calidad.",
+    phase: 'insert_start',
+    highlight: ['F', 'G', 'H', 'E'],
+    entryPoint: 'G',
+    activeLayer: 1,
+    showV: true,
+    vInIndex: false,
+    efExplore: true,
+  },
+  {
+    title: "Fase 2 — Conectar v★ en la capa 1",
+    desc: "Con ef_construction candidatos explorados, seleccionamos los M=3 más cercanos a v★: G, F y H. Se crean aristas bidireccionales. Si algún vecino supera M_max conexiones, se aplica pruning eliminando su arista más débil.",
+    phase: 'insert_layer1',
+    highlight: ['G', 'F', 'H'],
+    connections1: [['v', 'G'], ['v', 'F'], ['v', 'H']],
+    entryPoint: 'G',
+    activeLayer: 1,
+    showV: true,
+    vInIndex: true,
+  },
+  {
+    title: "Bajar a la capa 0 — entry_point = G",
+    desc: "El vecino más cercano a v★ en la capa 1 fue G. G se convierte en el entry_point para la capa 0. Repetimos el proceso con ef_construction candidatos.",
+    phase: 'insert_layer0_start',
+    highlight: ['M', 'N', 'O', 'P'],
+    entryPoint: 'N',
+    activeLayer: 0,
+    showV: true,
+    vInIndex: true,
+    connections1: [['v', 'G'], ['v', 'F'], ['v', 'H']],
+    efExplore: true,
+  },
+  {
+    title: "Fase 2 — Conectar v★ en la capa 0",
+    desc: "Seleccionamos los M=3 más cercanos en la capa 0: N, O, M. Se crean aristas bidireccionales en la capa 0. La inserción está completa — v★ ahora forma parte del índice con conexiones en las capas 1 y 0.",
+    phase: 'insert_layer0',
+    highlight: ['M', 'N', 'O'],
+    connections1: [['v', 'G'], ['v', 'F'], ['v', 'H']],
+    connections0: [['v', 'N'], ['v', 'O'], ['v', 'M']],
+    entryPoint: 'N',
+    activeLayer: 0,
+    showV: true,
+    vInIndex: true,
+  },
+  {
+    title: "✅ Inserción completa",
+    desc: "v★ está integrado en el índice. Existe en la capa 1 (conexiones largas) y la capa 0 (conexiones locales precisas). La próxima búsqueda que pase cerca de v★ podrá encontrarlo eficientemente desde cualquier capa.",
+    phase: 'complete',
+    highlight: [],
+    connections1: [['v', 'G'], ['v', 'F'], ['v', 'H']],
+    connections0: [['v', 'N'], ['v', 'O'], ['v', 'M']],
+    showV: true,
+    vInIndex: true,
+  },
+];
+
+function getNodePos(id, layer) {
+  const nodes = NODES[layer];
+  if (!nodes) return null;
+  return nodes.find(n => n.id === id) || null;
+}
+
+function getAllNodePos(id) {
+  for (const [layer, nodes] of Object.entries(NODES)) {
+    const n = nodes.find(n => n.id === id);
+    if (n) return { ...n, layer: parseInt(layer) };
+  }
+  return null;
+}
+
+function drawAnim() {
+  const canvas = document.getElementById('animCanvas');
+  const { ctx, w, h } = dpr(canvas);
+  ctx.clearRect(0, 0, w, h);
+
+  const step = ANIM_STEPS[animIdx];
+  const scaleX = w / 740;
+  const scaleY = h / 400;
+  const sx = n => n.x * scaleX;
+  const sy = n => n.y * scaleY;
+
+  // Layer bands
+  Object.entries(LAYER_Y_BANDS).forEach(([layer, [y1, y2]]) => {
+    const color = LAYER_COLORS[parseInt(layer)];
+    ctx.fillStyle = `${color}10`;
+    ctx.fillRect(0, y1 * scaleY, w, (y2 - y1) * scaleY);
+    ctx.fillStyle = `${color}60`;
+    ctx.globalAlpha = .5;
+    ctx.font = 'bold 11px Space Mono';
+    ctx.fillText(`Capa ${layer}`, 8, (y2 - 6) * scaleY);
+    ctx.globalAlpha = 1;
+  });
+
+  // Background mesh edges
+  Object.entries(NODES).forEach(([layer, nodes]) => {
+    const color = LAYER_COLORS[parseInt(layer)];
+    nodes.forEach(a => {
+      nodes.filter(b => b.id !== a.id)
+        .sort((x, y) => dist(a, x) - dist(a, y))
+        .slice(0, 2)
+        .forEach(b => {
+          ctx.beginPath();
+          ctx.moveTo(sx(a), sy(a));
+          ctx.lineTo(sx(b), sy(b));
+          ctx.strokeStyle = `${color}20`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        });
+    });
+  });
+
+  // Greedy path arrows
+  if (step.path) {
+    const layerNodes = NODES[step.activeLayer];
+    for (let i = 0; i < step.path.length - 1; i++) {
+      const a = layerNodes.find(n => n.id === step.path[i]);
+      const b = layerNodes.find(n => n.id === step.path[i + 1]);
+      if (!a || !b) continue;
+      ctx.beginPath();
+      ctx.moveTo(sx(a), sy(a));
+      ctx.lineTo(sx(b), sy(b));
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([6, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Arrow head
+      const angle = Math.atan2(sy(b) - sy(a), sx(b) - sx(a));
+      const len = 10;
+      ctx.beginPath();
+      ctx.moveTo(sx(b), sy(b));
+      ctx.lineTo(sx(b) - len * Math.cos(angle - .4), sy(b) - len * Math.sin(angle - .4));
+      ctx.lineTo(sx(b) - len * Math.cos(angle + .4), sy(b) - len * Math.sin(angle + .4));
+      ctx.closePath();
+      ctx.fillStyle = '#f59e0b';
+      ctx.fill();
+    }
+  }
+
+  // New connections — layer 1
+  if (step.connections1) {
+    step.connections1.forEach(([aid, bid]) => {
+      const vpos = { x: V.x, y: V.y };
+      const bpos = NODES[1].find(n => n.id === bid);
+      if (!bpos) return;
+      ctx.beginPath();
+      ctx.moveTo(sx(vpos), sy(vpos));
+      ctx.lineTo(sx(bpos), sy(bpos));
+      ctx.strokeStyle = '#6366f1';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    });
+  }
+
+  // New connections — layer 0
+  if (step.connections0) {
+    step.connections0.forEach(([aid, bid]) => {
+      const vpos = { x: V.x, y: V.y };
+      // Project v to layer 0 y
+      const vLayer0 = { x: V.x, y: 325 };
+      const bpos = NODES[0].find(n => n.id === bid);
+      if (!bpos) return;
+      ctx.beginPath();
+      ctx.moveTo(sx(vLayer0), sy(vLayer0));
+      ctx.lineTo(sx(bpos), sy(bpos));
+      ctx.strokeStyle = '#059669';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    });
+  }
+
+  // Nodes
+  Object.entries(NODES).forEach(([layer, nodes]) => {
+    const color = LAYER_COLORS[parseInt(layer)];
+    nodes.forEach(n => {
+      const isHighlighted = step.highlight && step.highlight.includes(n.id);
+      const isEntry = step.entryPoint === n.id && parseInt(layer) === step.activeLayer;
+      const r = isEntry ? 11 : isHighlighted ? 9 : 6;
+
+      ctx.beginPath();
+      ctx.arc(sx(n), sy(n), r, 0, Math.PI * 2);
+      ctx.fillStyle = isEntry ? color : isHighlighted ? `${color}99` : `${color}30`;
+      ctx.fill();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = isEntry ? 2.5 : 1.5;
+      ctx.stroke();
+
+      if (isEntry) {
+        ctx.fillStyle = 'rgba(0,0,0,.15)';
+        ctx.beginPath();
+        ctx.arc(sx(n), sy(n), 18, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = color;
+        ctx.font = 'bold 9px Space Mono';
+        ctx.textAlign = 'center';
+        ctx.fillText('entry', sx(n), sy(n) + 24);
+        ctx.textAlign = 'start';
+      }
+    });
+  });
+
+  // v★
+  if (step.showV) {
+    const vpos = { x: V.x, y: V.y };
+    // If v is in index, also show in layer 0
+    if (step.vInIndex && step.connections0) {
+      const vLayer0 = { x: V.x, y: 325 };
+      ctx.beginPath();
+      ctx.arc(sx(vLayer0), sy(vLayer0), 10, 0, Math.PI * 2);
+      ctx.fillStyle = '#ea580c';
+      ctx.fill();
+      ctx.strokeStyle = '#9a3412';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 9px Space Mono';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('v★', sx(vLayer0), sy(vLayer0));
+      ctx.textAlign = 'start';
+      ctx.textBaseline = 'alphabetic';
+    }
+
+    // v in layer 1
+    const showVLayer1 = step.vInIndex || !step.vInIndex;
+    if (showVLayer1) {
+      ctx.beginPath();
+      ctx.arc(sx(vpos), sy(vpos), 12, 0, Math.PI * 2);
+      ctx.fillStyle = step.vInIndex ? '#ea580c' : 'rgba(234,88,12,.3)';
+      ctx.fill();
+      ctx.strokeStyle = '#ea580c';
+      ctx.lineWidth = step.vInIndex ? 2.5 : 2;
+      ctx.setLineDash(step.vInIndex ? [] : [4, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = step.vInIndex ? '#fff' : '#ea580c';
+      ctx.font = 'bold 9px Space Mono';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('v★', sx(vpos), sy(vpos));
+      ctx.textAlign = 'start';
+      ctx.textBaseline = 'alphabetic';
+    }
+  }
+
+  // ef_construction exploration hint
+  if (step.efExplore) {
+    const vpos = { x: V.x, y: V.y };
+    ctx.beginPath();
+    ctx.arc(sx(vpos), sy(vpos), 70 * scaleX, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(234,88,12,.2)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(234,88,12,.15)';
+    ctx.fill();
+    ctx.fillStyle = '#ea580c';
+    ctx.font = '10px Space Mono';
+    ctx.textAlign = 'center';
+    ctx.fillText('ef_construction', sx(vpos), sy(vpos) - 75 * scaleY);
+    ctx.textAlign = 'start';
+  }
+
+  // Legend
+  const legends = [
+    { color: '#f59e0b', label: 'camino greedy' },
+    { color: '#ea580c', label: 'v★ (nuevo vector)' },
+  ];
+  legends.forEach((l, i) => {
+    ctx.beginPath();
+    ctx.arc(16, h - 30 + i * 18, 5, 0, Math.PI * 2);
+    ctx.fillStyle = l.color;
+    ctx.fill();
+    ctx.fillStyle = '#475569';
+    ctx.font = '10px Space Mono';
+    ctx.fillText(l.label, 26, h - 26 + i * 18);
+  });
+}
+
+function animStep(dir) {
+  animIdx = Math.max(0, Math.min(ANIM_STEPS.length - 1, animIdx + dir));
+  const step = ANIM_STEPS[animIdx];
+  document.getElementById('animTitle').textContent = step.title;
+  document.getElementById('animDesc').textContent = step.desc;
+  document.getElementById('stepCounter').textContent = `Paso ${animIdx} / ${ANIM_STEPS.length - 1}`;
+  document.getElementById('progressBar').style.width = `${(animIdx / (ANIM_STEPS.length - 1)) * 100}%`;
+  document.getElementById('animPrev').disabled = animIdx === 0;
+  document.getElementById('animNext').disabled = animIdx === ANIM_STEPS.length - 1;
+  drawAnim();
+}
+
+function animReset() {
+  animIdx = 0;
+  document.getElementById('animTitle').textContent = 'Listo para comenzar';
+  document.getElementById('animDesc').textContent = 'Presiona "Siguiente" para ver el proceso de inserción paso a paso.';
+  document.getElementById('stepCounter').textContent = 'Paso 0 / 7';
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('animPrev').disabled = true;
+  document.getElementById('animNext').disabled = false;
+  drawAnim();
+}
+
+window.addEventListener('load', () => {
+  drawStructure();
+  drawAnim();
+});
+
+window.addEventListener('resize', () => {
+  drawStructure();
+  drawAnim();
+});
+</script>
+</body>
+</html>

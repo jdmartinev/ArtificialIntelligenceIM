@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HNSW — Búsqueda</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff; --surface: #f8fafc; --card: #f1f5f9; --border: #cbd5e1;
+  --text: #0f172a; --muted: #64748b;
+  --accent: #0284c7; --accent2: #6366f1; --accent3: #059669;
+  --warn: #ea580c; --mono: 'Space Mono', monospace; --sans: 'Syne', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 16px; line-height: 1.7; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 0 24px 100px; }
+
+.hero { padding: 60px 0 40px; text-align: center; }
+.hero-tag {
+  display: inline-block; font-family: var(--mono); font-size: 11px;
+  letter-spacing: .15em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid var(--accent); padding: 4px 14px; border-radius: 99px; margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 800; letter-spacing: -.02em;
+  line-height: 1.1; margin-bottom: 16px;
+  background: linear-gradient(135deg, #0f172a 0%, var(--accent) 55%, var(--accent2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero p { color: var(--muted); max-width: 560px; margin: 0 auto; }
+
+.section { margin-bottom: 60px; }
+.section-label { font-family: var(--mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.section h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; letter-spacing: -.02em; }
+.section p { color: #334155; margin-bottom: 12px; }
+.section p strong { color: var(--text); }
+
+.callout { border-left: 3px solid var(--accent); background: #e0f2fe; padding: 14px 18px; border-radius: 0 10px 10px 0; margin: 14px 0; font-size: .9rem; }
+.callout.orange { border-color: var(--warn); background: #fff7ed; }
+.callout.green  { border-color: var(--accent3); background: #ecfdf5; }
+.callout strong { color: var(--text); }
+
+.steps { margin: 16px 0; }
+.step { display: flex; gap: 14px; margin-bottom: 14px; align-items: flex-start; }
+.step-num { flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--accent); color: var(--accent); font-family: var(--mono); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.step-body { padding-top: 4px; }
+.step-body strong { color: var(--text); display: block; margin-bottom: 2px; }
+.step-body span { color: #475569; font-size: .9rem; }
+
+.math-block { background: #f1f5f9; border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; font-family: var(--mono); font-size: .82rem; color: #065f46; overflow-x: auto; white-space: pre; margin: 14px 0; }
+
+.anim-panel { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin: 24px 0; }
+.anim-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+.anim-title { font-weight: 700; font-size: .95rem; }
+.anim-step-counter { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.anim-canvas-wrap canvas { display: block; width: 100%; }
+.anim-explanation { padding: 16px 18px; border-top: 1px solid var(--border); min-height: 80px; }
+.anim-explanation .step-title { font-weight: 700; font-size: .95rem; margin-bottom: 6px; color: var(--accent); }
+.anim-explanation .step-desc { color: #334155; font-size: .9rem; line-height: 1.6; }
+.anim-controls { display: flex; align-items: center; gap: 10px; padding: 12px 18px; border-top: 1px solid var(--border); }
+.progress-bar-wrap { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.progress-bar { height: 100%; background: var(--accent); transition: width .3s; border-radius: 2px; }
+
+.btn { font-family: var(--mono); font-size: 11px; padding: 6px 16px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer; transition: all .15s; }
+.btn:hover { background: var(--border); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+.btn.primary:hover:not(:disabled) { opacity: .85; }
+
+.compare-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: .875rem; }
+.compare-table th { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+.compare-table td { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; color: #475569; }
+.compare-table td:first-child { color: var(--text); font-weight: 600; }
+.compare-table tr:last-child td { border-bottom: none; }
+
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity .4s, transform .4s; }
+.reveal.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hero">
+  <div class="hero-tag">HNSW — Hierarchical Navigable Small World</div>
+  <h1>Búsqueda (Query)</h1>
+  <p>Paso a paso: qué ocurre cuando un usuario hace una pregunta y el índice busca los k vecinos más cercanos.</p>
+</div>
+
+<!-- S1 -->
+<div class="section reveal">
+  <div class="section-label">01 — Diferencia con inserción</div>
+  <h2>No hay sorteo de capa</h2>
+  <p>En la inserción, lo primero que se hacía era sortear la capa máxima del nuevo vector. En la búsqueda <strong>no hay sorteo</strong>.</p>
+  <p>Siempre entras por la <strong>capa más alta</strong> del índice, desde un nodo de entrada fijo que se guardó al construirlo.</p>
+
+  <div class="compare-table">
+    <thead><tr><th>Operación</th><th>Capa de entrada</th><th>ef</th><th>Resultado</th></tr></thead>
+    <tbody>
+      <tr><td>Inserción</td><td>Capa más alta → bajar hasta l (sorteado)</td><td>ef_construction</td><td>Nuevas aristas</td></tr>
+      <tr><td>Búsqueda</td><td>Capa más alta → bajar hasta 0</td><td>ef (configurable)</td><td>k vecinos más cercanos</td></tr>
+    </tbody>
+  </div>
+</div>
+
+<!-- S2 -->
+<div class="section reveal">
+  <div class="section-label">02 — Proceso</div>
+  <h2>Tres fases de la búsqueda</h2>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Descenso rápido — capas L_max hasta 1</strong>
+        <span>Greedy con ef=1. En cada capa te mueves al vecino más cercano al query. Paras en el mínimo local. Ese nodo es el entry_point para la capa siguiente. No te importa la precisión aquí — solo quieres llegar a la zona correcta.</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Búsqueda exhaustiva — capa 0</strong>
+        <span>Greedy con ef candidatos. Mantienes una cola con los ef más cercanos al query. Exploras desde cada candidato de la cola. Paras cuando no encuentras nada mejor.</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Retornar k resultados</strong>
+        <span>De los ef candidatos finales, retornas los k más cercanos. ef ≥ k siempre.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="math-block">Búsqueda HNSW(query, k, ef):
+
+  entry_point = nodo_entrada_global   # fijo, guardado al construir
+
+  # Fase 1: descenso rápido
+  para cada capa desde L_max hasta 1:
+      entry_point = greedy(capa, entry_point, query, ef=1)
+
+  # Fase 2: búsqueda exhaustiva
+  candidatos = greedy(capa_0, entry_point, query, ef=ef)
+
+  # Fase 3: retornar resultados
+  retornar k_mejores(candidatos)</div>
+
+  <div class="callout">
+    <strong>ef vs ef_construction:</strong> son el mismo concepto — tamaño de la cola de candidatos — pero en momentos distintos. <code style="font-family:var(--mono);font-size:.85em">ef_construction</code> se fija al construir el índice. <code style="font-family:var(--mono);font-size:.85em">ef</code> se puede cambiar en cada búsqueda sin reconstruir el índice.
+  </div>
+</div>
+
+<!-- S3 -->
+<div class="section reveal">
+  <div class="section-label">03 — ef y recall</div>
+  <h2>El trade-off de ef</h2>
+  <p>Subir <code style="font-family:var(--mono);font-size:.85em">ef</code> mejora el recall pero aumenta la latencia. Es el único parámetro que puedes ajustar en producción sin reconstruir el índice.</p>
+
+  <div class="callout orange">
+    <strong>ef mínimo:</strong> ef debe ser siempre ≥ k. Si pides k=10 resultados con ef=5, solo tienes 5 candidatos para elegir — imposible retornar 10.
+  </div>
+  <div class="callout green">
+    <strong>Regla práctica:</strong> empieza con ef = 2·k. Si el recall es insuficiente, súbelo. Para la mayoría de aplicaciones RAG ef = 50–100 con k = 5–10 da &gt;95% recall.
+  </div>
+</div>
+
+<!-- S4: Animación -->
+<div class="section reveal">
+  <div class="section-label">04 — Animación</div>
+  <h2>Proceso completo paso a paso</h2>
+  <p>El query <strong>q★</strong> entra al índice. Sigue cada fase hasta obtener los k vecinos más cercanos.</p>
+
+  <div class="anim-panel">
+    <div class="anim-header">
+      <span class="anim-title">Búsqueda de q★ en HNSW</span>
+      <span class="anim-step-counter" id="stepCounter">Paso 0 / 6</span>
+    </div>
+    <div class="anim-canvas-wrap">
+      <canvas id="animCanvas" height="400"></canvas>
+    </div>
+    <div class="anim-explanation">
+      <div class="step-title" id="animTitle">Listo para comenzar</div>
+      <div class="step-desc" id="animDesc">Presiona "Siguiente" para ver la búsqueda paso a paso.</div>
+    </div>
+    <div class="anim-controls">
+      <button class="btn" id="animPrev" onclick="animStep(-1)" disabled>← Anterior</button>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="progressBar" style="width:0%"></div>
+      </div>
+      <button class="btn primary" id="animNext" onclick="animStep(1)">Siguiente →</button>
+      <button class="btn" onclick="animReset()">Reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- S5 -->
+<div class="section reveal">
+  <div class="section-label">05 — Resumen</div>
+  <h2>Inserción vs Búsqueda</h2>
+
+  <div class="compare-table">
+    <thead><tr><th></th><th>Inserción</th><th>Búsqueda</th></tr></thead>
+    <tbody>
+      <tr><td>Entrada</td><td>Capa más alta</td><td>Capa más alta</td></tr>
+      <tr><td>Sorteo de capa</td><td>✅ sí (distribución exponencial)</td><td>❌ no</td></tr>
+      <tr><td>Descenso capas altas</td><td>ef=1 hasta capa l</td><td>ef=1 hasta capa 1</td></tr>
+      <tr><td>Fase principal</td><td>ef_construction desde capa l hasta 0</td><td>ef en capa 0</td></tr>
+      <tr><td>Resultado</td><td>Nuevas aristas en el grafo</td><td>k vecinos más cercanos</td></tr>
+      <tr><td>Modifica el índice</td><td>✅ sí</td><td>❌ no</td></tr>
+    </tbody>
+  </div>
+</div>
+
+</div>
+
+<script>
+// Scroll reveal
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: .1 });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+function dpr(canvas) {
+  const ratio = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width  = rect.width  * ratio;
+  canvas.height = rect.height * ratio;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(ratio, ratio);
+  return { ctx, w: rect.width, h: rect.height };
+}
+function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+
+// ── Fixed node layout ──────────────────────────────────────
+const NODES = {
+  2: [
+    { x: 110, y: 60,  id: 'A' },
+    { x: 320, y: 55,  id: 'B' },
+    { x: 560, y: 62,  id: 'C' },
+  ],
+  1: [
+    { x: 70,  y: 192, id: 'D' },
+    { x: 180, y: 200, id: 'E' },
+    { x: 295, y: 188, id: 'F' },
+    { x: 410, y: 196, id: 'G' },
+    { x: 530, y: 192, id: 'H' },
+    { x: 640, y: 198, id: 'I' },
+  ],
+  0: [
+    { x: 45,  y: 318, id: 'J' },
+    { x: 120, y: 328, id: 'K' },
+    { x: 195, y: 314, id: 'L' },
+    { x: 270, y: 324, id: 'M' },
+    { x: 345, y: 310, id: 'N' },
+    { x: 415, y: 326, id: 'O' },
+    { x: 490, y: 316, id: 'P' },
+    { x: 568, y: 322, id: 'Q' },
+    { x: 645, y: 328, id: 'R' },
+  ]
+};
+
+const LAYER_COLORS = { 2: '#0284c7', 1: '#6366f1', 0: '#059669' };
+const LAYER_Y_BANDS = { 2: [28, 118], 1: [152, 242], 0: [276, 370] };
+
+// Query vector
+const Q = { x: 380, y: 316, id: 'q★' };
+
+// Entry point global (fixed, stored at build time)
+const GLOBAL_ENTRY = 'A';
+
+const ANIM_STEPS = [
+  {
+    title: "Estado inicial — query q★ llega al índice",
+    desc: "El query q★ (en naranja) llega al índice. El índice tiene 3 capas con todos sus nodos y aristas. La búsqueda siempre empieza por la capa más alta (capa 2) desde el nodo de entrada global A — un nodo fijo guardado al construir el índice.",
+    activeLayer: null,
+    greedyPath2: [],
+    greedyPath1: [],
+    entryPoint: 'A',
+    efCandidates: [],
+    results: [],
+    showEntryGlobal: true,
+  },
+  {
+    title: "Fase 1 — Greedy ef=1 en capa 2",
+    desc: "Empezamos en A (entry point global). Miramos los vecinos de A en la capa 2: B y C. B está más cerca de q★ → nos movemos a B. Desde B, revisamos sus vecinos: A y C. Ninguno está más cerca que B → mínimo local. Entry point para la capa 1 = B.",
+    activeLayer: 2,
+    greedyPath2: ['A', 'B'],
+    greedyPath1: [],
+    entryPoint: 'B',
+    efCandidates: [],
+    results: [],
+  },
+  {
+    title: "Fase 1 — Greedy ef=1 en capa 1",
+    desc: "Entramos a la capa 1 desde B (proyectado). Miramos vecinos: F y G están cerca. G está más cerca de q★ → nos movemos a G. Revisamos vecinos de G: ninguno más cerca → mínimo local. Entry point para la capa 0 = G.",
+    activeLayer: 1,
+    greedyPath2: ['A', 'B'],
+    greedyPath1: ['F', 'G'],
+    entryPoint: 'G',
+    efCandidates: [],
+    results: [],
+  },
+  {
+    title: "Fase 2 — Búsqueda exhaustiva en capa 0 (ef candidatos)",
+    desc: "Llegamos a la capa 0 con entry point = G (proyectado a N). Ahora usamos ef candidatos — mantenemos una cola con los ef más cercanos a q★. Exploramos desde cada candidato de la cola hasta que no encontramos nada mejor.",
+    activeLayer: 0,
+    greedyPath2: ['A', 'B'],
+    greedyPath1: ['F', 'G'],
+    entryPoint: 'N',
+    efCandidates: ['N', 'O', 'M', 'P', 'L'],
+    results: [],
+    showEfZone: true,
+  },
+  {
+    title: "Fase 2 — Cola de ef candidatos explorados",
+    desc: "La búsqueda exploró 5 candidatos (ef=5): N, O, M, P, L. Todos están dentro del radio de exploración. La cola se mantiene ordenada por distancia a q★. Ya no encontramos vecinos más cercanos → la búsqueda termina.",
+    activeLayer: 0,
+    greedyPath2: ['A', 'B'],
+    greedyPath1: ['F', 'G'],
+    entryPoint: 'N',
+    efCandidates: ['N', 'O', 'M', 'P', 'L'],
+    results: [],
+    showEfZone: true,
+    showCandidateOrder: true,
+  },
+  {
+    title: "Fase 3 — Retornar los k más cercanos",
+    desc: "De los 5 candidatos, seleccionamos los k=3 más cercanos a q★: N, O, M. Estos son los vecinos aproximados más cercanos (ANN). La búsqueda termina aquí — sin haber comparado q★ contra todos los nodos del índice.",
+    activeLayer: 0,
+    greedyPath2: ['A', 'B'],
+    greedyPath1: ['F', 'G'],
+    entryPoint: 'N',
+    efCandidates: ['N', 'O', 'M', 'P', 'L'],
+    results: ['N', 'O', 'M'],
+    showEfZone: true,
+  },
+  {
+    title: "✅ Búsqueda completa — k=3 vecinos encontrados",
+    desc: "El resultado son N, O, M — los 3 vectores más similares a q★ en el índice. La búsqueda recorrió solo un subconjunto pequeño del grafo gracias a la jerarquía. Sin HNSW, habría que comparar q★ contra todos los nodos de la capa 0.",
+    activeLayer: null,
+    greedyPath2: ['A', 'B'],
+    greedyPath1: ['F', 'G'],
+    entryPoint: 'N',
+    efCandidates: ['N', 'O', 'M', 'P', 'L'],
+    results: ['N', 'O', 'M'],
+    complete: true,
+  },
+];
+
+let animIdx = 0;
+
+function drawAnim() {
+  const canvas = document.getElementById('animCanvas');
+  const { ctx, w, h } = dpr(canvas);
+  ctx.clearRect(0, 0, w, h);
+
+  const step = ANIM_STEPS[animIdx];
+  const scaleX = w / 720;
+  const scaleY = h / 400;
+  const sx = n => n.x * scaleX;
+  const sy = n => n.y * scaleY;
+
+  // Layer bands
+  Object.entries(LAYER_Y_BANDS).forEach(([layer, [y1, y2]]) => {
+    const color = LAYER_COLORS[parseInt(layer)];
+    const isActive = step.activeLayer === parseInt(layer);
+    ctx.fillStyle = isActive ? `${color}18` : `${color}09`;
+    ctx.fillRect(0, y1 * scaleY, w, (y2 - y1) * scaleY);
+    if (isActive) {
+      ctx.strokeStyle = `${color}40`;
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(1, y1 * scaleY, w - 2, (y2 - y1) * scaleY);
+    }
+    ctx.fillStyle = `${color}70`;
+    ctx.font = 'bold 11px Space Mono';
+    ctx.fillText(`Capa ${layer}`, 8, (y2 - 6) * scaleY);
+  });
+
+  // Background mesh edges
+  Object.entries(NODES).forEach(([layer, nodes]) => {
+    const color = LAYER_COLORS[parseInt(layer)];
+    nodes.forEach(a => {
+      nodes.filter(b => b.id !== a.id)
+        .sort((x, y) => dist(a, x) - dist(a, y))
+        .slice(0, 2)
+        .forEach(b => {
+          ctx.beginPath();
+          ctx.moveTo(sx(a), sy(a));
+          ctx.lineTo(sx(b), sy(b));
+          ctx.strokeStyle = `${color}22`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        });
+    });
+  });
+
+  // ef zone circle
+  if (step.showEfZone) {
+    const qx = sx(Q), qy = sy(Q);
+    const radius = 115 * scaleX;
+    ctx.beginPath();
+    ctx.arc(qx, qy, radius, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(5,150,105,.07)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(5,150,105,.3)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([5, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#059669';
+    ctx.font = '10px Space Mono';
+    ctx.textAlign = 'center';
+    ctx.fillText('ef candidatos', qx, qy - radius - 6);
+    ctx.textAlign = 'start';
+  }
+
+  // Greedy path layer 2
+  if (step.greedyPath2 && step.greedyPath2.length > 1) {
+    const nodes2 = NODES[2];
+    for (let i = 0; i < step.greedyPath2.length - 1; i++) {
+      const a = nodes2.find(n => n.id === step.greedyPath2[i]);
+      const b = nodes2.find(n => n.id === step.greedyPath2[i + 1]);
+      if (!a || !b) continue;
+      ctx.beginPath();
+      ctx.moveTo(sx(a), sy(a));
+      ctx.lineTo(sx(b), sy(b));
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([6, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      const angle = Math.atan2(sy(b) - sy(a), sx(b) - sx(a));
+      ctx.beginPath();
+      ctx.moveTo(sx(b), sy(b));
+      ctx.lineTo(sx(b) - 10 * Math.cos(angle - .4), sy(b) - 10 * Math.sin(angle - .4));
+      ctx.lineTo(sx(b) - 10 * Math.cos(angle + .4), sy(b) - 10 * Math.sin(angle + .4));
+      ctx.closePath();
+      ctx.fillStyle = '#f59e0b';
+      ctx.fill();
+    }
+  }
+
+  // Greedy path layer 1
+  if (step.greedyPath1 && step.greedyPath1.length > 1) {
+    const nodes1 = NODES[1];
+    for (let i = 0; i < step.greedyPath1.length - 1; i++) {
+      const a = nodes1.find(n => n.id === step.greedyPath1[i]);
+      const b = nodes1.find(n => n.id === step.greedyPath1[i + 1]);
+      if (!a || !b) continue;
+      ctx.beginPath();
+      ctx.moveTo(sx(a), sy(a));
+      ctx.lineTo(sx(b), sy(b));
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([6, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      const angle = Math.atan2(sy(b) - sy(a), sx(b) - sx(a));
+      ctx.beginPath();
+      ctx.moveTo(sx(b), sy(b));
+      ctx.lineTo(sx(b) - 10 * Math.cos(angle - .4), sy(b) - 10 * Math.sin(angle - .4));
+      ctx.lineTo(sx(b) - 10 * Math.cos(angle + .4), sy(b) - 10 * Math.sin(angle + .4));
+      ctx.closePath();
+      ctx.fillStyle = '#f59e0b';
+      ctx.fill();
+    }
+  }
+
+  // Lines from q to ef candidates
+  if (step.efCandidates && step.efCandidates.length) {
+    step.efCandidates.forEach(id => {
+      const n = NODES[0].find(n => n.id === id);
+      if (!n) return;
+      const isResult = step.results && step.results.includes(id);
+      ctx.beginPath();
+      ctx.moveTo(sx(Q), sy(Q));
+      ctx.lineTo(sx(n), sy(n));
+      ctx.strokeStyle = isResult ? '#059669' : 'rgba(5,150,105,.3)';
+      ctx.lineWidth = isResult ? 2 : 1;
+      ctx.setLineDash(isResult ? [] : [3, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    });
+  }
+
+  // All nodes
+  Object.entries(NODES).forEach(([layer, nodes]) => {
+    const color = LAYER_COLORS[parseInt(layer)];
+    const li = parseInt(layer);
+    nodes.forEach(n => {
+      const isEntry = step.entryPoint === n.id && li === (step.activeLayer ?? (step.greedyPath1?.includes(n.id) ? 1 : step.greedyPath2?.includes(n.id) ? 2 : -1));
+      const isEfCandidate = li === 0 && step.efCandidates && step.efCandidates.includes(n.id);
+      const isResult = li === 0 && step.results && step.results.includes(n.id);
+      const isPathNode = (li === 2 && step.greedyPath2?.includes(n.id)) || (li === 1 && step.greedyPath1?.includes(n.id));
+      const isGlobalEntry = step.showEntryGlobal && n.id === GLOBAL_ENTRY && li === 2;
+
+      const r = isResult ? 11 : isEntry || isGlobalEntry ? 10 : isEfCandidate || isPathNode ? 8 : 6;
+
+      ctx.beginPath();
+      ctx.arc(sx(n), sy(n), r, 0, Math.PI * 2);
+      ctx.fillStyle = isResult ? color
+        : isEfCandidate ? `${color}bb`
+        : isPathNode ? `${color}99`
+        : isGlobalEntry ? color
+        : `${color}30`;
+      ctx.fill();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = isResult ? 2.5 : isGlobalEntry ? 2 : 1.5;
+      ctx.stroke();
+
+      // Result glow
+      if (isResult) {
+        ctx.fillStyle = `${color}20`;
+        ctx.beginPath();
+        ctx.arc(sx(n), sy(n), 20, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = color;
+        ctx.font = 'bold 9px Space Mono';
+        ctx.textAlign = 'center';
+        ctx.fillText('k', sx(n), sy(n) - 18);
+        ctx.textAlign = 'start';
+      }
+
+      // Global entry label
+      if (isGlobalEntry) {
+        ctx.fillStyle = LAYER_COLORS[2];
+        ctx.font = 'bold 9px Space Mono';
+        ctx.textAlign = 'center';
+        ctx.fillText('entrada', sx(n), sy(n) + 22);
+        ctx.textAlign = 'start';
+      }
+
+      // Candidate order numbers
+      if (step.showCandidateOrder && isEfCandidate) {
+        const rank = step.efCandidates.indexOf(n.id) + 1;
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 8px Space Mono';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(rank, sx(n), sy(n));
+        ctx.textAlign = 'start';
+        ctx.textBaseline = 'alphabetic';
+      }
+    });
+  });
+
+  // Query q★
+  ctx.beginPath();
+  ctx.arc(sx(Q), sy(Q), 13, 0, Math.PI * 2);
+  ctx.fillStyle = '#ea580c';
+  ctx.fill();
+  ctx.strokeStyle = '#9a3412';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 8px Space Mono';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('q★', sx(Q), sy(Q));
+  ctx.textAlign = 'start';
+  ctx.textBaseline = 'alphabetic';
+
+  // Complete celebration
+  if (step.complete) {
+    ctx.fillStyle = 'rgba(5,150,105,.08)';
+    ctx.beginPath();
+    ctx.arc(sx(Q), sy(Q), 130 * scaleX, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Legend
+  const legends = [
+    { color: '#f59e0b', label: 'camino greedy (ef=1)' },
+    { color: '#ea580c', label: 'query q★' },
+    { color: '#059669', label: 'k resultados finales' },
+  ];
+  legends.forEach((l, i) => {
+    ctx.beginPath();
+    ctx.arc(16, h - 48 + i * 18, 5, 0, Math.PI * 2);
+    ctx.fillStyle = l.color;
+    ctx.fill();
+    ctx.fillStyle = '#475569';
+    ctx.font = '10px Space Mono';
+    ctx.fillText(l.label, 28, h - 44 + i * 18);
+  });
+}
+
+function animStep(dir) {
+  animIdx = Math.max(0, Math.min(ANIM_STEPS.length - 1, animIdx + dir));
+  const step = ANIM_STEPS[animIdx];
+  document.getElementById('animTitle').textContent = step.title;
+  document.getElementById('animDesc').textContent = step.desc;
+  document.getElementById('stepCounter').textContent = `Paso ${animIdx} / ${ANIM_STEPS.length - 1}`;
+  document.getElementById('progressBar').style.width = `${(animIdx / (ANIM_STEPS.length - 1)) * 100}%`;
+  document.getElementById('animPrev').disabled = animIdx === 0;
+  document.getElementById('animNext').disabled = animIdx === ANIM_STEPS.length - 1;
+  drawAnim();
+}
+
+function animReset() {
+  animIdx = 0;
+  document.getElementById('animTitle').textContent = 'Listo para comenzar';
+  document.getElementById('animDesc').textContent = 'Presiona "Siguiente" para ver la búsqueda paso a paso.';
+  document.getElementById('stepCounter').textContent = 'Paso 0 / 6';
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('animPrev').disabled = true;
+  document.getElementById('animNext').disabled = false;
+  drawAnim();
+}
+
+window.addEventListener('load', () => drawAnim());
+window.addEventListener('resize', () => drawAnim());
+</script>
+</body>
+</html>

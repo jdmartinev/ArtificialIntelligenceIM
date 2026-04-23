@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Small World & HNSW — Explicación Visual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #ffffff;
+    --surface:  #f8fafc;
+    --card:     #f1f5f9;
+    --border:   #cbd5e1;
+    --accent:   #0284c7;
+    --accent2:  #6366f1;
+    --accent3:  #059669;
+    --warn:     #ea580c;
+    --text:     #0f172a;
+    --muted:    #64748b;
+    --mono:     'Space Mono', monospace;
+    --sans:     'Syne', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── Starfield bg ── */
+  #stars { display: none; }
+
+  /* ── Layout ── */
+  .wrap {
+    position: relative; z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px 120px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: 80px 0 60px;
+    text-align: center;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 4px 12px;
+    border-radius: 99px;
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 6vw, 3.6rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    background: linear-gradient(135deg, #0f172a 0%, var(--accent) 55%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+  }
+  .hero p {
+    color: #475569;
+    font-size: 1.05rem;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: 72px;
+  }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .section h2 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  .section p {
+    color: #334155;
+    margin-bottom: 14px;
+  }
+  .section p strong { color: var(--text); }
+
+  /* ── Canvas cards ── */
+  .canvas-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin: 28px 0;
+  }
+  .canvas-card canvas {
+    display: block;
+    width: 100%;
+  }
+  .canvas-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .canvas-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-right: auto;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 6px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    transition: all .15s;
+    letter-spacing: .04em;
+  }
+  .btn:hover { background: var(--border); }
+  .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+    font-weight: 700;
+  }
+  .btn.primary:hover { opacity: .85; }
+  .btn.active {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: #fff;
+  }
+
+  /* ── Callout boxes ── */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: #e0f2fe;
+    padding: 16px 20px;
+    border-radius: 0 12px 12px 0;
+    margin: 20px 0;
+    font-size: .9rem;
+  }
+  .callout.orange { border-color: var(--warn); background: #fff7ed; }
+  .callout.green  { border-color: var(--accent3); background: #ecfdf5; }
+  .callout strong { color: var(--text); }
+
+  /* ── Math block ── */
+  .math-block {
+    background: #f1f5f9;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: #065f46;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  /* ── Steps ── */
+  .steps { counter-reset: step; margin: 20px 0; }
+  .step {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 18px;
+    align-items: flex-start;
+  }
+  .step-num {
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-body { padding-top: 4px; }
+  .step-body strong { color: var(--text); display: block; margin-bottom: 4px; }
+  .step-body span { color: #475569; font-size: .9rem; }
+
+  /* ── Compare table ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: .875rem;
+  }
+  .compare-table th {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #475569;
+  }
+  .compare-table td:first-child { color: var(--text); font-weight: 600; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-family: var(--mono);
+  }
+  .pill.green  { background: #d1fae5; color: #065f46; }
+  .pill.red    { background: #fee2e2; color: #991b1b; }
+  .pill.yellow { background: #fef3c7; color: #92400e; }
+
+  /* ── Layer vis ── */
+  .layer-demo {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 24px 0;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .layer-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .layer-row:last-child { border-bottom: none; }
+  .layer-row:hover { background: #e0f2fe; }
+  .layer-row.active { background: #bae6fd; }
+  .layer-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    width: 70px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .layer-desc { font-size: .875rem; color: #475569; }
+  .layer-desc strong { color: var(--text); }
+
+  /* ── Progress bar ── */
+  .search-progress {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin: 24px 0;
+  }
+  .sp-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .sp-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    width: 100px;
+    flex-shrink: 0;
+  }
+  .sp-bar-wrap {
+    flex: 1;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .sp-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width .6s cubic-bezier(.4,0,.2,1);
+  }
+  .sp-val {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text);
+    width: 60px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* ── Scroll reveal ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .5s ease, transform .5s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin: 32px 0 48px;
+  }
+  .toc-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .toc a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    color: #475569;
+    text-decoration: none;
+    font-size: .9rem;
+    transition: color .15s;
+  }
+  .toc a:hover { color: var(--accent); }
+  .toc-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    width: 20px;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<div class="wrap">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-tag">Algoritmos de búsqueda vectorial</div>
+    <h1>Small World<br>& HNSW</h1>
+    <p>De los seis grados de separación a la búsqueda aproximada de vecinos más cercanos en millones de vectores.</p>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc reveal">
+    <div class="toc-title">Contenido</div>
+    <a href="#s1"><span class="toc-num">01</span> El problema: buscar en espacios de alta dimensión</a>
+    <a href="#s2"><span class="toc-num">02</span> El fenómeno Small World</a>
+    <a href="#s3"><span class="toc-num">03</span> Navigable Small World (NSW)</a>
+    <a href="#s4"><span class="toc-num">04</span> HNSW: la versión jerárquica</a>
+    <a href="#s5"><span class="toc-num">05</span> Parámetros clave</a>
+    <a href="#s6"><span class="toc-num">06</span> HNSW vs otras alternativas</a>
+  </div>
+
+  <!-- S1: El problema -->
+  <div class="section reveal" id="s1">
+    <div class="section-label">01 — El problema</div>
+    <h2>Buscar en espacios de alta dimensión</h2>
+    <p>Cuando tienes 1 millón de vectores de 768 dimensiones (embeddings de Gemini), ¿cómo encuentras los <em>k</em> más similares a una consulta?</p>
+
+    <div class="callout orange">
+      <strong>Fuerza bruta:</strong> comparar la consulta contra <em>todos</em> los vectores.
+      Con 1M vectores y 768 dims, son ~768 millones de multiplicaciones por consulta.
+      A 100 consultas/seg → inviable.
+    </div>
+
+    <p>El problema se llama <strong>Approximate Nearest Neighbor (ANN)</strong>. La idea: sacrificar una pequeña fracción de precisión para ganar órdenes de magnitud en velocidad.</p>
+
+    <div class="search-progress" id="sp">
+      <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:16px;">COMPARACIÓN DE LATENCIA — 1M vectores, k=10</div>
+      <div class="sp-row">
+        <span class="sp-label">Fuerza bruta</span>
+        <div class="sp-bar-wrap"><div class="sp-bar" id="bar1" style="width:0%;background:#ef4444;"></div></div>
+        <span class="sp-val" id="val1">–</span>
+      </div>
+      <div class="sp-row">
+        <span class="sp-label">FAISS IVF</span>
+        <div class="sp-bar-wrap"><div class="sp-bar" id="bar2" style="width:0%;background:var(--warn);"></div></div>
+        <span class="sp-val" id="val2">–</span>
+      </div>
+      <div class="sp-row">
+        <span class="sp-label">HNSW</span>
+        <div class="sp-bar-wrap"><div class="sp-bar" id="bar3" style="width:0%;background:var(--accent3);"></div></div>
+        <span class="sp-val" id="val3">–</span>
+      </div>
+      <button class="btn primary" onclick="animateBars()" style="margin-top:8px;">▶ Animar</button>
+    </div>
+
+    <p>HNSW es el algoritmo que usa <strong>Qdrant, Weaviate y Pinecone</strong> internamente. Para entenderlo necesitamos entender primero el fenómeno <em>Small World</em>.</p>
+  </div>
+
+  <!-- S2: Small World -->
+  <div class="section reveal" id="s2">
+    <div class="section-label">02 — Fenómeno</div>
+    <h2>El fenómeno Small World</h2>
+    <p>En 1967, Stanley Milgram envió cartas a personas aleatorias en Nebraska pidiéndoles que las hicieran llegar a un destinatario en Boston, pasando la carta solo a conocidos directos. Resultado: <strong>6 saltos en promedio</strong>.</p>
+
+    <p>Esto se llama el fenómeno <em>Small World</em> o "seis grados de separación". En una red de millones de personas, cualquier par está conectado por una cadena sorprendentemente corta.</p>
+
+    <div class="callout">
+      <strong>¿Por qué ocurre?</strong> Las redes reales tienen dos propiedades simultáneas:
+      alta <em>clusterización</em> (tus amigos también se conocen entre sí) y
+      algunos <em>enlaces largos</em> que conectan clusters distantes.
+      Son esos pocos enlaces largos los que colapsan la distancia media.
+    </div>
+
+    <div class="canvas-card">
+      <canvas id="swCanvas" height="340"></canvas>
+      <div class="canvas-toolbar">
+        <span class="canvas-label">RED SMALL WORLD — haz click en un nodo para ver su camino más corto</span>
+        <button class="btn" onclick="swRegen()">Regenerar</button>
+        <button class="btn primary" onclick="swFindPath()">Buscar camino</button>
+      </div>
+    </div>
+
+    <p>Observa cómo los <strong style="color:var(--accent)">enlaces cortos</strong> crean clusters locales y los <strong style="color:var(--warn)">enlaces largos</strong> conectan clusters distantes. La búsqueda greedy (siempre al vecino más cercano al destino) llega rápido gracias a los saltos largos.</p>
+
+    <div class="math-block">Propiedad formal (Watts-Strogatz, 1998):
+  L(G) ~ log(N) / log(k)    — diámetro crece logarítmicamente
+  C(G) >> C(G_random)        — alta clusterización local
+
+  L: longitud media del camino más corto
+  N: número de nodos
+  k: grado medio</div>
+  </div>
+
+  <!-- S3: NSW -->
+  <div class="section reveal" id="s3">
+    <div class="section-label">03 — NSW</div>
+    <h2>Navigable Small World (NSW)</h2>
+    <p>Yury Malkov (2014) se preguntó: <em>¿y si aplicamos el fenómeno Small World a un grafo de vectores?</em></p>
+    <p>La idea de <strong>NSW</strong> es construir un grafo donde cada vector es un nodo, conectado a sus vecinos más cercanos. Al insertar vectores en orden aleatorio, los primeros en entrar forman automáticamente <em>conexiones largas</em> (hubs), mientras los últimos crean <em>conexiones cortas</em> locales. El grafo queda con propiedades Small World de forma natural.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Construcción — insertar vector v</strong>
+          <span>Buscar los M vecinos más cercanos a v en el grafo actual. Conectar v con ellos bidireccionalmente. Los primeros nodos insertados tienen conexiones con nodos muy dispersos → se convierten en "autopistas".</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Búsqueda greedy</strong>
+          <span>Partir de un nodo de entrada. En cada paso, moverse al vecino más cercano a la consulta. Repetir hasta que ningún vecino esté más cerca que el nodo actual (mínimo local).</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Problema: mínimos locales</strong>
+          <span>La búsqueda greedy puede quedar atrapada en un cluster local lejos del verdadero vecino más cercano. Este es el talón de Aquiles de NSW puro.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="canvas-card">
+      <canvas id="nswCanvas" height="340"></canvas>
+      <div class="canvas-toolbar">
+        <span class="canvas-label" id="nswLabel">NSW — inserción paso a paso</span>
+        <button class="btn" id="nswPrevBtn" onclick="nswStep(-1)">← Anterior</button>
+        <button class="btn primary" id="nswNextBtn" onclick="nswStep(1)">Siguiente →</button>
+        <button class="btn" onclick="nswReset()">Reset</button>
+      </div>
+    </div>
+
+    <div class="callout orange">
+      <strong>Limitación de NSW:</strong> con millones de vectores la búsqueda greedy
+      recorre demasiados nodos antes de converger. La complejidad es
+      <code style="color:var(--warn)">O(log N · k)</code> en teoría, pero con alta dimensionalidad
+      el factor constante explota.
+    </div>
+  </div>
+
+  <!-- S4: HNSW -->
+  <div class="section reveal" id="s4">
+    <div class="section-label">04 — HNSW</div>
+    <h2>Hierarchical NSW</h2>
+    <p>Malkov & Yashunin (2018) resolvieron el problema de NSW con una idea elegante: <strong>construir múltiples capas del grafo con densidad decreciente</strong>. Igual que un mapa que tiene autopistas, carreteras secundarias y callejuelas.</p>
+
+    <div class="layer-demo" id="layerDemo">
+      <div class="layer-row active" onclick="selectLayer(this, 0)">
+        <span class="layer-badge" style="background:#e0f2fe;color:var(--accent);">Capa 2</span>
+        <span class="layer-desc"><strong>Pocos nodos, enlaces muy largos.</strong> Solo los vectores "afortunados" (selección exponencial aleatoria) existen aquí. Son las autopistas: permiten saltos enormes al inicio de la búsqueda.</span>
+      </div>
+      <div class="layer-row" onclick="selectLayer(this, 1)">
+        <span class="layer-badge" style="background:#ede9fe;color:var(--accent2);">Capa 1</span>
+        <span class="layer-desc"><strong>Densidad media, enlaces medios.</strong> Más nodos. La búsqueda llega aquí ya cerca de la zona correcta y refina.</span>
+      </div>
+      <div class="layer-row" onclick="selectLayer(this, 2)">
+        <span class="layer-badge" style="background:#d1fae5;color:var(--accent3);">Capa 0</span>
+        <span class="layer-desc"><strong>Todos los nodos, enlaces cortos.</strong> La capa base con el grafo completo. Aquí ocurre la búsqueda final y precisa de los k vecinos.</span>
+      </div>
+    </div>
+
+    <div class="canvas-card">
+      <canvas id="hnswCanvas" height="400"></canvas>
+      <div class="canvas-toolbar">
+        <span class="canvas-label" id="hnswLabel">HNSW — proceso de búsqueda</span>
+        <button class="btn" id="hnswPrevBtn" onclick="hnswStep(-1)">← Anterior</button>
+        <button class="btn primary" id="hnswNextBtn" onclick="hnswStep(1)">Siguiente →</button>
+        <button class="btn" onclick="hnswReset()">Reset</button>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Entrar por la capa más alta</strong>
+          <span>La búsqueda empieza en la capa superior (pocos nodos). Greedy hasta encontrar el mínimo local en esa capa. Esto da una aproximación gruesa muy rápida.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Descender capa por capa</strong>
+          <span>El mínimo local de la capa L se convierte en punto de entrada para la capa L-1. En cada capa la búsqueda greedy refina la zona. <code style="font-family:var(--mono);color:var(--accent3)">ef</code> controla cuántos candidatos se mantienen en la cola.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Búsqueda precisa en capa 0</strong>
+          <span>En la capa base (todos los nodos) se ejecuta la búsqueda final con ef candidatos. Se retornan los k mejores. El resultado es ANN — aproximado pero con recall típico &gt;95%.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="math-block">Complejidad de búsqueda HNSW:
+  O(log N)   — descenso entre capas
+  ×
+  O(M · ef)  — exploración local por capa
+
+  Total ≈ O(log N)   para N grande, M y ef fijos
+
+  Comparado con fuerza bruta: O(N · d)
+  Con N=1M, d=768: ~10,000× más rápido</div>
+
+    <div class="callout green">
+      <strong>Construcción:</strong> al insertar un vector nuevo, se asigna aleatoriamente
+      a una capa máxima según una distribución exponencial:
+      <code style="font-family:var(--mono);color:var(--accent3)">l = ⌊-ln(uniform(0,1)) · mL⌋</code>.
+      Esto garantiza que la proporción de nodos en cada capa decae exponencialmente
+      hacia arriba — igual que los pisos de una pirámide.
+    </div>
+  </div>
+
+  <!-- S5: Parámetros -->
+  <div class="section reveal" id="s5">
+    <div class="section-label">05 — Parámetros</div>
+    <h2>Parámetros clave</h2>
+    <p>HNSW tiene tres parámetros que controlan el trade-off velocidad / recall / memoria.</p>
+
+    <div class="canvas-card">
+      <canvas id="paramCanvas" height="280"></canvas>
+      <div class="canvas-toolbar">
+        <span class="canvas-label">Mueve los sliders para ver el efecto</span>
+      </div>
+    </div>
+
+    <div style="display:grid;gap:20px;margin:20px 0;">
+
+      <div style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:12px;padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-weight:700;">M — conexiones por nodo</span>
+          <span id="mVal" style="font-family:var(--mono);color:var(--accent);font-size:14px;">16</span>
+        </div>
+        <input type="range" id="mSlider" min="4" max="64" value="16" style="width:100%;accent-color:var(--accent);">
+        <p style="font-size:.85rem;color:var(--muted);margin-top:8px;">
+          Cuántos vecinos se conectan al insertar. ↑M → mejor recall, más memoria, más lento en inserción.
+          Valor típico: <strong style="color:var(--text)">M = 16–32</strong>.
+        </p>
+        <div id="mEffect" style="font-family:var(--mono);font-size:11px;color:var(--accent3);margin-top:6px;"></div>
+      </div>
+
+      <div style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:12px;padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-weight:700;">ef_construction — candidatos en construcción</span>
+          <span id="efcVal" style="font-family:var(--mono);color:var(--accent2);font-size:14px;">200</span>
+        </div>
+        <input type="range" id="efcSlider" min="50" max="500" value="200" step="10" style="width:100%;accent-color:var(--accent2);">
+        <p style="font-size:.85rem;color:var(--muted);margin-top:8px;">
+          Candidatos evaluados al construir el índice. ↑efc → mejor calidad del grafo, construcción más lenta.
+          Solo afecta al <em>build time</em>. Valor típico: <strong style="color:var(--text)">200–400</strong>.
+        </p>
+        <div id="efcEffect" style="font-family:var(--mono);font-size:11px;color:var(--accent3);margin-top:6px;"></div>
+      </div>
+
+      <div style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:12px;padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-weight:700;">ef — candidatos en búsqueda</span>
+          <span id="efVal" style="font-family:var(--mono);color:var(--warn);font-size:14px;">50</span>
+        </div>
+        <input type="range" id="efSlider" min="10" max="300" value="50" step="5" style="width:100%;accent-color:var(--warn);">
+        <p style="font-size:.85rem;color:var(--muted);margin-top:8px;">
+          Candidatos evaluados en cada búsqueda. ↑ef → mejor recall, latencia mayor.
+          Debe ser ≥ k. Valor típico: <strong style="color:var(--text)">50–100</strong>.
+        </p>
+        <div id="efEffect" style="font-family:var(--mono);font-size:11px;color:var(--accent3);margin-top:6px;"></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Regla práctica para producción:</strong><br>
+      Empieza con M=16, ef_construction=200, ef=50.<br>
+      Si el recall es bajo → sube ef primero (más barato que reconstruir el índice).<br>
+      Si la memoria es el cuello de botella → baja M.
+    </div>
+  </div>
+
+  <!-- S6: Comparación -->
+  <div class="section reveal" id="s6">
+    <div class="section-label">06 — Comparación</div>
+    <h2>HNSW vs otras alternativas</h2>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Algoritmo</th>
+          <th>Búsqueda</th>
+          <th>Memoria</th>
+          <th>Construcción</th>
+          <th>Ideal para</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Fuerza bruta</td>
+          <td><span class="pill red">O(N·d)</span></td>
+          <td><span class="pill green">Mínima</span></td>
+          <td><span class="pill green">Ninguna</span></td>
+          <td>N &lt; 10K</td>
+        </tr>
+        <tr>
+          <td>FAISS IVF</td>
+          <td><span class="pill yellow">O(N/nlist · d)</span></td>
+          <td><span class="pill green">Baja</span></td>
+          <td><span class="pill yellow">K-means</span></td>
+          <td>RAM limitada</td>
+        </tr>
+        <tr>
+          <td>FAISS IVF+PQ</td>
+          <td><span class="pill green">Muy rápido</span></td>
+          <td><span class="pill green">Mínima</span></td>
+          <td><span class="pill red">Lenta</span></td>
+          <td>Billones de vectores</td>
+        </tr>
+        <tr>
+          <td><strong>HNSW</strong></td>
+          <td><span class="pill green">O(log N)</span></td>
+          <td><span class="pill yellow">Media-alta</span></td>
+          <td><span class="pill yellow">Moderada</span></td>
+          <td>Latencia baja, recall alto</td>
+        </tr>
+        <tr>
+          <td>ScaNN (Google)</td>
+          <td><span class="pill green">O(log N)</span></td>
+          <td><span class="pill yellow">Media</span></td>
+          <td><span class="pill red">Compleja</span></td>
+          <td>Escala masiva en GCP</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout green">
+      <strong>¿Por qué Qdrant usa HNSW?</strong><br>
+      HNSW tiene el mejor trade-off recall/latencia para workloads de RAG típicos
+      (N de 100K a 10M, consultas en tiempo real, memoria disponible).
+      Además soporta filtrado por metadatos sin degradar mucho el recall —
+      algo crítico para RAG donde filtras por departamento, fecha, etc.
+    </div>
+
+    <div class="callout">
+      <strong>Memoria:</strong> cada nodo almacena M punteros de 4 bytes → ~4·M·N bytes extra.
+      Con M=16 y N=1M: <code style="font-family:var(--mono);color:var(--accent)">64 MB</code> solo para el grafo,
+      más los vectores. Comparado con IVF que no almacena el grafo.
+    </div>
+
+    <div style="margin-top:40px;padding:28px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:16px;">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">RESUMEN MENTAL</div>
+      <p style="color:#334155;margin-bottom:10px;">
+        <strong style="color:var(--text)">Small World</strong> → redes donde cualquier nodo alcanza a cualquier otro en O(log N) pasos gracias a la combinación de clusters locales + atajos largos.
+      </p>
+      <p style="color:#334155;margin-bottom:10px;">
+        <strong style="color:var(--text)">NSW</strong> → aplica eso a vectores. Los primeros vectores insertados actúan como hubs (autopistas). Búsqueda greedy funciona bien pero sufre con mínimos locales.
+      </p>
+      <p style="color:#334155;margin-bottom:0;">
+        <strong style="color:var(--text)">HNSW</strong> → añade jerarquía. Las capas superiores son NSW muy escasos (autopistas), la capa 0 es el grafo completo. La búsqueda desciende capa por capa refinando. Resultado: O(log N) con recall &gt;95% y sin mínimos locales problemáticos.
+      </p>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+// ─────────────────────────────────────────────
+// Starfield
+// ─────────────────────────────────────────────
+(function(){
+  const c = document.getElementById('stars');
+  const ctx = c.getContext('2d');
+  let stars = [];
+  function resize(){
+    c.width = window.innerWidth;
+    c.height = window.innerHeight;
+    stars = Array.from({length:120},()=>({
+      x: Math.random()*c.width,
+      y: Math.random()*c.height,
+      r: Math.random()*1.2+.2,
+      a: Math.random()
+    }));
+  }
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    stars.forEach(s=>{
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(148,163,184,${s.a})`;
+      ctx.fill();
+    });
+  }
+  resize(); draw();
+  window.addEventListener('resize',()=>{resize();draw();});
+})();
+
+// ─────────────────────────────────────────────
+// Scroll reveal
+// ─────────────────────────────────────────────
+const ro = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting) e.target.classList.add('visible');});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+// ─────────────────────────────────────────────
+// Bar animation
+// ─────────────────────────────────────────────
+function animateBars(){
+  const targets = [
+    {id:'bar1',val:'~2,400 ms',w:100,label:'val1'},
+    {id:'bar2',val:'~180 ms', w:25, label:'val2'},
+    {id:'bar3',val:'~8 ms',   w:5,  label:'val3'},
+  ];
+  targets.forEach((t,i)=>{
+    setTimeout(()=>{
+      document.getElementById(t.id).style.width = t.w+'%';
+      document.getElementById(t.label).textContent = t.val;
+    }, i*200);
+  });
+}
+
+// ─────────────────────────────────────────────
+// Helpers canvas
+// ─────────────────────────────────────────────
+function dpr(canvas){
+  const ratio = window.devicePixelRatio||1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width  = rect.width  * ratio;
+  canvas.height = rect.height * ratio;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(ratio, ratio);
+  return {ctx, w: rect.width, h: rect.height};
+}
+
+function rnd(min,max){ return Math.random()*(max-min)+min; }
+function dist(a,b){ return Math.hypot(a.x-b.x,a.y-b.y); }
+
+// ─────────────────────────────────────────────
+// S2: Small World canvas
+// ─────────────────────────────────────────────
+let swNodes=[], swEdges=[], swPath=[], swSelected=null;
+
+function swBuild(){
+  const N=28;
+  swNodes=[];
+  for(let i=0;i<N;i++){
+    const angle = (i/N)*Math.PI*2;
+    const clusterAngle = Math.floor(i/(N/4))*Math.PI/2;
+    swNodes.push({
+      x: 400 + Math.cos(clusterAngle)*120 + rnd(-50,50),
+      y: 170 + Math.sin(clusterAngle)*100 + rnd(-40,40),
+      id: i
+    });
+  }
+  swEdges=[];
+  // Short edges (cluster)
+  for(let i=0;i<N;i++){
+    const nearest = swNodes
+      .map((n,j)=>({j,d:dist(swNodes[i],n)}))
+      .filter(x=>x.j!==i)
+      .sort((a,b)=>a.d-b.d)
+      .slice(0,3);
+    nearest.forEach(x=>{
+      if(!swEdges.find(e=>(e.a===i&&e.b===x.j)||(e.a===x.j&&e.b===i)))
+        swEdges.push({a:i,b:x.j,long:false});
+    });
+  }
+  // Long edges (shortcuts) — 8 random long-range
+  for(let k=0;k<8;k++){
+    let a=Math.floor(Math.random()*N), b;
+    do{ b=Math.floor(Math.random()*N); }while(b===a||dist(swNodes[a],swNodes[b])<150);
+    swEdges.push({a,b,long:true});
+  }
+  swPath=[];
+  swSelected=null;
+}
+
+function swDraw(){
+  const canvas=document.getElementById('swCanvas');
+  const {ctx,w,h} = dpr(canvas);
+
+  ctx.clearRect(0,0,w,h);
+
+  // scale coords
+  const sx=n=>n.x*(w/800);
+  const sy=n=>n.y*(h/340);
+
+  // edges
+  swEdges.forEach(e=>{
+    const a=swNodes[e.a], b=swNodes[e.b];
+    ctx.beginPath();
+    ctx.moveTo(sx(a),sy(a));
+    ctx.lineTo(sx(b),sy(b));
+    ctx.strokeStyle = e.long ? 'rgba(251,146,60,.45)' : 'rgba(56,189,248,.18)';
+    ctx.lineWidth = e.long ? 1.5 : 1;
+    ctx.setLineDash(e.long ? [4,4] : []);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  });
+
+  // path highlight
+  if(swPath.length>1){
+    for(let i=0;i<swPath.length-1;i++){
+      const a=swNodes[swPath[i]], b=swNodes[swPath[i+1]];
+      ctx.beginPath();
+      ctx.moveTo(sx(a),sy(a));
+      ctx.lineTo(sx(b),sy(b));
+      ctx.strokeStyle='#34d399';
+      ctx.lineWidth=2.5;
+      ctx.stroke();
+    }
+  }
+
+  // nodes
+  swNodes.forEach((n,i)=>{
+    ctx.beginPath();
+    ctx.arc(sx(n),sy(n),i===swSelected?9:6,0,Math.PI*2);
+    const inPath=swPath.includes(i);
+    ctx.fillStyle = i===swSelected ? '#0284c7' : inPath ? '#059669' : '#dbeafe';
+    ctx.fill();
+    ctx.strokeStyle = i===swSelected ? '#7dd3fc' : inPath ? '#6ee7b7' : '#38bdf8';
+    ctx.lineWidth=1.5;
+    ctx.stroke();
+  });
+
+  // path length
+  if(swPath.length>1){
+    ctx.fillStyle='#34d399';
+    ctx.font='bold 13px Space Mono';
+    ctx.fillText(`${swPath.length-1} saltos`,10,20);
+  }
+}
+
+function swFindPath(){
+  if(swNodes.length===0)return;
+  const src=swSelected??0;
+  const tgt=Math.floor(Math.random()*swNodes.length);
+
+  // BFS
+  const adj={};
+  swNodes.forEach((_,i)=>adj[i]=[]);
+  swEdges.forEach(e=>{adj[e.a].push(e.b);adj[e.b].push(e.a);});
+
+  const visited={[src]:true}, queue=[[src]], paths={[src]:[src]};
+  while(queue.length){
+    const path=queue.shift();
+    const cur=path[path.length-1];
+    if(cur===tgt){ swPath=path; break; }
+    (adj[cur]||[]).forEach(nb=>{
+      if(!visited[nb]){ visited[nb]=true; const np=[...path,nb]; queue.push(np); paths[nb]=np; }
+    });
+  }
+  swDraw();
+}
+
+function swRegen(){ swBuild(); swDraw(); }
+
+document.getElementById('swCanvas').addEventListener('click',function(ev){
+  const rect=this.getBoundingClientRect();
+  const mx=(ev.clientX-rect.left), my=(ev.clientY-rect.top);
+  const canvas=this;
+  const w=rect.width, h=rect.height;
+  const sx=n=>n.x*(w/800), sy=n=>n.y*(h/340);
+  let best=null,bd=99;
+  swNodes.forEach((n,i)=>{
+    const d=Math.hypot(sx(n)-mx, sy(n)-my);
+    if(d<bd){bd=d;best=i;}
+  });
+  if(bd<20){ swSelected=best; swPath=[]; swDraw(); }
+});
+
+// ─────────────────────────────────────────────
+// S3: NSW canvas — paso a paso
+// ─────────────────────────────────────────────
+let nswStepIdx=0, nswData=null;
+
+const NSW_STEPS = [
+  {label:"Grafo vacío — insertar primer vector (hub potencial)", insert:[0]},
+  {label:"Insertar 2° y 3° vector — primeros nodos = futuros hubs", insert:[1,2]},
+  {label:"Insertar más vectores — empiezan a formarse clusters locales", insert:[3,4,5,6]},
+  {label:"Completar inserción — observa los enlaces largos de los primeros nodos", insert:[7,8,9,10,11,12,13]},
+  {label:"Búsqueda greedy: desde nodo aleatorio hacia la consulta (★)", insert:[], search:true},
+];
+
+function nswInit(){
+  const N=14;
+  nswData = {
+    nodes: Array.from({length:N},(_,i)=>({
+      x: rnd(40,720), y: rnd(30,300), id:i, visible:false
+    })),
+    edges:[],
+    query:{x:rnd(80,680),y:rnd(40,280)},
+    path:[]
+  };
+}
+
+function nswBuildEdges(nodes){
+  const edges=[];
+  const vis=nodes.filter(n=>n.visible);
+  vis.forEach(n=>{
+    const sorted=vis.filter(m=>m.id!==n.id).sort((a,b)=>dist(n,a)-dist(n,b));
+    sorted.slice(0,3).forEach(m=>{
+      if(!edges.find(e=>(e.a===n.id&&e.b===m.id)||(e.a===m.id&&e.b===n.id)))
+        edges.push({a:n.id,b:m.id});
+    });
+  });
+  return edges;
+}
+
+function nswGreedy(nodes,edges,start,query){
+  const adj={};
+  nodes.forEach(n=>adj[n.id]=[]);
+  edges.forEach(e=>{adj[e.a].push(e.b);adj[e.b].push(e.a);});
+  let cur=start, path=[cur];
+  for(let iter=0;iter<30;iter++){
+    const nb=adj[cur]||[];
+    let best=cur, bd=dist(nodes[cur],query);
+    nb.forEach(id=>{ const d=dist(nodes[id],query); if(d<bd){bd=d;best=id;} });
+    if(best===cur)break;
+    cur=best; path.push(cur);
+  }
+  return path;
+}
+
+function nswApplyStep(idx){
+  if(!nswData)nswInit();
+  const step=NSW_STEPS[idx];
+  if(step.insert) step.insert.forEach(i=>{ nswData.nodes[i].visible=true; });
+  nswData.edges = nswBuildEdges(nswData.nodes);
+  nswData.path = [];
+  if(step.search){
+    const vis=nswData.nodes.filter(n=>n.visible);
+    const start=vis[0].id;
+    nswData.path=nswGreedy(nswData.nodes,nswData.edges,start,nswData.query);
+  }
+  document.getElementById('nswLabel').textContent = `NSW — ${step.label}`;
+}
+
+function nswDrawCanvas(){
+  const canvas=document.getElementById('nswCanvas');
+  const {ctx,w,h}=dpr(canvas);
+  ctx.clearRect(0,0,w,h);
+
+  if(!nswData)return;
+  const sx=n=>n.x*(w/760), sy=n=>n.y*(h/340);
+
+  // edges
+  nswData.edges.forEach(e=>{
+    const a=nswData.nodes[e.a], b=nswData.nodes[e.b];
+    const d=dist(a,b)*(760/w);
+    const isLong = d>200;
+    ctx.beginPath();
+    ctx.moveTo(sx(a),sy(a));
+    ctx.lineTo(sx(b),sy(b));
+    ctx.strokeStyle=isLong?'rgba(234,88,12,.6)':'rgba(2,132,199,.3)';
+    ctx.lineWidth=isLong?1.5:1;
+    ctx.setLineDash(isLong?[5,4]:[]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  });
+
+  // path
+  if(nswData.path.length>1){
+    for(let i=0;i<nswData.path.length-1;i++){
+      const a=nswData.nodes[nswData.path[i]], b=nswData.nodes[nswData.path[i+1]];
+      ctx.beginPath(); ctx.moveTo(sx(a),sy(a)); ctx.lineTo(sx(b),sy(b));
+      ctx.strokeStyle='#059669'; ctx.lineWidth=2.5; ctx.stroke();
+    }
+  }
+
+  // nodes
+  nswData.nodes.filter(n=>n.visible).forEach(n=>{
+    const inPath=nswData.path.includes(n.id);
+    const isFirst=n.id<=2;
+    ctx.beginPath();
+    ctx.arc(sx(n),sy(n),inPath?9:isFirst?8:6,0,Math.PI*2);
+    ctx.fillStyle=inPath?'#059669':isFirst?'#ea580c':'#bfdbfe';
+    ctx.fill();
+    ctx.strokeStyle=inPath?'#065f46':isFirst?'#c2410c':'#0284c7';
+    ctx.lineWidth=1.5; ctx.stroke();
+    if(isFirst){
+      ctx.fillStyle='rgba(251,146,60,.12)';
+      ctx.beginPath(); ctx.arc(sx(n),sy(n),18,0,Math.PI*2); ctx.fill();
+    }
+  });
+
+  // query star
+  if(NSW_STEPS[nswStepIdx].search){
+    const qx=sx(nswData.query), qy=sy(nswData.query);
+    ctx.fillStyle='#fbbf24';
+    ctx.font='bold 18px sans-serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('★',qx,qy);
+    ctx.textAlign='start'; ctx.textBaseline='alphabetic';
+  }
+
+  // legend
+  ctx.fillStyle='rgba(234,88,12,.9)';
+  ctx.beginPath(); ctx.arc(14,h-20,6,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#475569'; ctx.font='11px Space Mono';
+  ctx.fillText('Hub (primeros insertados)',24,h-16);
+}
+
+function nswStep(dir){
+  nswStepIdx = Math.max(0,Math.min(NSW_STEPS.length-1, nswStepIdx+dir));
+  nswApplyStep(nswStepIdx);
+  nswDrawCanvas();
+  document.getElementById('nswPrevBtn').disabled = nswStepIdx===0;
+  document.getElementById('nswNextBtn').disabled = nswStepIdx===NSW_STEPS.length-1;
+}
+
+function nswReset(){ nswStepIdx=0; nswInit(); nswApplyStep(0); nswDrawCanvas(); }
+
+// ─────────────────────────────────────────────
+// S4: HNSW canvas — layers + search
+// ─────────────────────────────────────────────
+let hnswStepIdx=0;
+
+const LAYER_COLORS = ['#0284c7','#6366f1','#059669'];
+const LAYER_BG     = ['rgba(2,132,199,.07)','rgba(99,102,241,.06)','rgba(5,150,105,.05)'];
+
+const HNSW_STEPS = [
+  {label:"Estructura HNSW — 3 capas con densidad decreciente", phase:'structure'},
+  {label:"Búsqueda: entrar por capa 2 (pocos nodos, saltos largos)", phase:'layer2'},
+  {label:"Bajar a capa 1 — refinar zona con más nodos", phase:'layer1'},
+  {label:"Capa 0 — grafo completo, búsqueda final precisa", phase:'layer0'},
+  {label:"Resultado: k vecinos más cercanos encontrados", phase:'result'},
+];
+
+// Fixed layout para las 3 capas
+function buildHNSWData(){
+  const all = Array.from({length:22},(_,i)=>({
+    x: rnd(30,730), y: rnd(0,100), id:i,
+    layer: i<4 ? 2 : i<10 ? 1 : 0
+  }));
+  // spread vertically by layer
+  all.forEach(n=>{
+    const ly = n.layer;
+    n.y = rnd(20,80) + (2-ly)*100;
+  });
+  return all;
+}
+
+let hnswNodes = buildHNSWData();
+let hnswQuery = {x:rnd(60,700), y:280};
+let hnswSearchPath = {l2:[],l1:[],l0:[]};
+let hnswResult = [];
+
+function computeHNSWSearch(){
+  // Simulate search: pick best node per layer greedily
+  const byLayer = [0,1,2].map(l=>hnswNodes.filter(n=>n.layer===l));
+
+  // Layer 2: start from first node, greedy to query
+  const l2nodes = byLayer[2];
+  let cur = l2nodes[0];
+  let path2=[cur.id];
+  for(let i=0;i<5;i++){
+    const nb=l2nodes.filter(n=>n.id!==cur.id);
+    const best=nb.sort((a,b)=>dist(a,hnswQuery)-dist(b,hnswQuery))[0];
+    if(!best||dist(best,hnswQuery)>=dist(cur,hnswQuery))break;
+    cur=best; path2.push(cur.id);
+  }
+
+  // Layer 1: start from closest to last l2 result
+  const l1nodes = byLayer[1];
+  let entry1 = l1nodes.sort((a,b)=>dist(a,cur)-dist(b,cur))[0];
+  cur=entry1; let path1=[cur.id];
+  for(let i=0;i<6;i++){
+    const nb=l1nodes.filter(n=>n.id!==cur.id);
+    const best=nb.sort((a,b)=>dist(a,hnswQuery)-dist(b,hnswQuery))[0];
+    if(!best||dist(best,hnswQuery)>=dist(cur,hnswQuery))break;
+    cur=best; path1.push(cur.id);
+  }
+
+  // Layer 0: full search around entry point
+  const l0nodes = byLayer[0];
+  let entry0 = l0nodes.sort((a,b)=>dist(a,cur)-dist(b,cur))[0];
+  cur=entry0; let path0=[cur.id];
+  for(let i=0;i<8;i++){
+    const nb=l0nodes.filter(n=>n.id!==cur.id);
+    const best=nb.sort((a,b)=>dist(a,hnswQuery)-dist(b,hnswQuery))[0];
+    if(!best||dist(best,hnswQuery)>=dist(cur,hnswQuery))break;
+    cur=best; path0.push(cur.id);
+  }
+
+  // Result: 3 closest in layer 0
+  const result = l0nodes.sort((a,b)=>dist(a,hnswQuery)-dist(b,hnswQuery)).slice(0,3).map(n=>n.id);
+
+  hnswSearchPath = {l2:path2, l1:path1, l0:path0};
+  hnswResult = result;
+}
+
+function hnswDraw(){
+  const canvas = document.getElementById('hnswCanvas');
+  const {ctx,w,h} = dpr(canvas);
+  ctx.clearRect(0,0,w,h);
+
+  const phase = HNSW_STEPS[hnswStepIdx].phase;
+  const sx = n => n.x*(w/760);
+  const sy = n => n.y*(h/380)+10;
+
+  // Layer bands
+  [2,1,0].forEach(l=>{
+    const ys = hnswNodes.filter(n=>n.layer===l).map(n=>sy(n));
+    const minY = Math.min(...ys)-22, maxY = Math.max(...ys)+22;
+    ctx.fillStyle=LAYER_BG[l];
+    ctx.fillRect(0,minY,w,maxY-minY);
+    ctx.fillStyle=LAYER_COLORS[l];
+    ctx.globalAlpha=.35;
+    ctx.font='bold 11px Space Mono';
+    ctx.fillText(`Capa ${l}`,8,maxY-6);
+    ctx.globalAlpha=1;
+  });
+
+  // Determine active sets
+  const activeIds = new Set();
+  if(phase==='layer2'||phase==='result') hnswSearchPath.l2.forEach(id=>activeIds.add(id));
+  if(phase==='layer1'||phase==='result') hnswSearchPath.l1.forEach(id=>activeIds.add(id));
+  if(phase==='layer0'||phase==='result') hnswSearchPath.l0.forEach(id=>activeIds.add(id));
+
+  // Draw edges between adjacent path nodes per layer
+  const drawPath=(path,color)=>{
+    if(path.length<2)return;
+    for(let i=0;i<path.length-1;i++){
+      const a=hnswNodes.find(n=>n.id===path[i]);
+      const b=hnswNodes.find(n=>n.id===path[i+1]);
+      if(!a||!b)continue;
+      ctx.beginPath(); ctx.moveTo(sx(a),sy(a)); ctx.lineTo(sx(b),sy(b));
+      ctx.strokeStyle=color; ctx.lineWidth=2.5; ctx.stroke();
+    }
+  };
+
+  // Background mesh edges
+  [2,1,0].forEach(l=>{
+    const ln=hnswNodes.filter(n=>n.layer===l);
+    ln.forEach(a=>{
+      const nb=ln.filter(m=>m.id!==a.id).sort((x,y)=>dist(a,x)-dist(a,y)).slice(0,3);
+      nb.forEach(b=>{
+        ctx.beginPath(); ctx.moveTo(sx(a),sy(a)); ctx.lineTo(sx(b),sy(b));
+        ctx.strokeStyle=`rgba(${l===2?'2,132,199':l===1?'99,102,241':'5,150,105'},.18)`;
+        ctx.lineWidth=1; ctx.stroke();
+      });
+    });
+  });
+
+  // Active paths
+  if(phase==='layer2'||phase==='result') drawPath(hnswSearchPath.l2, LAYER_COLORS[2]);
+  if(phase==='layer1'||phase==='result') drawPath(hnswSearchPath.l1, LAYER_COLORS[1]);
+  if(phase==='layer0'||phase==='result') drawPath(hnswSearchPath.l0, LAYER_COLORS[0]);
+
+  // Nodes
+  hnswNodes.forEach(n=>{
+    const l=n.layer;
+    const inActive=activeIds.has(n.id);
+    const isResult=hnswResult.includes(n.id)&&phase==='result';
+    const r = l===2?9:l===1?7:5;
+    ctx.beginPath(); ctx.arc(sx(n),sy(n),isResult?11:r,0,Math.PI*2);
+    ctx.fillStyle=isResult?'#f59e0b':inActive?LAYER_COLORS[l]:'#e2e8f0';
+    ctx.fill();
+    ctx.strokeStyle=isResult?'#d97706':LAYER_COLORS[l];
+    ctx.lineWidth=isResult?2:1.5; ctx.stroke();
+    if(isResult){
+      ctx.fillStyle='rgba(245,158,11,.2)';
+      ctx.beginPath(); ctx.arc(sx(n),sy(n),20,0,Math.PI*2); ctx.fill();
+    }
+  });
+
+  // Query point
+  const qx=hnswQuery.x*(w/760), qy=hnswQuery.y*(h/380)+10;
+  if(phase!=='structure'){
+    ctx.fillStyle='rgba(217,119,6,.15)';
+    ctx.beginPath(); ctx.arc(qx,qy,22,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#d97706'; ctx.font='bold 20px sans-serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('★',qx,qy);
+    ctx.textAlign='start'; ctx.textBaseline='alphabetic';
+  }
+}
+
+function hnswStep(dir){
+  hnswStepIdx=Math.max(0,Math.min(HNSW_STEPS.length-1,hnswStepIdx+dir));
+  document.getElementById('hnswLabel').textContent='HNSW — '+HNSW_STEPS[hnswStepIdx].label;
+  hnswDraw();
+  document.getElementById('hnswPrevBtn').disabled=hnswStepIdx===0;
+  document.getElementById('hnswNextBtn').disabled=hnswStepIdx===HNSW_STEPS.length-1;
+}
+
+function hnswReset(){ hnswStepIdx=0; hnswNodes=buildHNSWData(); computeHNSWSearch(); hnswDraw(); }
+
+function selectLayer(el,idx){
+  document.querySelectorAll('#layerDemo .layer-row').forEach(r=>r.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ─────────────────────────────────────────────
+// S5: Parameter sliders
+// ─────────────────────────────────────────────
+function computeEffects(){
+  const M   = parseInt(document.getElementById('mSlider').value);
+  const efc = parseInt(document.getElementById('efcSlider').value);
+  const ef  = parseInt(document.getElementById('efSlider').value);
+
+  document.getElementById('mVal').textContent   = M;
+  document.getElementById('efcVal').textContent = efc;
+  document.getElementById('efVal').textContent  = ef;
+
+  const mem   = (M * 22 * 4 / 1024 / 1024).toFixed(1);
+  const recall = Math.min(99, 60 + M*0.8 + ef*0.15).toFixed(0);
+  const lat    = (2 + M*0.08 + ef*0.12).toFixed(1);
+  const buildT = (efc * M * 0.001).toFixed(0);
+
+  document.getElementById('mEffect').textContent
+    = `→ Mem grafo (1M nodos): ~${mem} MB  |  Recall estimado: ~${recall}%`;
+  document.getElementById('efcEffect').textContent
+    = `→ Build time relativo: ~${buildT} unidades`;
+  document.getElementById('efEffect').textContent
+    = `→ Latencia estimada: ~${lat} ms  |  Recall estimado: ~${recall}%`;
+
+  drawParamChart(M, ef);
+}
+
+function drawParamChart(M, ef){
+  const canvas=document.getElementById('paramCanvas');
+  const {ctx,w,h}=dpr(canvas);
+  ctx.clearRect(0,0,w,h);
+
+  const pad={l:50,r:20,t:20,b:36};
+  const cw=w-pad.l-pad.r, ch=h-pad.t-pad.b;
+
+  // Axes
+  ctx.strokeStyle='#94a3b8'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(pad.l,pad.t); ctx.lineTo(pad.l,pad.t+ch); ctx.lineTo(pad.l+cw,pad.t+ch); ctx.stroke();
+
+  // Grid
+  [0,25,50,75,100].forEach(v=>{
+    const y=pad.t+ch*(1-v/100);
+    ctx.strokeStyle='#e2e8f0'; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(pad.l+cw,y); ctx.stroke();
+    ctx.fillStyle='#475569'; ctx.font='10px Space Mono'; ctx.textAlign='right';
+    ctx.fillText(v+'%',pad.l-6,y+4);
+  });
+
+  // Recall vs ef curve
+  const efRange=Array.from({length:50},(_,i)=>10+i*6);
+  const recallCurve=efRange.map(e=>Math.min(99,60+M*0.8+e*0.15));
+
+  ctx.beginPath();
+  efRange.forEach((e,i)=>{
+    const x=pad.l+cw*(e-10)/(310-10);
+    const y=pad.t+ch*(1-recallCurve[i]/100);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.strokeStyle='#0284c7'; ctx.lineWidth=2; ctx.stroke();
+
+  // Current ef marker
+  const curX=pad.l+cw*(ef-10)/(310-10);
+  const curRecall=Math.min(99,60+M*0.8+ef*0.15);
+  const curY=pad.t+ch*(1-curRecall/100);
+  ctx.beginPath(); ctx.arc(curX,curY,5,0,Math.PI*2);
+  ctx.fillStyle='#ea580c'; ctx.fill();
+
+  // Labels
+  ctx.fillStyle='#64748b'; ctx.font='10px Space Mono'; ctx.textAlign='center';
+  ctx.fillText('ef (candidatos en búsqueda)',pad.l+cw/2,h-4);
+  ctx.save(); ctx.translate(14,pad.t+ch/2); ctx.rotate(-Math.PI/2);
+  ctx.fillText('Recall (%)',0,0); ctx.restore();
+
+  ctx.fillStyle='#0284c7'; ctx.textAlign='left';
+  ctx.fillText('Recall vs ef  (M='+M+')',pad.l+8,pad.t+14);
+  ctx.fillStyle='#ea580c';
+  ctx.fillText(`ef=${ef} → ${curRecall.toFixed(0)}%`,curX+8,curY-8);
+}
+
+['mSlider','efcSlider','efSlider'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',computeEffects);
+});
+
+// ─────────────────────────────────────────────
+// Init all
+// ─────────────────────────────────────────────
+window.addEventListener('load',()=>{
+  swBuild(); swDraw();
+  nswInit(); nswApplyStep(0); nswDrawCanvas();
+  computeHNSWSearch(); hnswDraw();
+  computeEffects();
+});
+
+window.addEventListener('resize',()=>{
+  swDraw(); nswDrawCanvas(); hnswDraw(); computeEffects();
+});
+</script>
+</body>
+</html>

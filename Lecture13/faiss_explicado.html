@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAISSVectorStore — Explicado</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg2: #f5f5f3; --bg3: #eeede9;
+    --text: #1a1a18; --text2: #6b6b67; --text3: #9a9a96;
+    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
+    --radius: 8px; --radius-lg: 12px;
+    --blue-bg: #E6F1FB; --blue-text: #0C447C;
+    --teal-bg: #E1F5EE; --teal-text: #085041;
+    --coral-bg: #FAECE7; --coral-text: #4A1B0C;
+    --amber-bg: #FAEEDA; --amber-text: #633806;
+    --accent: #EF9F27;
+    --mono: 'Courier New', monospace;
+  }
+
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; padding: 2rem 1rem; }
+  .container { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 500; margin-bottom: .25rem; }
+  .subtitle { font-size: 13px; color: var(--text2); margin-bottom: 2rem; }
+  .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1rem 1.25rem; }
+  .code { font-family: var(--mono); font-size: 12px; color: var(--text2); background: var(--bg2); border-radius: 5px; padding: 2px 6px; }
+  .tag { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+  .tag-blue  { background: var(--blue-bg);  color: var(--blue-text); }
+  .tag-teal  { background: var(--teal-bg);  color: var(--teal-text); }
+  .tag-coral { background: var(--coral-bg); color: var(--coral-text); }
+  .tag-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .tab-row { display: flex; gap: 4px; margin-bottom: 1rem; flex-wrap: wrap; }
+  .tab { padding: 6px 16px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; border: 0.5px solid var(--border2); background: transparent; color: var(--text2); transition: all .15s; }
+  .tab:hover { background: var(--bg2); }
+  .tab.active { background: var(--bg); color: var(--text); border-color: var(--border2); box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+  .pane { display: none; }
+  .pane.active { display: block; }
+  .three-col { display: flex; gap: 10px; }
+  .three-col .col { flex: 1; min-width: 0; }
+  .arrow-mid { display: flex; align-items: center; justify-content: center; color: var(--text3); font-size: 18px; flex-shrink: 0; padding: 0 2px; }
+  .struct-box { border: 0.5px solid var(--border2); border-radius: var(--radius); padding: .75rem 1rem; margin-bottom: 6px; }
+  .struct-label { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+  .faiss-vec { display: flex; gap: 2px; flex-wrap: wrap; }
+  .faiss-cell { width: 10px; height: 10px; border-radius: 2px; }
+  .highlight { outline: 2px solid var(--accent); border-radius: 6px; }
+  .invariant { background: var(--bg2); border-left: 2px solid var(--accent); border-radius: 0 6px 6px 0; padding: .75rem 1rem; font-size: 12px; color: var(--text2); line-height: 1.6; margin-top: .75rem; }
+  .doc-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--bg2); border: 0.5px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer; margin: 0 4px 4px 0; transition: background .15s; }
+  .doc-chip:hover { background: var(--bg3); }
+  .doc-chip .idx { font-family: var(--mono); font-size: 11px; color: var(--text2); }
+  .search-flow { display: flex; flex-direction: column; gap: 10px; }
+  .flow-step { display: flex; gap: 12px; align-items: flex-start; }
+  .step-num { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; margin-top: 2px; }
+  .step-title { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .step-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
+  .scores-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+  .score-card { background: var(--bg2); border-radius: 6px; padding: 8px; text-align: center; }
+  .score-val { font-size: 20px; font-weight: 500; }
+  .score-idx { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .dir-row { display: flex; align-items: center; gap: 8px; font-size: 12px; flex-wrap: wrap; padding: 4px 0; }
+  .section-label { font-size: 11px; font-weight: 500; color: var(--text2); letter-spacing: .06em; text-transform: uppercase; margin-bottom: .75rem; }
+  p.intro { font-size: 13px; color: var(--text2); margin-bottom: 1rem; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>FAISSVectorStore — explicado</h1>
+  <p class="subtitle">Internals de búsqueda vectorial con FAISS · material de clase</p>
+
+  <div class="tab-row">
+    <button class="tab active" onclick="showTab('estructuras')">Estructuras de datos</button>
+    <button class="tab" onclick="showTab('agregar')">add()</button>
+    <button class="tab" onclick="showTab('buscar')">search()</button>
+    <button class="tab" onclick="showTab('invariante')">El invariante</button>
+  </div>
+
+  <!-- ESTRUCTURAS -->
+  <div class="pane active" id="pane-estructuras">
+    <p class="intro">El store mantiene <strong>tres estructuras paralelas</strong> que deben permanecer sincronizadas en todo momento.</p>
+    <div class="three-col">
+      <div class="col card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500">Índice FAISS</span>
+          <span class="tag tag-blue">solo vectores float32</span>
+        </div>
+        <div class="faiss-vec" style="margin:.5rem 0">
+          <div class="faiss-cell" style="background:#378ADD"></div>
+          <div class="faiss-cell" style="background:#185FA5"></div>
+          <div class="faiss-cell" style="background:#85B7EB"></div>
+          <div class="faiss-cell" style="background:#0C447C"></div>
+          <div class="faiss-cell" style="background:#378ADD"></div>
+          <div class="faiss-cell" style="background:#B5D4F4"></div>
+          <span style="font-size:10px;color:var(--text2);margin-left:4px">× dim</span>
+        </div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.6">
+          Almacena vectores normalizados.<br>
+          Devuelve <code class="code">(scores, índices_int)</code>.<br>
+          No sabe nada de tus documentos.
+        </div>
+      </div>
+      <div class="arrow-mid">→</div>
+      <div class="col card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500">self.documents</span>
+          <span class="tag tag-teal">List[DocumentChunk]</span>
+        </div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.6">
+          Objetos completos en orden de inserción.<br>
+          <code class="code">documents[i]</code> ↔ vector FAISS <code class="code">i</code>.<br>
+          Puente: entero → objeto rico.
+        </div>
+      </div>
+      <div class="arrow-mid">→</div>
+      <div class="col card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500">self.id_to_index</span>
+          <span class="tag tag-coral">Dict[str, int]</span>
+        </div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.6">
+          Lookup inverso: doc_id → posición.<br>
+          Acceso O(1) por id de texto.<br>
+          No se usa durante la búsqueda.
+        </div>
+      </div>
+    </div>
+    <div class="invariant">
+      <strong style="color:var(--text)">Idea clave:</strong> FAISS solo habla enteros. <code class="code">self.documents</code> es la única estructura que sabe qué significan esos enteros. Sin ella, el resultado de una búsqueda es solo <code class="code">[42, 17, 5]</code>.
+    </div>
+  </div>
+
+  <!-- ADD -->
+  <div class="pane" id="pane-agregar">
+    <p class="intro">Haz clic en un documento para trazar qué ocurre durante <code class="code">add()</code>.</p>
+    <div style="margin-bottom:1rem" id="add-chips">
+      <div class="doc-chip" onclick="selectDoc(0)"><span class="idx">0</span> chunk_A</div>
+      <div class="doc-chip" onclick="selectDoc(1)"><span class="idx">1</span> chunk_B</div>
+      <div class="doc-chip" onclick="selectDoc(2)"><span class="idx">2</span> chunk_C</div>
+      <div class="doc-chip" onclick="selectDoc(3)"><span class="idx">3</span> chunk_D</div>
+    </div>
+    <div class="three-col" style="gap:12px">
+      <div class="col">
+        <div class="section-label">self.documents (lista)</div>
+        <div id="docs-list"></div>
+      </div>
+      <div class="col">
+        <div class="section-label">self.id_to_index (dict)</div>
+        <div id="idx-map"></div>
+      </div>
+      <div class="col">
+        <div class="section-label">Vectores en FAISS</div>
+        <div id="faiss-list"></div>
+      </div>
+    </div>
+    <div class="invariant" id="add-note">Selecciona un documento para ver cómo se mapea.</div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="pane" id="pane-buscar">
+    <p class="intro">Las tres fases de <code class="code">search()</code>.</p>
+    <div class="search-flow">
+      <div class="flow-step">
+        <div class="step-num tag-blue">1</div>
+        <div class="card" style="flex:1">
+          <div class="step-title">Preparar el vector de consulta</div>
+          <div class="step-desc">
+            Convertir a <code class="code">float32</code> y normalizar: <code class="code">q /= np.linalg.norm(q)</code> — la misma normalización que en la inserción. Ambos lados deben vivir en la esfera unitaria; si no, producto interno ≠ similitud coseno. Se hace <code class="code">reshape(1, dim)</code> porque FAISS espera un batch.
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num tag-teal">2</div>
+        <div class="card" style="flex:1">
+          <div class="step-title">Búsqueda FAISS — espacio vectorial puro</div>
+          <div class="step-desc" style="margin-bottom:.75rem">
+            <code class="code">scores, indices = self.index.search(q.reshape(1,-1), k)</code><br>
+            Devuelve dos arrays de forma <code class="code">(1, k)</code>. FAISS no conoce tus documentos.
+          </div>
+          <div class="scores-grid">
+            <div class="score-card"><div class="score-val" style="color:#EF9F27">0.91</div><div class="score-idx">idx 42</div></div>
+            <div class="score-card"><div class="score-val" style="color:#BA7517">0.85</div><div class="score-idx">idx 17</div></div>
+            <div class="score-card"><div class="score-val" style="color:#854F0B">0.72</div><div class="score-idx">idx 5</div></div>
+          </div>
+          <div style="font-size:11px;color:var(--text2);margin-top:.5rem">
+            El guard <code class="code">idx >= 0</code> maneja el padding cuando hay menos de k resultados (FAISS rellena con <code class="code">-1</code>).
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num tag-coral">3</div>
+        <div class="card" style="flex:1">
+          <div class="step-title">Puente: entero → DocumentChunk</div>
+          <div class="step-desc">
+            <code class="code">self.documents[idx]</code> recupera el objeto completo. <code class="code">id_to_index</code> <em>no se usa aquí</em> — la búsqueda va en dirección <strong>entero FAISS → documento</strong>. <code class="code">id_to_index</code> es la dirección inversa: <strong>id del doc → entero</strong> (lookups, dedup, borrado).
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:.75rem;flex-wrap:wrap">
+            <span class="tag tag-blue">42</span>
+            <span style="color:var(--text2)">→</span>
+            <span class="tag tag-teal">documents[42]</span>
+            <span style="color:var(--text2)">→</span>
+            <span class="tag tag-coral">(DocumentChunk, 0.91)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INVARIANTE -->
+  <div class="pane" id="pane-invariante">
+    <p class="intro">Todo el sistema depende de un <strong>invariante estructural</strong>: la posición <code class="code">i</code> en FAISS siempre corresponde a <code class="code">self.documents[i]</code>.</p>
+    <div class="card" style="margin-bottom:1rem">
+      <div class="step-title" style="margin-bottom:.5rem">Por qué se mantiene</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.7">
+        En <code class="code">add()</code>, <code class="code">pos = len(self.documents)</code> se captura <em>antes</em> del append. Luego <code class="code">self.documents.append(doc)</code> y <code class="code">self.index.add(vec)</code> ocurren en la misma iteración del loop, en el mismo orden. Por eso la n-ésima llamada a <code class="code">index.add()</code> siempre inserta el mismo doc que quedó en la posición n de <code class="code">self.documents</code>.
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:1rem">
+      <div class="step-title" style="margin-bottom:.5rem">Por qué puede romperse</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.7">
+        <code class="code">faiss.IndexFlatIP</code> no tiene operación de borrado. Si eliminas un documento de <code class="code">self.documents</code> sin reconstruir el índice FAISS completo, las posiciones se desplazan y el mapeo queda inválido. Ésa es una de las razones por las que existen las bases de datos vectoriales de producción (Qdrant, Weaviate): gestionan las mutaciones de forma nativa.
+      </div>
+    </div>
+    <div class="card">
+      <div class="step-title" style="margin-bottom:.75rem">Dirección de uso: resumen</div>
+      <div class="dir-row">
+        <span class="tag tag-teal">search()</span>
+        <span style="color:var(--text2)">entero FAISS</span>
+        <span>→</span>
+        <span style="color:var(--text2)">self.documents[i]</span>
+        <span class="tag tag-blue">usa documents</span>
+      </div>
+      <div class="dir-row">
+        <span class="tag tag-coral">get_by_id()</span>
+        <span style="color:var(--text2)">doc_id str</span>
+        <span>→</span>
+        <span style="color:var(--text2)">int → documents[i]</span>
+        <span class="tag tag-amber">usa id_to_index</span>
+      </div>
+      <div class="dir-row">
+        <span class="tag tag-coral">dedup check</span>
+        <span style="color:var(--text2)">doc_id in id_to_index</span>
+        <span>→</span>
+        <span style="color:var(--text2)">verificación O(1)</span>
+        <span class="tag tag-amber">usa id_to_index</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DOCS = ['chunk_A','chunk_B','chunk_C','chunk_D'];
+const COLORS = ['#378ADD','#1D9E75','#D85A30','#D4537E'];
+
+function showTab(name) {
+  const names = ['estructuras','agregar','buscar','invariante'];
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i] === name));
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+  document.getElementById('pane-'+name).classList.add('active');
+}
+
+function renderAdd(selected) {
+  const dl = document.getElementById('docs-list');
+  const im = document.getElementById('idx-map');
+  const fl = document.getElementById('faiss-list');
+  const note = document.getElementById('add-note');
+  dl.innerHTML = im.innerHTML = fl.innerHTML = '';
+  DOCS.forEach((id, i) => {
+    const hl = i === selected ? 'highlight' : '';
+    const dEl = document.createElement('div');
+    dEl.className = 'struct-box ' + hl;
+    dEl.innerHTML = `<div class="struct-label">documents[${i}]</div><div style="font-size:12px">${id}</div>`;
+    dl.appendChild(dEl);
+    const iEl = document.createElement('div');
+    iEl.className = 'struct-box ' + hl;
+    iEl.innerHTML = `<div style="font-size:12px;font-family:var(--mono)">"${id}" → ${i}</div>`;
+    im.appendChild(iEl);
+    const fEl = document.createElement('div');
+    fEl.className = 'struct-box ' + hl;
+    const cells = Array.from({length:8}, () => `<div class="faiss-cell" style="background:${COLORS[i]};opacity:${(0.4+Math.random()*0.5).toFixed(2)}"></div>`).join('');
+    fEl.innerHTML = `<div class="struct-label">vec[${i}]</div><div class="faiss-vec">${cells}</div>`;
+    fl.appendChild(fEl);
+  });
+  if (selected !== null) {
+    const id = DOCS[selected];
+    note.innerHTML = `<strong style="color:var(--text)">pos = ${selected}</strong> se captura antes del append. Luego <code class="code">documents.append(${id})</code> e <code class="code">index.add(vec)</code> se ejecutan — ambos aterrizan en la posición ${selected}. <code class="code">id_to_index["${id}"] = ${selected}</code>.`;
+  } else {
+    note.textContent = 'Selecciona un documento para ver cómo se mapea.';
+  }
+}
+
+function selectDoc(i) {
+  document.querySelectorAll('#add-chips .doc-chip').forEach((c,j) => {
+    c.style.background = j===i ? 'var(--bg3)' : '';
+    c.style.borderColor = j===i ? 'var(--border2)' : '';
+  });
+  renderAdd(i);
+}
+
+renderAdd(null);
+</script>
+</body>
+</html>
