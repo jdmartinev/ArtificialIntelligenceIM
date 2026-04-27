@@ -1,0 +1,56 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+  <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+    <path d="M0,0 L12,6 L0,12 Z" fill="#334155"/>
+  </marker>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.16"/>
+  </filter>
+  <style>
+    .bg { fill: #f8fafc; }
+    .title { font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; fill: #0f172a; }
+    .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 17px; fill: #475569; }
+    .section { font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 700; fill: #64748b; letter-spacing: 1.2px; }
+    .label { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 700; fill: #0f172a; }
+    .small { font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #334155; }
+    .tiny { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #475569; }
+    .code { font-family: Consolas, Menlo, monospace; font-size: 13px; fill: #1e293b; }
+    .start { fill: #ecfeff; stroke: #0891b2; stroke-width: 2; rx: 22; filter: url(#shadow); }
+    .agent { fill: #eff6ff; stroke: #2563eb; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .tools { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .router { fill: #fffbeb; stroke: #d97706; stroke-width: 2.5; filter: url(#shadow); }
+    .end { fill: #f1f5f9; stroke: #64748b; stroke-width: 2; rx: 22; filter: url(#shadow); }
+    .state { fill: #f5f3ff; stroke: #7c3aed; stroke-width: 2; rx: 20; filter: url(#shadow); }
+    .pink { fill: #fdf2f8; stroke: #db2777; stroke-width: 2.3; rx: 22; filter: url(#shadow); }
+    .gray { fill: #f1f5f9; stroke: #64748b; stroke-width: 2; rx: 20; filter: url(#shadow); }
+    .arrow { stroke: #334155; stroke-width: 2.7; fill: none; marker-end: url(#arrow); }
+    .loop { stroke: #16a34a; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    .dash { stroke: #64748b; stroke-width: 2.3; stroke-dasharray: 8 7; fill: none; marker-end: url(#arrow); }
+  </style>
+</defs>
+
+<rect width="1200" height="760" class="bg"/>
+
+<text x="60" y="62" class="title">MessagesState Evolution</text>
+<text x="60" y="94" class="subtitle">The model is stateless; the graph preserves context by carrying the message history across nodes.</text>
+<rect x="95" y="180" width="230" height="115" class="state"/>
+<text x="148" y="220" class="label">Initial State</text>
+<text x="135" y="250" class="code">[system, user]</text>
+<rect x="380" y="180" width="230" height="115" class="agent"/>
+<text x="445" y="220" class="label">After agent</text>
+<text x="405" y="250" class="code">+ assistant(tool_call)</text>
+<rect x="665" y="180" width="230" height="115" class="tools"/>
+<text x="730" y="220" class="label">After tools</text>
+<text x="705" y="250" class="code">+ tool(result)</text>
+<rect x="950" y="180" width="230" height="115" class="end"/>
+<text x="1000" y="220" class="label">Final State</text>
+<text x="980" y="250" class="code">+ assistant(answer)</text>
+<path d="M325 238 L380 238" class="arrow"/>
+<path d="M610 238 L665 238" class="arrow"/>
+<path d="M895 238 L950 238" class="arrow"/>
+<rect x="210" y="430" width="780" height="120" class="gray"/>
+<text x="470" y="475" class="label">Core idea</text>
+<text x="315" y="510" class="small">Every node receives state and returns only the incremental update.</text>
+
+</svg>

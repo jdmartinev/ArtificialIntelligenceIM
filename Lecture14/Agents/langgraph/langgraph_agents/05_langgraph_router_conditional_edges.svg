@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="950" viewBox="0 0 1600 950">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.13"/>
+    </filter>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d4ed8"/></marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#15803d"/></marker>
+    <marker id="arrowPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#6d28d9"/></marker>
+    <marker id="arrowGold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b45309"/></marker>
+    <style>
+      .title { font: 800 44px Inter, Arial, sans-serif; fill: #111827; }
+      .subtitle { font: italic 26px Inter, Arial, sans-serif; fill: #4b5563; }
+      .h1 { font: 800 27px Inter, Arial, sans-serif; fill: #111827; }
+      .h2 { font: 750 22px Inter, Arial, sans-serif; fill: #111827; }
+      .body { font: 19px Inter, Arial, sans-serif; fill: #1f2937; }
+      .small { font: 16px Inter, Arial, sans-serif; fill: #374151; }
+      .tiny { font: 14px Inter, Arial, sans-serif; fill: #475569; }
+      .blue { fill:#eff6ff; stroke:#1d4ed8; } .purple { fill:#f5f3ff; stroke:#6d28d9; }
+      .green { fill:#f0fdf4; stroke:#15803d; } .gold { fill:#fffbeb; stroke:#b45309; }
+      .gray { fill:#f8fafc; stroke:#64748b; } .red { fill:#fff1f2; stroke:#be123c; }
+      .box { stroke-width:2.5; rx:18; filter:url(#shadow); }
+      .inner { stroke-width:1.8; rx:12; }
+      .arrowB { stroke:#1d4ed8; stroke-width:4; fill:none; marker-end:url(#arrowBlue); }
+      .arrowG { stroke:#15803d; stroke-width:4; fill:none; marker-end:url(#arrowGreen); }
+      .arrowP { stroke:#6d28d9; stroke-width:4; fill:none; marker-end:url(#arrowPurple); }
+      .arrowY { stroke:#b45309; stroke-width:4; fill:none; marker-end:url(#arrowGold); }
+      .dashP { stroke:#6d28d9; stroke-width:4; fill:none; stroke-dasharray:12 10; marker-end:url(#arrowPurple); }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="800" y="60" text-anchor="middle" class="title">Conditional Routing in LangGraph</text>
+  <text x="800" y="102" text-anchor="middle" class="subtitle">The router replaces manual finish_reason branching</text>
+  <rect x="145" y="205" width="360" height="120" class="box purple"/><text x="325.0" y="243" text-anchor="middle" class="h1">agent node</text><text x="185" y="275" text-anchor="start" class="small">Last message may contain tool_calls</text><rect x="625" y="180" width="350" height="180" class="box gold"/><text x="800.0" y="218" text-anchor="middle" class="h1">router(state)</text><text x="670" y="255" text-anchor="start" class="body">Inspect last message</text><text x="670" y="290" text-anchor="start" class="small">if tool_calls: tools</text><text x="670" y="320" text-anchor="start" class="small">else: END</text><rect x="1105" y="170" width="360" height="120" class="box green"/><text x="1285.0" y="208" text-anchor="middle" class="h1">tools node</text><text x="1145" y="240" text-anchor="start" class="small">ToolNode executes function</text><rect x="1105" y="430" width="360" height="120" class="box blue"/><text x="1285.0" y="468" text-anchor="middle" class="h1">END</text><text x="1145" y="500" text-anchor="start" class="small">Return final response</text><path d="M505 265 C555 265 575 265 625 265" class="arrowP"/><path d="M975 250 C1030 240 1050 235 1105 230" class="arrowG"/><text x="1010" y="210" text-anchor="start" class="small">tool_calls</text><path d="M975 305 C1040 345 1055 455 1105 485" class="arrowB"/><text x="1010" y="405" text-anchor="start" class="small">stop</text><path d="M1285 290 C1285 620 315 620 315 325" class="dashP"/><text x="775" y="650" text-anchor="middle" class="small">after tools, go back to agent</text>
+</svg>

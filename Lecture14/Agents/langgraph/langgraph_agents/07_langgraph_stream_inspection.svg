@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="950" viewBox="0 0 1600 950">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.13"/>
+    </filter>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d4ed8"/></marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#15803d"/></marker>
+    <marker id="arrowPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#6d28d9"/></marker>
+    <marker id="arrowGold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b45309"/></marker>
+    <style>
+      .title { font: 800 44px Inter, Arial, sans-serif; fill: #111827; }
+      .subtitle { font: italic 26px Inter, Arial, sans-serif; fill: #4b5563; }
+      .h1 { font: 800 27px Inter, Arial, sans-serif; fill: #111827; }
+      .h2 { font: 750 22px Inter, Arial, sans-serif; fill: #111827; }
+      .body { font: 19px Inter, Arial, sans-serif; fill: #1f2937; }
+      .small { font: 16px Inter, Arial, sans-serif; fill: #374151; }
+      .tiny { font: 14px Inter, Arial, sans-serif; fill: #475569; }
+      .blue { fill:#eff6ff; stroke:#1d4ed8; } .purple { fill:#f5f3ff; stroke:#6d28d9; }
+      .green { fill:#f0fdf4; stroke:#15803d; } .gold { fill:#fffbeb; stroke:#b45309; }
+      .gray { fill:#f8fafc; stroke:#64748b; } .red { fill:#fff1f2; stroke:#be123c; }
+      .box { stroke-width:2.5; rx:18; filter:url(#shadow); }
+      .inner { stroke-width:1.8; rx:12; }
+      .arrowB { stroke:#1d4ed8; stroke-width:4; fill:none; marker-end:url(#arrowBlue); }
+      .arrowG { stroke:#15803d; stroke-width:4; fill:none; marker-end:url(#arrowGreen); }
+      .arrowP { stroke:#6d28d9; stroke-width:4; fill:none; marker-end:url(#arrowPurple); }
+      .arrowY { stroke:#b45309; stroke-width:4; fill:none; marker-end:url(#arrowGold); }
+      .dashP { stroke:#6d28d9; stroke-width:4; fill:none; stroke-dasharray:12 10; marker-end:url(#arrowPurple); }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="800" y="60" text-anchor="middle" class="title">Execution and Inspection</text>
+  <text x="800" y="102" text-anchor="middle" class="subtitle">Streaming exposes how LangGraph executes the agent workflow</text>
+  <rect x="100" y="190" width="360" height="130" class="box blue"/><text x="280.0" y="228" text-anchor="middle" class="h1">run_agent()</text><text x="145" y="260" text-anchor="start" class="small">graph.stream(initial state)</text><rect x="610" y="170" width="380" height="170" class="box purple"/><text x="800.0" y="208" text-anchor="middle" class="h1">stream_mode=&quot;values&quot;</text><text x="655" y="245" text-anchor="start" class="body">Returns full state</text><text x="655" y="280" text-anchor="start" class="small">after each node execution</text><rect x="1140" y="190" width="360" height="130" class="box green"/><text x="1320.0" y="228" text-anchor="middle" class="h1">Verbose trace</text><text x="1180" y="260" text-anchor="start" class="small">tool calls + tool results</text><rect x="610" y="510" width="380" height="140" class="box gold"/><text x="800.0" y="548" text-anchor="middle" class="h1">Final state</text><text x="655" y="585" text-anchor="start" class="small">final_state[&quot;messages&quot;][-1]</text><path d="M460 255 C520 255 550 255 610 255" class="arrowB"/><path d="M990 255 C1050 255 1080 255 1140 255" class="arrowG"/><path d="M800 340 C800 405 800 445 800 510" class="arrowY"/><text x="800" y="780" text-anchor="middle" class="h1">This is the pedagogical bridge: students can observe the graph execution step by step.</text>
+</svg>

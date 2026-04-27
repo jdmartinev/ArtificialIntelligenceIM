@@ -1,0 +1,56 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+  <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+    <path d="M0,0 L12,6 L0,12 Z" fill="#334155"/>
+  </marker>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.16"/>
+  </filter>
+  <style>
+    .bg { fill: #f8fafc; }
+    .title { font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; fill: #0f172a; }
+    .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 17px; fill: #475569; }
+    .section { font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 700; fill: #64748b; letter-spacing: 1.2px; }
+    .label { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 700; fill: #0f172a; }
+    .small { font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #334155; }
+    .tiny { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #475569; }
+    .code { font-family: Consolas, Menlo, monospace; font-size: 13px; fill: #1e293b; }
+    .start { fill: #ecfeff; stroke: #0891b2; stroke-width: 2; rx: 22; filter: url(#shadow); }
+    .agent { fill: #eff6ff; stroke: #2563eb; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .tools { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .router { fill: #fffbeb; stroke: #d97706; stroke-width: 2.5; filter: url(#shadow); }
+    .end { fill: #f1f5f9; stroke: #64748b; stroke-width: 2; rx: 22; filter: url(#shadow); }
+    .state { fill: #f5f3ff; stroke: #7c3aed; stroke-width: 2; rx: 20; filter: url(#shadow); }
+    .pink { fill: #fdf2f8; stroke: #db2777; stroke-width: 2.3; rx: 22; filter: url(#shadow); }
+    .gray { fill: #f1f5f9; stroke: #64748b; stroke-width: 2; rx: 20; filter: url(#shadow); }
+    .arrow { stroke: #334155; stroke-width: 2.7; fill: none; marker-end: url(#arrow); }
+    .loop { stroke: #16a34a; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    .dash { stroke: #64748b; stroke-width: 2.3; stroke-dasharray: 8 7; fill: none; marker-end: url(#arrow); }
+  </style>
+</defs>
+
+<rect width="1200" height="760" class="bg"/>
+
+<text x="60" y="62" class="title">Router and Conditional Edges</text>
+<text x="60" y="94" class="subtitle">The router is the graph-level equivalent of an if statement after the LLM response.</text>
+<rect x="430" y="160" width="260" height="105" class="agent"/>
+<text x="525" y="200" class="label">agent</text>
+<text x="475" y="230" class="small">produces last message</text>
+<polygon points="560,340 690,430 560,520 430,430" class="router"/>
+<text x="515" y="418" class="label">_router</text>
+<text x="495" y="448" class="tiny">inspect last message</text>
+<rect x="150" y="570" width="230" height="82" class="end"/>
+<text x="243" y="604" class="label">END</text>
+<text x="192" y="628" class="tiny">no tool_calls</text>
+<rect x="760" y="570" width="230" height="82" class="tools"/>
+<text x="856" y="604" class="label">tools</text>
+<text x="805" y="628" class="tiny">tool_calls present</text>
+<path d="M560 265 L560 340" class="arrow"/>
+<path d="M430 430 C340 460 280 515 265 570" class="arrow"/>
+<path d="M690 430 C780 460 850 515 875 570" class="arrow"/>
+<rect x="430" y="595" width="260" height="70" class="gray"/>
+<text x="455" y="626" class="code">if tool_calls: "tools"</text>
+<text x="455" y="650" class="code">else: END</text>
+
+</svg>

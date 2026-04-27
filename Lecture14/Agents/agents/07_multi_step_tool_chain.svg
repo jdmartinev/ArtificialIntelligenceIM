@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="740" viewBox="0 0 1300 740">
+<defs>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.12"/>
+  </filter>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#f8fafc"/><stop offset="1" stop-color="#eef2ff"/>
+  </linearGradient>
+  <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#faf5ff"/><stop offset="1" stop-color="#ede9fe"/>
+  </linearGradient>
+  <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#f0fdf4"/><stop offset="1" stop-color="#dcfce7"/>
+  </linearGradient>
+  <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#dbeafe"/>
+  </linearGradient>
+  <linearGradient id="amber" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#fffbeb"/><stop offset="1" stop-color="#fef3c7"/>
+  </linearGradient>
+  <marker id="arrowBlue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M2,2 L10,6 L2,10 Z" fill="#1d4ed8"/></marker>
+  <marker id="arrowGreen" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M2,2 L10,6 L2,10 Z" fill="#15803d"/></marker>
+  <marker id="arrowPurple" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M2,2 L10,6 L2,10 Z" fill="#6d28d9"/></marker>
+  <marker id="arrowAmber" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M2,2 L10,6 L2,10 Z" fill="#b45309"/></marker>
+  <style>
+    .title{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:34px;font-weight:800;fill:#111827;}
+    .subtitle{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:18px;font-style:italic;fill:#4b5563;}
+    .h{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:21px;font-weight:750;fill:#111827;}
+    .sh{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:17px;font-weight:700;fill:#374151;}
+    .txt{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:15px;fill:#374151;}
+    .small{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:13px;fill:#4b5563;}
+    .tiny{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:11px;fill:#6b7280;}
+    .code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;fill:#111827;}
+    .num{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:14px;font-weight:800;fill:white;}
+    .icon{font-family:Apple Color Emoji,Segoe UI Emoji,Noto Color Emoji,sans-serif;font-size:25px;}
+  </style>
+</defs>
+<rect width="1300" height="740" fill="url(#bg)"/><text x="650" y="48" class="title" text-anchor="middle">Multi-step Agent Example</text><text x="650" y="78" class="subtitle" text-anchor="middle">A single user task can trigger several tool calls across iterations</text><rect x="80" y="155" width="250" height="80" rx="18" fill="url(#blue)" stroke="#1d4ed8" stroke-width="2" filter="url(#shadow)"/><text x="205" y="188" class="h" text-anchor="middle"><tspan x="205" dy="0">User Question</tspan></text><text x="205" y="215" class="small" text-anchor="middle"><tspan x="205" dy="0">“Price of BTC and cost of 0.75 BTC?”</tspan></text><rect x="80" y="330" width="220" height="76" rx="16" fill="url(#purple)" stroke="#6d28d9" stroke-width="2" filter="url(#shadow)"/><text x="190" y="361" class="sh" text-anchor="middle"><tspan x="190" dy="0">LLM</tspan></text><text x="190" y="385" class="small" text-anchor="middle"><tspan x="190" dy="0">Decides to search</tspan></text><line x1="300" y1="368" x2="340" y2="368" stroke="#6d28d9" stroke-width="3" marker-end="url(#arrowPurple)"/><rect x="340" y="330" width="220" height="76" rx="16" fill="url(#green)" stroke="#15803d" stroke-width="2" filter="url(#shadow)"/><text x="450" y="361" class="sh" text-anchor="middle"><tspan x="450" dy="0">web_search</tspan></text><text x="450" y="385" class="small" text-anchor="middle"><tspan x="450" dy="0">Gets current price</tspan></text><line x1="560" y1="368" x2="600" y2="368" stroke="#15803d" stroke-width="3" marker-end="url(#arrowGreen)"/><rect x="600" y="330" width="220" height="76" rx="16" fill="url(#blue)" stroke="#1d4ed8" stroke-width="2" filter="url(#shadow)"/><text x="710" y="361" class="sh" text-anchor="middle"><tspan x="710" dy="0">Observation</tspan></text><text x="710" y="385" class="small" text-anchor="middle"><tspan x="710" dy="0">Search results</tspan></text><line x1="820" y1="368" x2="860" y2="368" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrowBlue)"/><rect x="860" y="330" width="220" height="76" rx="16" fill="url(#purple)" stroke="#6d28d9" stroke-width="2" filter="url(#shadow)"/><text x="970" y="361" class="sh" text-anchor="middle"><tspan x="970" dy="0">LLM</tspan></text><text x="970" y="385" class="small" text-anchor="middle"><tspan x="970" dy="0">Decides to calculate</tspan></text><path d="M 1080 368 C 1110 368 1110 475 80 475" fill="none" stroke="#6d28d9" stroke-width="3" marker-end="url(#arrowPurple)"/><rect x="80" y="475" width="220" height="76" rx="16" fill="url(#green)" stroke="#15803d" stroke-width="2" filter="url(#shadow)"/><text x="190" y="506" class="sh" text-anchor="middle"><tspan x="190" dy="0">calculate</tspan></text><text x="190" y="530" class="small" text-anchor="middle"><tspan x="190" dy="0">0.75 × price</tspan></text><line x1="300" y1="513" x2="340" y2="513" stroke="#15803d" stroke-width="3" marker-end="url(#arrowGreen)"/><rect x="340" y="475" width="220" height="76" rx="16" fill="url(#blue)" stroke="#1d4ed8" stroke-width="2" filter="url(#shadow)"/><text x="450" y="506" class="sh" text-anchor="middle"><tspan x="450" dy="0">Observation</tspan></text><text x="450" y="530" class="small" text-anchor="middle"><tspan x="450" dy="0">Computed value</tspan></text><line x1="560" y1="513" x2="600" y2="513" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrowBlue)"/><rect x="600" y="475" width="220" height="76" rx="16" fill="url(#purple)" stroke="#6d28d9" stroke-width="2" filter="url(#shadow)"/><text x="710" y="506" class="sh" text-anchor="middle"><tspan x="710" dy="0">LLM</tspan></text><text x="710" y="530" class="small" text-anchor="middle"><tspan x="710" dy="0">Final synthesis</tspan></text><line x1="820" y1="513" x2="860" y2="513" stroke="#6d28d9" stroke-width="3" marker-end="url(#arrowPurple)"/><rect x="860" y="475" width="220" height="76" rx="16" fill="url(#amber)" stroke="#b45309" stroke-width="2" filter="url(#shadow)"/><text x="970" y="506" class="sh" text-anchor="middle"><tspan x="970" dy="0">Final Answer</tspan></text><text x="970" y="530" class="small" text-anchor="middle"><tspan x="970" dy="0">Natural language response</tspan></text><line x1="205" y1="235" x2="205" y2="330" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrowBlue)"/></svg>

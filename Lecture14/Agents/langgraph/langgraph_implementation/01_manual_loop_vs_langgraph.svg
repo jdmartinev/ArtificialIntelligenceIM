@@ -1,0 +1,64 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+  <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+    <path d="M0,0 L12,6 L0,12 Z" fill="#334155"/>
+  </marker>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.16"/>
+  </filter>
+  <style>
+    .bg { fill: #f8fafc; }
+    .title { font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; fill: #0f172a; }
+    .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 17px; fill: #475569; }
+    .section { font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 700; fill: #64748b; letter-spacing: 1.2px; }
+    .label { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 700; fill: #0f172a; }
+    .small { font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #334155; }
+    .tiny { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #475569; }
+    .code { font-family: Consolas, Menlo, monospace; font-size: 13px; fill: #1e293b; }
+    .start { fill: #ecfeff; stroke: #0891b2; stroke-width: 2; rx: 22; filter: url(#shadow); }
+    .agent { fill: #eff6ff; stroke: #2563eb; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .tools { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .router { fill: #fffbeb; stroke: #d97706; stroke-width: 2.5; filter: url(#shadow); }
+    .end { fill: #f1f5f9; stroke: #64748b; stroke-width: 2; rx: 22; filter: url(#shadow); }
+    .state { fill: #f5f3ff; stroke: #7c3aed; stroke-width: 2; rx: 20; filter: url(#shadow); }
+    .pink { fill: #fdf2f8; stroke: #db2777; stroke-width: 2.3; rx: 22; filter: url(#shadow); }
+    .gray { fill: #f1f5f9; stroke: #64748b; stroke-width: 2; rx: 20; filter: url(#shadow); }
+    .arrow { stroke: #334155; stroke-width: 2.7; fill: none; marker-end: url(#arrow); }
+    .loop { stroke: #16a34a; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    .dash { stroke: #64748b; stroke-width: 2.3; stroke-dasharray: 8 7; fill: none; marker-end: url(#arrow); }
+  </style>
+</defs>
+
+<rect width="1200" height="760" class="bg"/>
+
+<text x="60" y="62" class="title">Manual Agentic Loop vs LangGraph</text>
+<text x="60" y="94" class="subtitle">The same ReAct logic is represented either as imperative control flow or as an explicit graph.</text>
+
+<text x="105" y="155" class="section">MANUAL LOOP</text>
+<rect x="80" y="185" width="420" height="420" class="agent"/>
+<rect x="170" y="245" width="240" height="62" class="gray"/>
+<text x="224" y="283" class="label">while loop</text>
+<rect x="170" y="355" width="240" height="62" class="tools"/>
+<text x="217" y="393" class="label">execute tools</text>
+<rect x="170" y="465" width="240" height="62" class="state"/>
+<text x="222" y="503" class="label">messages</text>
+<path d="M290 307 L290 355" class="arrow"/>
+<path d="M290 417 L290 465" class="arrow"/>
+<path d="M170 496 C95 450 95 320 170 276" class="loop"/>
+<text x="132" y="570" class="small">Control flow lives in Python code.</text>
+
+<text x="700" y="155" class="section">LANGGRAPH</text>
+<rect x="650" y="185" width="420" height="420" class="state"/>
+<rect x="750" y="245" width="220" height="62" class="agent"/>
+<text x="817" y="283" class="label">agent</text>
+<polygon points="860,355 940,415 860,475 780,415" class="router"/>
+<text x="830" y="421" class="label">router</text>
+<rect x="750" y="535" width="220" height="62" class="tools"/>
+<text x="830" y="573" class="label">tools</text>
+<path d="M860 307 L860 355" class="arrow"/>
+<path d="M860 475 L860 535" class="arrow"/>
+<path d="M970 566 C1060 465 1035 300 970 276" class="loop"/>
+<text x="690" y="570" class="small">Control flow is encoded as graph edges.</text>
+
+</svg>

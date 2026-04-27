@@ -1,0 +1,59 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+  <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+    <path d="M0,0 L12,6 L0,12 Z" fill="#334155"/>
+  </marker>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.16"/>
+  </filter>
+  <style>
+    .bg { fill: #f8fafc; }
+    .title { font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; fill: #0f172a; }
+    .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 17px; fill: #475569; }
+    .section { font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 700; fill: #64748b; letter-spacing: 1.2px; }
+    .label { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 700; fill: #0f172a; }
+    .small { font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #334155; }
+    .tiny { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #475569; }
+    .code { font-family: Consolas, Menlo, monospace; font-size: 13px; fill: #1e293b; }
+    .start { fill: #ecfeff; stroke: #0891b2; stroke-width: 2; rx: 22; filter: url(#shadow); }
+    .agent { fill: #eff6ff; stroke: #2563eb; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .tools { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .router { fill: #fffbeb; stroke: #d97706; stroke-width: 2.5; filter: url(#shadow); }
+    .end { fill: #f1f5f9; stroke: #64748b; stroke-width: 2; rx: 22; filter: url(#shadow); }
+    .state { fill: #f5f3ff; stroke: #7c3aed; stroke-width: 2; rx: 20; filter: url(#shadow); }
+    .pink { fill: #fdf2f8; stroke: #db2777; stroke-width: 2.3; rx: 22; filter: url(#shadow); }
+    .gray { fill: #f1f5f9; stroke: #64748b; stroke-width: 2; rx: 20; filter: url(#shadow); }
+    .arrow { stroke: #334155; stroke-width: 2.7; fill: none; marker-end: url(#arrow); }
+    .loop { stroke: #16a34a; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    .dash { stroke: #64748b; stroke-width: 2.3; stroke-dasharray: 8 7; fill: none; marker-end: url(#arrow); }
+  </style>
+</defs>
+
+<rect width="1200" height="760" class="bg"/>
+
+<text x="60" y="62" class="title">LangGraph Agentic Loop</text>
+<text x="60" y="94" class="subtitle">Nodes execute computation, edges define control flow, and MessagesState carries memory.</text>
+<text x="90" y="150" class="section">GRAPH EXECUTION FLOW</text>
+<rect x="120" y="210" width="170" height="82" class="start"/>
+<text x="174" y="244" class="label">START</text><text x="146" y="268" class="tiny">entry point</text>
+<rect x="430" y="185" width="230" height="132" class="agent"/>
+<text x="490" y="230" class="label">agent</text><text x="466" y="258" class="small">calls the LLM</text><text x="453" y="282" class="tiny">answer or request tools</text>
+<polygon points="545,385 665,465 545,545 425,465" class="router"/>
+<text x="512" y="456" class="label">router</text><text x="477" y="482" class="tiny">conditional edge</text>
+<rect x="170" y="555" width="190" height="82" class="end"/>
+<text x="244" y="589" class="label">END</text><text x="212" y="613" class="tiny">return final answer</text>
+<rect x="780" y="555" width="230" height="92" class="tools"/>
+<text x="866" y="590" class="label">tools</text><text x="820" y="618" class="small">execute tool calls</text>
+<path d="M290 251 L430 251" class="arrow"/><text x="325" y="233" class="tiny">START → agent</text>
+<path d="M545 317 L545 385" class="arrow"/><text x="566" y="354" class="tiny">after LLM call</text>
+<path d="M425 465 C350 480 305 520 265 555" class="arrow"/><text x="292" y="493" class="tiny">no tool calls → END</text>
+<path d="M665 465 C735 485 820 520 895 555" class="arrow"/><text x="742" y="493" class="tiny">tool calls → tools</text>
+<path d="M895 555 C875 425 760 250 660 245" class="loop"/><text x="805" y="360" class="small">tools → agent</text>
+<text x="760" y="150" class="section">SHARED STATE</text>
+<rect x="760" y="185" width="330" height="170" class="state"/>
+<text x="855" y="225" class="label">MessagesState</text><text x="798" y="258" class="small">Passed between all nodes:</text>
+<text x="800" y="288" class="code">state["messages"]</text><text x="800" y="315" class="tiny">system, user, assistant, tool outputs</text>
+<text x="90" y="700" class="code">StateGraph(MessagesState) → agent → router → END/tools → agent</text>
+
+</svg>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="720" viewBox="0 0 1400 720">
+<defs>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.12"/>
+  </filter>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#f8fafc"/><stop offset="1" stop-color="#eef2ff"/>
+  </linearGradient>
+  <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#faf5ff"/><stop offset="1" stop-color="#ede9fe"/>
+  </linearGradient>
+  <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#f0fdf4"/><stop offset="1" stop-color="#dcfce7"/>
+  </linearGradient>
+  <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#dbeafe"/>
+  </linearGradient>
+  <linearGradient id="amber" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#fffbeb"/><stop offset="1" stop-color="#fef3c7"/>
+  </linearGradient>
+  <marker id="arrowBlue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M2,2 L10,6 L2,10 Z" fill="#1d4ed8"/></marker>
+  <marker id="arrowGreen" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M2,2 L10,6 L2,10 Z" fill="#15803d"/></marker>
+  <marker id="arrowPurple" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M2,2 L10,6 L2,10 Z" fill="#6d28d9"/></marker>
+  <marker id="arrowAmber" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M2,2 L10,6 L2,10 Z" fill="#b45309"/></marker>
+  <style>
+    .title{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:34px;font-weight:800;fill:#111827;}
+    .subtitle{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:18px;font-style:italic;fill:#4b5563;}
+    .h{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:21px;font-weight:750;fill:#111827;}
+    .sh{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:17px;font-weight:700;fill:#374151;}
+    .txt{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:15px;fill:#374151;}
+    .small{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:13px;fill:#4b5563;}
+    .tiny{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:11px;fill:#6b7280;}
+    .code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;fill:#111827;}
+    .num{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:14px;font-weight:800;fill:white;}
+    .icon{font-family:Apple Color Emoji,Segoe UI Emoji,Noto Color Emoji,sans-serif;font-size:25px;}
+  </style>
+</defs>
+<rect width="1400" height="720" fill="url(#bg)"/><text x="700" y="48" class="title" text-anchor="middle">Message History as Agent State</text><text x="700" y="78" class="subtitle" text-anchor="middle">The LLM is stateless; the message list carries the full state</text><rect x="70" y="170" width="280" height="390" rx="18" fill="url(#blue)" stroke="#1d4ed8" stroke-width="2" filter="url(#shadow)"/><text x="210" y="212" class="h" text-anchor="middle"><tspan x="210" dy="0">Iteration 0</tspan></text><rect x="105" y="265" width="210" height="44" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3" filter="url(#shadow)"/><text x="210" y="294" class="small" text-anchor="middle"><tspan x="210" dy="0">system</tspan></text><rect x="105" y="325" width="210" height="44" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3" filter="url(#shadow)"/><text x="210" y="354" class="small" text-anchor="middle"><tspan x="210" dy="0">user</tspan></text><line x1="350" y1="365" x2="420" y2="365" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrowBlue)"/><rect x="420" y="170" width="280" height="390" rx="18" fill="url(#purple)" stroke="#6d28d9" stroke-width="2" filter="url(#shadow)"/><text x="560" y="212" class="h" text-anchor="middle"><tspan x="560" dy="0">Iteration 1</tspan></text><rect x="455" y="265" width="210" height="44" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3" filter="url(#shadow)"/><text x="560" y="294" class="small" text-anchor="middle"><tspan x="560" dy="0">system</tspan></text><rect x="455" y="325" width="210" height="44" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3" filter="url(#shadow)"/><text x="560" y="354" class="small" text-anchor="middle"><tspan x="560" dy="0">user</tspan></text><rect x="455" y="385" width="210" height="44" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3" filter="url(#shadow)"/><text x="560" y="414" class="small" text-anchor="middle"><tspan x="560" dy="0">assistant(tool_call)</tspan></text><line x1="700" y1="365" x2="770" y2="365" stroke="#6d28d9" stroke-width="3" marker-end="url(#arrowPurple)"/><rect x="770" y="170" width="280" height="390" rx="18" fill="url(#green)" stroke="#15803d" stroke-width="2" filter="url(#shadow)"/><text x="910" y="212" class="h" text-anchor="middle"><tspan x="910" dy="0">Iteration 2</tspan></text><rect x="805" y="265" width="210" height="44" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3" filter="url(#shadow)"/><text x="910" y="294" class="small" text-anchor="middle"><tspan x="910" dy="0">system</tspan></text><rect x="805" y="325" width="210" height="44" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3" filter="url(#shadow)"/><text x="910" y="354" class="small" text-anchor="middle"><tspan x="910" dy="0">user</tspan></text><rect x="805" y="385" width="210" height="44" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3" filter="url(#shadow)"/><text x="910" y="414" class="small" text-anchor="middle"><tspan x="910" dy="0">assistant(tool_call)</tspan></text><rect x="805" y="445" width="210" height="44" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3" filter="url(#shadow)"/><text x="910" y="474" class="small" text-anchor="middle"><tspan x="910" dy="0">tool(result)</tspan></text><line x1="1050" y1="365" x2="1120" y2="365" stroke="#15803d" stroke-width="3" marker-end="url(#arrowGreen)"/><rect x="1120" y="170" width="280" height="390" rx="18" fill="url(#amber)" stroke="#d97706" stroke-width="2" filter="url(#shadow)"/><text x="1260" y="212" class="h" text-anchor="middle"><tspan x="1260" dy="0">Iteration 3</tspan></text><rect x="1155" y="265" width="210" height="44" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3" filter="url(#shadow)"/><text x="1260" y="294" class="small" text-anchor="middle"><tspan x="1260" dy="0">system</tspan></text><rect x="1155" y="325" width="210" height="44" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3" filter="url(#shadow)"/><text x="1260" y="354" class="small" text-anchor="middle"><tspan x="1260" dy="0">user</tspan></text><rect x="1155" y="385" width="210" height="44" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3" filter="url(#shadow)"/><text x="1260" y="414" class="small" text-anchor="middle"><tspan x="1260" dy="0">assistant(final_answer)</tspan></text><rect x="425" y="610" width="550" height="62" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5" filter="url(#shadow)"/><text x="700" y="649" class="sh" text-anchor="middle"><tspan x="700" dy="0">Each new tool call or tool result is appended before the next LLM call.</tspan></text></svg>

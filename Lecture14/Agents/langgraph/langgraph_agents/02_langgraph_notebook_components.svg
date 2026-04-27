@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="950" viewBox="0 0 1600 950">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.13"/>
+    </filter>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d4ed8"/></marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#15803d"/></marker>
+    <marker id="arrowPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#6d28d9"/></marker>
+    <marker id="arrowGold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b45309"/></marker>
+    <style>
+      .title { font: 800 44px Inter, Arial, sans-serif; fill: #111827; }
+      .subtitle { font: italic 26px Inter, Arial, sans-serif; fill: #4b5563; }
+      .h1 { font: 800 27px Inter, Arial, sans-serif; fill: #111827; }
+      .h2 { font: 750 22px Inter, Arial, sans-serif; fill: #111827; }
+      .body { font: 19px Inter, Arial, sans-serif; fill: #1f2937; }
+      .small { font: 16px Inter, Arial, sans-serif; fill: #374151; }
+      .tiny { font: 14px Inter, Arial, sans-serif; fill: #475569; }
+      .blue { fill:#eff6ff; stroke:#1d4ed8; } .purple { fill:#f5f3ff; stroke:#6d28d9; }
+      .green { fill:#f0fdf4; stroke:#15803d; } .gold { fill:#fffbeb; stroke:#b45309; }
+      .gray { fill:#f8fafc; stroke:#64748b; } .red { fill:#fff1f2; stroke:#be123c; }
+      .box { stroke-width:2.5; rx:18; filter:url(#shadow); }
+      .inner { stroke-width:1.8; rx:12; }
+      .arrowB { stroke:#1d4ed8; stroke-width:4; fill:none; marker-end:url(#arrowBlue); }
+      .arrowG { stroke:#15803d; stroke-width:4; fill:none; marker-end:url(#arrowGreen); }
+      .arrowP { stroke:#6d28d9; stroke-width:4; fill:none; marker-end:url(#arrowPurple); }
+      .arrowY { stroke:#b45309; stroke-width:4; fill:none; marker-end:url(#arrowGold); }
+      .dashP { stroke:#6d28d9; stroke-width:4; fill:none; stroke-dasharray:12 10; marker-end:url(#arrowPurple); }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="800" y="60" text-anchor="middle" class="title">Notebook Components — LangGraph Version</text>
+  <text x="800" y="102" text-anchor="middle" class="subtitle">Important building blocks in the LangGraph implementation</text>
+  <rect x="80" y="180" width="610" height="105" class="inner blue"/><text x="102" y="212" text-anchor="start" class="h2">Backend Config</text><text x="102" y="242" text-anchor="start" class="small">ChatOpenAI-compatible model client</text><rect x="810" y="180" width="610" height="105" class="inner green"/><text x="832" y="212" text-anchor="start" class="h2">Tools with @tool</text><text x="832" y="242" text-anchor="start" class="small">Function + schema generated from type hints</text><rect x="80" y="330" width="610" height="105" class="inner purple"/><text x="102" y="362" text-anchor="start" class="h2">MessagesState</text><text x="102" y="392" text-anchor="start" class="small">Typed state carrying conversation messages</text><rect x="810" y="330" width="610" height="105" class="inner purple"/><text x="832" y="362" text-anchor="start" class="h2">agent_node</text><text x="832" y="392" text-anchor="start" class="small">Invokes the LLM bound to tools</text><rect x="80" y="480" width="610" height="105" class="inner green"/><text x="102" y="512" text-anchor="start" class="h2">ToolNode</text><text x="102" y="542" text-anchor="start" class="small">Executes tool calls automatically</text><rect x="810" y="480" width="610" height="105" class="inner gold"/><text x="832" y="512" text-anchor="start" class="h2">router</text><text x="832" y="542" text-anchor="start" class="small">Conditional edge: tools or END</text><rect x="80" y="630" width="610" height="105" class="inner blue"/><text x="102" y="662" text-anchor="start" class="h2">Compiled graph</text><text x="102" y="692" text-anchor="start" class="small">Runnable agent workflow</text><text x="800" y="845" text-anchor="middle" class="body">Key idea: LangGraph externalizes control flow as graph structure instead of hiding it inside a Python while-loop.</text>
+</svg>

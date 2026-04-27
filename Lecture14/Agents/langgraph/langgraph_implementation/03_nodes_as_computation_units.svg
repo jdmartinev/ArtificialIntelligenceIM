@@ -1,0 +1,55 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+  <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+    <path d="M0,0 L12,6 L0,12 Z" fill="#334155"/>
+  </marker>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.16"/>
+  </filter>
+  <style>
+    .bg { fill: #f8fafc; }
+    .title { font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; fill: #0f172a; }
+    .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 17px; fill: #475569; }
+    .section { font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 700; fill: #64748b; letter-spacing: 1.2px; }
+    .label { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 700; fill: #0f172a; }
+    .small { font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #334155; }
+    .tiny { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #475569; }
+    .code { font-family: Consolas, Menlo, monospace; font-size: 13px; fill: #1e293b; }
+    .start { fill: #ecfeff; stroke: #0891b2; stroke-width: 2; rx: 22; filter: url(#shadow); }
+    .agent { fill: #eff6ff; stroke: #2563eb; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .tools { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .router { fill: #fffbeb; stroke: #d97706; stroke-width: 2.5; filter: url(#shadow); }
+    .end { fill: #f1f5f9; stroke: #64748b; stroke-width: 2; rx: 22; filter: url(#shadow); }
+    .state { fill: #f5f3ff; stroke: #7c3aed; stroke-width: 2; rx: 20; filter: url(#shadow); }
+    .pink { fill: #fdf2f8; stroke: #db2777; stroke-width: 2.3; rx: 22; filter: url(#shadow); }
+    .gray { fill: #f1f5f9; stroke: #64748b; stroke-width: 2; rx: 20; filter: url(#shadow); }
+    .arrow { stroke: #334155; stroke-width: 2.7; fill: none; marker-end: url(#arrow); }
+    .loop { stroke: #16a34a; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    .dash { stroke: #64748b; stroke-width: 2.3; stroke-dasharray: 8 7; fill: none; marker-end: url(#arrow); }
+  </style>
+</defs>
+
+<rect width="1200" height="760" class="bg"/>
+
+<text x="60" y="62" class="title">LangGraph Nodes as Computation Units</text>
+<text x="60" y="94" class="subtitle">Each node is a callable that reads the current state and returns an update to that state.</text>
+<rect x="120" y="210" width="300" height="190" class="agent"/>
+<text x="230" y="255" class="label">agent node</text>
+<text x="165" y="295" class="small">Function: _agent(state)</text>
+<text x="165" y="325" class="tiny">• reads messages</text>
+<text x="165" y="350" class="tiny">• calls model</text>
+<text x="165" y="375" class="tiny">• appends assistant message</text>
+<rect x="780" y="210" width="300" height="190" class="tools"/>
+<text x="905" y="255" class="label">tools node</text>
+<text x="820" y="295" class="small">Function: ToolNode(tools)</text>
+<text x="820" y="325" class="tiny">• reads tool calls</text>
+<text x="820" y="350" class="tiny">• executes functions</text>
+<text x="820" y="375" class="tiny">• appends observations</text>
+<rect x="450" y="475" width="300" height="120" class="state"/>
+<text x="535" y="520" class="label">MessagesState</text>
+<text x="495" y="550" class="small">shared state object</text>
+<path d="M420 305 C500 335 535 420 570 475" class="dash"/>
+<path d="M780 305 C700 335 665 420 630 475" class="dash"/>
+
+</svg>

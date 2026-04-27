@@ -1,0 +1,66 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+  <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+    <path d="M0,0 L12,6 L0,12 Z" fill="#334155"/>
+  </marker>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.16"/>
+  </filter>
+  <style>
+    .bg { fill: #f8fafc; }
+    .title { font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; fill: #0f172a; }
+    .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 17px; fill: #475569; }
+    .section { font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 700; fill: #64748b; letter-spacing: 1.2px; }
+    .label { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 700; fill: #0f172a; }
+    .small { font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #334155; }
+    .tiny { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #475569; }
+    .code { font-family: Consolas, Menlo, monospace; font-size: 13px; fill: #1e293b; }
+    .blue { fill: #eff6ff; stroke: #2563eb; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .green { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .violet { fill: #f5f3ff; stroke: #7c3aed; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .amber { fill: #fffbeb; stroke: #d97706; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .red { fill: #fef2f2; stroke: #dc2626; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .gray { fill: #f1f5f9; stroke: #64748b; stroke-width: 2; rx: 20; filter: url(#shadow); }
+    .white { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.8; rx: 18; filter: url(#shadow); }
+    .arrow { stroke: #334155; stroke-width: 2.7; fill: none; marker-end: url(#arrow); }
+    .loop { stroke: #16a34a; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    .dash { stroke: #64748b; stroke-width: 2.3; stroke-dasharray: 8 7; fill: none; marker-end: url(#arrow); }
+  </style>
+</defs>
+
+<rect width="1200" height="760" class="bg"/>
+
+<text x="60" y="62" class="title">State Passing Across Agents</text>
+<text x="60" y="94" class="subtitle">Multi-agent workflows depend on shared state: messages, artifacts, intermediate outputs and metadata.</text>
+
+<rect x="90" y="300" width="190" height="105" class="blue"/>
+<text x="139" y="338" class="label">Agent 1</text>
+<text x="122" y="368" class="tiny">produces plan</text>
+
+<rect x="375" y="300" width="190" height="105" class="green"/>
+<text x="424" y="338" class="label">Agent 2</text>
+<text x="409" y="368" class="tiny">uses plan</text>
+
+<rect x="660" y="300" width="190" height="105" class="amber"/>
+<text x="709" y="338" class="label">Agent 3</text>
+<text x="694" y="368" class="tiny">reviews draft</text>
+
+<rect x="945" y="300" width="190" height="105" class="violet"/>
+<text x="989" y="338" class="label">Finalizer</text>
+<text x="977" y="368" class="tiny">integrates state</text>
+
+<path d="M280 352 L375 352" class="arrow"/>
+<path d="M565 352 L660 352" class="arrow"/>
+<path d="M850 352 L945 352" class="arrow"/>
+
+<rect x="160" y="535" width="880" height="92" class="gray"/>
+<text x="517" y="570" class="label">Shared State</text>
+<text x="318" y="600" class="small">messages · intermediate artifacts · scores · constraints · tool outputs</text>
+
+<path d="M185 405 L300 535" class="dash"/>
+<path d="M470 405 L525 535" class="dash"/>
+<path d="M755 405 L710 535" class="dash"/>
+<path d="M1040 405 L900 535" class="dash"/>
+
+</svg>

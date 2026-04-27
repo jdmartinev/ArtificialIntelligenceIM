@@ -1,0 +1,70 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+  <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+    <path d="M0,0 L12,6 L0,12 Z" fill="#334155"/>
+  </marker>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.16"/>
+  </filter>
+  <style>
+    .bg { fill: #f8fafc; }
+    .title { font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; fill: #0f172a; }
+    .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 17px; fill: #475569; }
+    .section { font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 700; fill: #64748b; letter-spacing: 1.2px; }
+    .label { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 700; fill: #0f172a; }
+    .small { font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #334155; }
+    .tiny { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #475569; }
+    .code { font-family: Consolas, Menlo, monospace; font-size: 13px; fill: #1e293b; }
+    .start { fill: #ecfeff; stroke: #0891b2; stroke-width: 2; rx: 22; filter: url(#shadow); }
+    .agent { fill: #eff6ff; stroke: #2563eb; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .tools { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .router { fill: #fffbeb; stroke: #d97706; stroke-width: 2.5; filter: url(#shadow); }
+    .end { fill: #f1f5f9; stroke: #64748b; stroke-width: 2; rx: 22; filter: url(#shadow); }
+    .state { fill: #f5f3ff; stroke: #7c3aed; stroke-width: 2; rx: 20; filter: url(#shadow); }
+    .pink { fill: #fdf2f8; stroke: #db2777; stroke-width: 2.3; rx: 22; filter: url(#shadow); }
+    .gray { fill: #f1f5f9; stroke: #64748b; stroke-width: 2; rx: 20; filter: url(#shadow); }
+    .arrow { stroke: #334155; stroke-width: 2.7; fill: none; marker-end: url(#arrow); }
+    .loop { stroke: #16a34a; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    .dash { stroke: #64748b; stroke-width: 2.3; stroke-dasharray: 8 7; fill: none; marker-end: url(#arrow); }
+  </style>
+</defs>
+
+<rect width="1200" height="760" class="bg"/>
+
+<text x="60" y="62" class="title">LangGraph Notebook Architecture</text>
+<text x="60" y="94" class="subtitle">A teaching-oriented map of the main components in the LangGraph version of the agent notebook.</text>
+
+<rect x="80" y="180" width="210" height="90" class="gray"/>
+<text x="122" y="215" class="label">User input</text>
+<text x="115" y="242" class="tiny">question or task</text>
+
+<rect x="420" y="150" width="260" height="110" class="state"/>
+<text x="475" y="190" class="label">MessagesState</text>
+<text x="455" y="220" class="tiny">shared graph state</text>
+
+<rect x="420" y="330" width="260" height="110" class="agent"/>
+<text x="520" y="370" class="label">agent</text>
+<text x="465" y="400" class="tiny">LLM with bound tools</text>
+
+<polygon points="550,505 670,585 550,665 430,585" class="router"/>
+<text x="518" y="578" class="label">router</text>
+<text x="485" y="604" class="tiny">conditional routing</text>
+
+<rect x="820" y="480" width="240" height="100" class="tools"/>
+<text x="915" y="520" class="label">tools</text>
+<text x="855" y="550" class="tiny">ToolNode executes functions</text>
+
+<rect x="120" y="545" width="190" height="90" class="end"/>
+<text x="195" y="580" class="label">END</text>
+<text x="155" y="607" class="tiny">final answer</text>
+
+<path d="M290 225 C350 220 380 210 420 205" class="arrow"/>
+<path d="M550 260 L550 330" class="arrow"/>
+<path d="M550 440 L550 505" class="arrow"/>
+<path d="M430 585 C350 585 310 585 310 590" class="arrow"/>
+<path d="M670 585 C740 565 790 540 820 530" class="arrow"/>
+<path d="M940 480 C890 350 760 260 680 210" class="loop"/>
+<text x="785" y="340" class="small">observations update state</text>
+
+</svg>

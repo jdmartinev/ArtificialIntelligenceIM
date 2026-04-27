@@ -1,0 +1,72 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+  <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+    <path d="M0,0 L12,6 L0,12 Z" fill="#334155"/>
+  </marker>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.16"/>
+  </filter>
+  <style>
+    .bg { fill: #f8fafc; }
+    .title { font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; fill: #0f172a; }
+    .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 17px; fill: #475569; }
+    .section { font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 700; fill: #64748b; letter-spacing: 1.2px; }
+    .label { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 700; fill: #0f172a; }
+    .small { font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #334155; }
+    .tiny { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #475569; }
+    .code { font-family: Consolas, Menlo, monospace; font-size: 13px; fill: #1e293b; }
+    .blue { fill: #eff6ff; stroke: #2563eb; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .green { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .violet { fill: #f5f3ff; stroke: #7c3aed; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .amber { fill: #fffbeb; stroke: #d97706; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .red { fill: #fef2f2; stroke: #dc2626; stroke-width: 2.5; rx: 22; filter: url(#shadow); }
+    .gray { fill: #f1f5f9; stroke: #64748b; stroke-width: 2; rx: 20; filter: url(#shadow); }
+    .white { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.8; rx: 18; filter: url(#shadow); }
+    .arrow { stroke: #334155; stroke-width: 2.7; fill: none; marker-end: url(#arrow); }
+    .loop { stroke: #16a34a; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    .dash { stroke: #64748b; stroke-width: 2.3; stroke-dasharray: 8 7; fill: none; marker-end: url(#arrow); }
+  </style>
+</defs>
+
+<rect width="1200" height="760" class="bg"/>
+
+<text x="60" y="62" class="title">LLM Orchestrator Pattern</text>
+<text x="60" y="94" class="subtitle">A central LLM dynamically selects which specialized agent should act next.</text>
+
+<rect x="90" y="330" width="180" height="80" class="gray"/>
+<text x="132" y="363" class="label">User Task</text>
+<text x="128" y="388" class="tiny">complex request</text>
+
+<rect x="440" y="270" width="260" height="150" class="violet"/>
+<text x="500" y="324" class="label">Orchestrator</text>
+<text x="492" y="354" class="small">routes and synthesizes</text>
+<text x="506" y="380" class="tiny">dynamic control flow</text>
+
+<rect x="890" y="155" width="210" height="72" class="green"/>
+<text x="940" y="187" class="label">Research</text>
+<text x="932" y="211" class="tiny">retrieves evidence</text>
+
+<rect x="890" y="285" width="210" height="72" class="green"/>
+<text x="953" y="317" class="label">Writer</text>
+<text x="940" y="341" class="tiny">generates content</text>
+
+<rect x="890" y="415" width="210" height="72" class="amber"/>
+<text x="950" y="447" class="label">Critic</text>
+<text x="932" y="471" class="tiny">evaluates output</text>
+
+<rect x="890" y="545" width="210" height="72" class="blue"/>
+<text x="944" y="577" class="label">Tool Agent</text>
+<text x="930" y="601" class="tiny">executes actions</text>
+
+<path d="M270 370 L440 345" class="arrow"/>
+<path d="M700 315 C775 250 815 205 890 191" class="arrow"/>
+<path d="M700 345 L890 321" class="arrow"/>
+<path d="M700 375 L890 451" class="arrow"/>
+<path d="M700 405 C780 480 820 565 890 581" class="arrow"/>
+
+<path d="M890 205 C805 235 755 275 700 315" class="dash"/>
+<path d="M890 335 C810 350 760 350 700 350" class="dash"/>
+<path d="M890 465 C800 435 755 405 700 380" class="dash"/>
+
+</svg>
