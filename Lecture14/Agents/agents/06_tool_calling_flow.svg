@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1024" viewBox="0 0 1536 1024">
+  <defs>
+    <style>
+      .title{font-family:Arial,Helvetica,sans-serif;font-size:38px;font-weight:700;fill:#0f172a}.subtitle{font-family:Arial,Helvetica,sans-serif;font-size:24px;font-style:italic;fill:#334155}.h{font-family:Arial,Helvetica,sans-serif;font-size:18px;font-weight:700}.txt{font-family:Arial,Helvetica,sans-serif;font-size:15px;fill:#111827}.small{font-family:Arial,Helvetica,sans-serif;font-size:13px;fill:#111827}.mono{font-family:Consolas,Menlo,monospace;font-size:13px;fill:#111827}.num{font-family:Arial,Helvetica,sans-serif;font-size:24px;font-weight:700;fill:white}.caption{font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:700;fill:#0f172a}.blue{fill:#0f4aa2}.green{fill:#157a37}.orange{fill:#d97706}.purple{fill:#6b21a8}.red{fill:#be123c}.strokeBlue{stroke:#0f4aa2}.strokeGreen{stroke:#157a37}.strokeOrange{stroke:#d97706}.strokePurple{stroke:#6b21a8}.strokeRed{stroke:#be123c}.box{fill:#ffffff;stroke-width:1.6;rx:10;ry:10}.softBlue{fill:#f5f9ff}.softGreen{fill:#f4fbf6}.softOrange{fill:#fff8ed}.softPurple{fill:#faf5ff}.softRed{fill:#fff5f5}.dash{stroke-dasharray:7 6}.arrow{stroke:#111827;stroke-width:2.2;fill:none;marker-end:url(#arrow)}.arrowLight{stroke:#111827;stroke-width:1.8;fill:none;marker-end:url(#arrow)}.loop{stroke:#111827;stroke-width:2;fill:none;stroke-dasharray:7 6;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#111827"/></marker>
+  </defs>
+
+  <text x="768" y="58" text-anchor="middle" class="title">Tool Calling Flow</text>
+  <text x="768" y="94" text-anchor="middle" class="subtitle">How an LLM uses tools to get things done</text>
+
+  <!-- Step 1 -->
+  <rect x="46" y="160" width="195" height="230" class="box softBlue strokeBlue"/>
+  <circle cx="54" cy="160" r="19" class="blue"/><text x="54" y="168" text-anchor="middle" class="num">1</text>
+  <text x="144" y="207" text-anchor="middle" class="h" fill="#0f4aa2">User Input</text>
+  <circle cx="144" cy="248" r="11" fill="none" stroke="#0f4aa2" stroke-width="2.5"/><path d="M115 290 Q144 260 173 290" fill="none" stroke="#0f4aa2" stroke-width="2.5"/>
+  <text x="144" y="315" text-anchor="middle" class="txt">“Which were the</text><text x="144" y="341" text-anchor="middle" class="txt">top 5 products by</text><text x="144" y="367" text-anchor="middle" class="txt">revenue in Q1 2026?”</text>
+
+  <!-- Step 2 -->
+  <rect x="305" y="160" width="205" height="230" class="box softGreen strokeGreen"/>
+  <circle cx="315" cy="160" r="19" class="green"/><text x="315" y="168" text-anchor="middle" class="num">2</text>
+  <text x="407" y="195" text-anchor="middle" class="h" fill="#157a37">LLM Reasoning</text><text x="407" y="219" text-anchor="middle" class="h" fill="#157a37">(Thought)</text>
+  <text x="407" y="278" text-anchor="middle" font-size="46" fill="#157a37">🧠</text>
+  <text x="407" y="315" text-anchor="middle" class="txt" font-weight="700">Thought:</text>
+  <text x="407" y="342" text-anchor="middle" class="txt">I need sales data about</text><text x="407" y="368" text-anchor="middle" class="txt">products and revenue.</text>
+  <text x="407" y="397" text-anchor="middle" class="txt">I should call a tool.</text>
+
+  <!-- Step 3 -->
+  <rect x="555" y="160" width="300" height="315" class="box softOrange strokeOrange"/>
+  <circle cx="562" cy="160" r="19" class="orange"/><text x="562" y="168" text-anchor="middle" class="num">3</text>
+  <text x="705" y="190" text-anchor="middle" class="h" fill="#d97706">Tool Selection</text><text x="705" y="214" text-anchor="middle" class="h" fill="#d97706">(LLM Output / Action)</text>
+  <text x="705" y="260" text-anchor="middle" font-size="40" fill="#d97706">🔧</text>
+  <rect x="585" y="265" width="250" height="175" fill="#fff" stroke="#d97706" stroke-width="1.3" stroke-dasharray="6 5" rx="8"/>
+  <text x="610" y="292" class="mono">{</text>
+  <text x="625" y="318" class="mono">"tool": "top_products_by_revenue",</text>
+  <text x="625" y="344" class="mono">"arguments": {</text>
+  <text x="645" y="370" class="mono">"start_date": "2026-01-01",</text>
+  <text x="645" y="396" class="mono">"end_date": "2026-04-01",</text>
+  <text x="645" y="422" class="mono">"limit": 5</text>
+  <text x="625" y="448" class="mono">}</text>
+  <text x="610" y="474" class="mono">}</text>
+  <text x="705" y="505" text-anchor="middle" class="small">The LLM decides which tool to call</text><text x="705" y="526" text-anchor="middle" class="small">and with what arguments.</text>
+
+  <!-- Step 4 -->
+  <rect x="925" y="160" width="190" height="275" class="box softPurple strokePurple"/>
+  <circle cx="936" cy="160" r="19" class="purple"/><text x="936" y="168" text-anchor="middle" class="num">4</text>
+  <text x="1020" y="205" text-anchor="middle" class="h" fill="#6b21a8">Tool Execution</text><text x="1020" y="229" text-anchor="middle" class="h" fill="#6b21a8">(Your Code)</text>
+  <text x="1020" y="275" text-anchor="middle" font-size="44" fill="#6b21a8">&lt;/&gt;</text>
+  <text x="1020" y="315" text-anchor="middle" class="txt">Your application code</text><text x="1020" y="341" text-anchor="middle" class="txt">receives the request</text><text x="1020" y="367" text-anchor="middle" class="txt">and calls the</text><text x="1020" y="393" text-anchor="middle" class="txt">corresponding tool</text><text x="1020" y="419" text-anchor="middle" class="small">(e.g., a Python function).</text>
+
+  <!-- Tools -->
+  <rect x="1235" y="250" width="260" height="330" fill="#ffffff" stroke="#0f4aa2" stroke-width="1.5" stroke-dasharray="7 6" rx="12"/>
+  <text x="1365" y="296" text-anchor="middle" class="h" fill="#0f4aa2">Tools (Functions / APIs)</text>
+  <rect x="1255" y="325" width="220" height="115" class="box softBlue strokeBlue"/>
+  <text x="1275" y="360" class="caption" fill="#0f4aa2">top_products_by_revenue</text>
+  <text x="1275" y="393" class="small">Queries the database and</text><text x="1275" y="416" class="small">returns the top products</text><text x="1275" y="439" class="small">by revenue.</text>
+  <text x="1447" y="399" text-anchor="middle" font-size="46" fill="#0f4aa2">▣</text>
+  <rect x="1255" y="465" width="220" height="95" class="box softBlue strokeBlue"/>
+  <text x="1275" y="498" class="caption" fill="#0f4aa2">Other tools...</text>
+  <text x="1275" y="529" class="small">e.g., get_product_details,</text><text x="1275" y="552" class="small">convert_currency, etc.</text>
+  <text x="1447" y="527" text-anchor="middle" font-size="46" fill="#0f4aa2">⚙</text>
+
+  <!-- Step 5 -->
+  <rect x="700" y="510" width="390" height="205" class="box softRed strokeRed"/>
+  <circle cx="715" cy="510" r="19" class="red"/><text x="715" y="518" text-anchor="middle" class="num">5</text>
+  <text x="895" y="545" text-anchor="middle" class="h" fill="#be123c">Tool Result</text><text x="895" y="569" text-anchor="middle" class="h" fill="#be123c">(Observation)</text>
+  <text x="945" y="562" text-anchor="middle" font-size="34" fill="#be123c">◉</text>
+  <rect x="735" y="590" width="320" height="100" fill="#fff" stroke="#be123c" stroke-width="1.3" stroke-dasharray="6 5" rx="8"/>
+  <text x="755" y="618" class="mono">{</text><text x="775" y="642" class="mono">"results": [</text>
+  <text x="795" y="666" class="mono">{"product": "Laptop Pro 14", "revenue": 125000},</text>
+  <text x="795" y="690" class="mono">{"product": "Monitor 27", "revenue": 98000},</text>
+  <text x="795" y="714" class="mono">...</text><text x="775" y="738" class="mono">]</text><text x="755" y="762" class="mono">}</text>
+  <text x="895" y="746" text-anchor="middle" class="small">The result is returned to the LLM</text><text x="895" y="767" text-anchor="middle" class="small">and added to the conversation.</text>
+
+  <!-- Step 6 -->
+  <rect x="325" y="540" width="275" height="205" class="box softGreen strokeGreen"/>
+  <circle cx="332" cy="540" r="19" class="green"/><text x="332" y="548" text-anchor="middle" class="num">6</text>
+  <text x="462" y="582" text-anchor="middle" class="h" fill="#157a37">LLM Reasoning Again</text><text x="462" y="606" text-anchor="middle" class="h" fill="#157a37">(Thought)</text>
+  <text x="462" y="655" text-anchor="middle" font-size="42" fill="#157a37">🧠</text>
+  <text x="462" y="694" text-anchor="middle" class="txt" font-weight="700">Thought:</text>
+  <text x="462" y="724" text-anchor="middle" class="txt">I have the data.</text><text x="462" y="750" text-anchor="middle" class="txt">Now I can answer.</text>
+
+  <!-- Step 7 -->
+  <rect x="46" y="510" width="205" height="225" class="box softBlue strokeBlue"/>
+  <circle cx="54" cy="510" r="19" class="blue"/><text x="54" y="518" text-anchor="middle" class="num">7</text>
+  <text x="148" y="558" text-anchor="middle" class="h" fill="#0f4aa2">Final Answer</text>
+  <text x="148" y="605" text-anchor="middle" font-size="38" fill="#0f4aa2">▢</text>
+  <text x="148" y="648" text-anchor="middle" class="txt">The top product in Q1 2026</text><text x="148" y="674" text-anchor="middle" class="txt">was Laptop Pro 14 with</text><text x="148" y="700" text-anchor="middle" class="txt">$125,000 in revenue,</text><text x="148" y="726" text-anchor="middle" class="txt">followed by Monitor 27</text><text x="148" y="752" text-anchor="middle" class="txt">with $98,000.</text>
+
+  <!-- Arrows -->
+  <path d="M242 275 L300 275" class="arrow"/>
+  <path d="M510 275 L550 275" class="arrow"/>
+  <path d="M855 285 L920 285" class="arrow"/>
+  <path d="M1115 305 L1215 305 L1215 384 L1235 384" class="arrowLight"/><text x="1170" y="295" class="txt">Calls</text>
+  <path d="M1235 520 L1140 520 L1140 615 L1095 615" class="arrowLight"/><text x="1160" y="630" class="txt">Returns</text><text x="1160" y="654" class="txt">Result</text>
+  <path d="M700 630 L604 630" class="arrow"/>
+  <path d="M325 645 L255 645" class="arrow"/>
+  <path d="M462 540 L462 395" class="loop"/>
+  <path d="M1085 710 C1085 800 300 800 150 740" class="loop"/>
+  <text x="768" y="842" text-anchor="middle" class="caption">The LLM can decide to call more tools if needed (loop)</text>
+
+  <!-- Takeaways -->
+  <rect x="42" y="860" width="1460" height="128" fill="#f8fbff" stroke="#94a3b8" stroke-width="1.2" rx="10"/>
+  <text x="65" y="895" class="h" fill="#0f4aa2">Key Takeaways</text>
+  <text x="95" y="942" text-anchor="middle" font-size="36" fill="#157a37">🧠</text><text x="130" y="925" class="small">The LLM decides</text><text x="130" y="948" class="small">when and which</text><text x="130" y="971" class="small">tool to use.</text>
+  <line x1="268" y1="910" x2="268" y2="970" stroke="#cbd5e1"/>
+  <text x="323" y="942" text-anchor="middle" font-size="36" fill="#d97706">&lt;/&gt;</text><text x="375" y="925" class="small">Your application</text><text x="375" y="948" class="small">connects the LLM</text><text x="375" y="971" class="small">to tools.</text>
+  <line x1="520" y1="910" x2="520" y2="970" stroke="#cbd5e1"/>
+  <text x="565" y="942" text-anchor="middle" font-size="36" fill="#be123c">▣</text><text x="610" y="925" class="small">Tools are your</text><text x="610" y="948" class="small">functions, APIs,</text><text x="610" y="971" class="small">or systems.</text>
+  <line x1="730" y1="910" x2="730" y2="970" stroke="#cbd5e1"/>
+  <text x="770" y="942" text-anchor="middle" font-size="36" fill="#6b21a8">↻</text><text x="820" y="925" class="small">Results go back to</text><text x="820" y="948" class="small">the LLM, which may</text><text x="820" y="971" class="small">call more tools.</text>
+  <line x1="970" y1="910" x2="970" y2="970" stroke="#cbd5e1"/>
+  <text x="1015" y="942" text-anchor="middle" font-size="36" fill="#0f4aa2">⚠</text><text x="1060" y="925" class="small">Every integration</text><text x="1060" y="948" class="small">is custom and</text><text x="1060" y="971" class="small">not standardized.</text>
+  <rect x="1195" y="885" width="280" height="90" fill="#ffffff" stroke="#0f4aa2" stroke-width="1.2" stroke-dasharray="6 5" rx="10"/>
+  <text x="1335" y="915" text-anchor="middle" class="h" fill="#0f4aa2">With MCP (later)</text>
+  <text x="1220" y="950" class="small">MCP standardizes how LLMs</text><text x="1220" y="972" class="small">discover, call, and use tools</text>
+</svg>
