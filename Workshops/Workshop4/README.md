@@ -292,13 +292,13 @@ proyecto/
 ```
 
 ---
-
 ## Notas Finales
 
 - No alteres las preguntas del archivo `questions.json`.
-- Asegúrate de ejecutar `ingest.py` **antes** de `rag_pipeline.py`.
+- Asegúrate de ejecutar la celda de ingesta **antes** de la celda de consulta.
 - Entregables:
-  - El código de tu pipeline RAG (`ingest.py`, `rag_pipeline.py`, `generate_answers.py`)
-  - El archivo `my_rag_output.json` con las 50 preguntas, contextos y respuestas
+  - Un **notebook** (`.ipynb`) con las dos fases implementadas (ingesta y pipeline RAG) y la generación de las 50 respuestas. Los scripts `.py` también son válidos.
+  - El archivo `my_rag_output.json` con las 50 preguntas, contextos y respuestas.
 
 **Atención**: El conjunto de datos utilizado proviene de la transcripción del video ["[1hr Talk] Intro to Large Language Models"](https://www.youtube.com/watch?v=zjkBMFhNj_g) de Andrej Karpathy, bajo licencia Creative Commons Attribution (CC-BY).
+
