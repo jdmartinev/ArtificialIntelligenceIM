@@ -293,20 +293,6 @@ proyecto/
 
 ---
 
-## 6. Diferencias con el Ejemplo de Clase
-
-| Componente    | `02_rag_langchain.py`                 | Esta tarea                              |
-|---------------|---------------------------------------|-----------------------------------------|
-| LLM           | `ChatGoogleGenerativeAI` (Gemini)     | `NvidiaLLM` wrapper → NVIDIA NIM        |
-| Embeddings    | `GoogleGenerativeAIEmbeddings`        | `HuggingFaceEmbeddings` `all-mpnet-base-v2` |
-| Vector store  | `QdrantVectorStore` en memoria        | `QdrantVectorStore` **persistente**     |
-| Dim. vectores | 3072 (Gemini)                         | **768** (`all-mpnet-base-v2`)           |
-| API key       | `GOOGLE_API_KEY`                      | `NVIDIA_API_KEY`                        |
-
-> El `NvidiaLLM` usa exactamente el mismo patrón del cliente OpenAI de `part01_from_prompt_to_action.py` — solo cambia `base_url` y `api_key`. La ventaja es que el mismo código funciona con cualquier backend compatible con la API de OpenAI.
-
----
-
 ## Notas Finales
 
 - No alteres las preguntas del archivo `questions.json`.
