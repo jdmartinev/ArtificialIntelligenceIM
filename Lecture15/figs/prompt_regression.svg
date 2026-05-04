@@ -1,0 +1,49 @@
+<svg width="800" height="300" viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .box { fill: #f5f5f5; stroke: #333; stroke-width: 2; rx: 10; }
+    .text { font-family: Arial, sans-serif; font-size: 14px; fill: #111; text-anchor: middle; dominant-baseline: middle; }
+    .arrow { stroke: #333; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    .good { fill: #bbf7d0; stroke: #16a34a; stroke-width: 2; }
+    .bad { fill: #fecaca; stroke: #dc2626; stroke-width: 2; }
+    .highlight { fill: #dcfce7; stroke: #16a34a; stroke-width: 2; }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"></polygon>
+    </marker>
+  </defs>
+
+  <!-- User -->
+  <circle cx="80" cy="150" r="35" fill="#93c5fd" stroke="#333" stroke-width="2"></circle>
+  <text x="80" y="150" class="text">User</text>
+
+  <!-- System Prompt -->
+  <rect x="200" y="110" width="180" height="80" class="box"></rect>
+  <text x="290" y="150" class="text">System Prompt</text>
+
+  <!-- Change -->
+  <rect x="200" y="60" width="180" height="35" class="highlight"></rect>
+  <text x="290" y="78" class="text">+ small change</text>
+
+  <!-- Outputs -->
+  <rect x="500" y="60" width="120" height="50" class="good"></rect>
+  <text x="560" y="85" class="text">Case 1 ✓</text>
+
+  <rect x="500" y="125" width="120" height="50" class="good"></rect>
+  <text x="560" y="150" class="text">Case 2 ✓</text>
+
+  <rect x="500" y="190" width="120" height="50" class="bad"></rect>
+  <text x="560" y="215" class="text">Case 3 ✗</text>
+
+  <!-- Arrows -->
+  <line x1="115" y1="150" x2="200" y2="150" class="arrow"></line>
+  <line x1="380" y1="150" x2="500" y2="85" class="arrow"></line>
+  <line x1="380" y1="150" x2="500" y2="150" class="arrow"></line>
+  <line x1="380" y1="150" x2="500" y2="215" class="arrow"></line>
+
+  <!-- Caption -->
+  <text x="400" y="270" class="text" font-size="16px">
+    Change a prompt or model, break a use case.
+  </text>
+</svg>
