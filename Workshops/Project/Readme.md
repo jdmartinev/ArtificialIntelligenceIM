@@ -72,7 +72,7 @@ The repo must contain:
 
 ---
 
-Make sure all materials are submitted by **November 20**, 11:59 PM.
+Make sure all materials are submitted by **May 28**, 11:59 PM.
 
 ---
 
