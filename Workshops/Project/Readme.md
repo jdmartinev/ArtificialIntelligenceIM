@@ -6,18 +6,18 @@ This document outlines the final project requirements for the **Artificial Intel
 
 ## 📆 Important Dates
 
-- **October 28** – Submit your **project idea**, including:  
+- **May 5** – Submit your **project idea**, including:  
   - A brief description of the problem  
   - A sketch of the proposed solution (e.g., model type, data to be used)  
   - Planned evaluation metrics
   
-- **November 21** – **Final submission deadline**
+- **May 28** – **Final submission deadline**
 
 ---
 
 ## 👥 Team Requirements
 
-- Projects must be completed in teams of **3 students**.
+- Projects must be completed in teams of **4 students**.
 
 ---
 
