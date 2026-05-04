@@ -1,0 +1,68 @@
+<svg width="900" height="430" viewBox="0 0 900 430" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .box { fill:#f8fafc; stroke:#1f2937; stroke-width:2; rx:14; }
+    .agent { fill:#eef2ff; stroke:#4f46e5; stroke-width:2; rx:14; }
+    .tool { fill:#ecfdf5; stroke:#059669; stroke-width:2; rx:14; }
+    .eval { fill:#fff7ed; stroke:#ea580c; stroke-width:2; rx:14; }
+    .user { fill:#dbeafe; stroke:#2563eb; stroke-width:2; }
+    .boundary { fill:none; stroke:#111827; stroke-width:2; stroke-dasharray:8 8; rx:24; }
+    .text { font-family:Arial, sans-serif; font-size:15px; fill:#111827; text-anchor:middle; dominant-baseline:middle; }
+    .small { font-size:12px; }
+    .title { font-size:19px; font-weight:bold; }
+    .arrow { stroke:#111827; stroke-width:2; fill:none; marker-end:url(#arrowhead); }
+    .dashed { stroke-dasharray:6 6; }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="#111827"></polygon>
+    </marker>
+  </defs>
+
+  <!-- Main agent boundary -->
+  <rect x="145" y="45" width="610" height="250" class="boundary"></rect>
+  <text x="450" y="75" class="text title">LangGraph Web Search Agent</text>
+
+  <!-- User -->
+  <circle cx="70" cy="170" r="40" class="user"></circle>
+  <text x="70" y="170" class="text">User</text>
+
+  <!-- Agent node -->
+  <rect x="210" y="125" width="180" height="80" class="agent"></rect>
+  <text x="300" y="150" class="text">Agent</text>
+  <text x="300" y="174" class="text small">LLM + function calling</text>
+  <text x="300" y="194" class="text small">should_continue()</text>
+
+  <!-- Tool node -->
+  <rect x="520" y="125" width="170" height="80" class="tool"></rect>
+  <text x="605" y="150" class="text">ToolNode</text>
+  <text x="605" y="174" class="text small">web_search(query)</text>
+  <text x="605" y="194" class="text small">DuckDuckGo results</text>
+
+  <!-- Final answer -->
+  <rect x="785" y="135" width="90" height="60" class="box"></rect>
+  <text x="830" y="165" class="text small">Final</text>
+  <text x="830" y="183" class="text small">answer</text>
+
+  <!-- Flow arrows -->
+  <line x1="110" y1="170" x2="210" y2="170" class="arrow"></line>
+  <line x1="390" y1="150" x2="520" y2="150" class="arrow"></line>
+  <text x="455" y="132" class="text small">tool call?</text>
+
+  <path d="M520 190 C455 250, 330 250, 300 205" class="arrow"></path>
+  <text x="430" y="260" class="text small">tool result</text>
+
+  <line x1="690" y1="165" x2="785" y2="165" class="arrow dashed"></line>
+  <path d="M390 190 C515 310, 720 295, 785 190" class="arrow dashed"></path>
+  <text x="610" y="315" class="text small">if no tool call → END</text>
+
+  <!-- Evaluation layer -->
+  <rect x="80" y="335" width="740" height="70" class="eval"></rect>
+  <text x="450" y="355" class="text">Evaluation Layer</text>
+  <text x="450" y="380" class="text small">
+    Dataset: question + expected_answer + expected_tools  →  tool_use | trajectory_match | LLM-as-judge | LangSmith experiment
+  </text>
+
+  <!-- Eval arrow -->
+  <line x1="450" y1="335" x2="450" y2="295" class="arrow dashed"></line>
+</svg>
