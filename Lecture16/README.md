@@ -4,6 +4,8 @@
 
 ## Tendencia 1: RLVR — Reinforcement Learning with Verifiable Rewards
 
+![RLVR Diagram](figs/Trend01.png)
+
 **¿Qué es?**
 Evolución del paradigma RLHF que reemplaza el reward model (entrenado sobre preferencias humanas) por recompensas verificables automáticamente: corrección de código, soluciones matemáticas, ejecución de pruebas unitarias. El detonante fue DeepSeek-R1 (enero 2025), que popularizó GRPO como alternativa más eficiente a PPO. La clave: si la respuesta es correcta o incorrecta se puede verificar *sin humanos*, lo que permite escalar el entrenamiento masivamente.
 
@@ -24,6 +26,8 @@ Evolución del paradigma RLHF que reemplaza el reward model (entrenado sobre pre
 ---
 
 ## Tendencia 2: Interpretabilidad Mecanicista
+
+![Interpretability Diagram](figs/Trend02.png)
 
 **¿Qué es?**
 Área de investigación que busca entender *cómo* funcionan internamente los modelos de lenguaje, no solo evaluarlos desde fuera. Usando sparse autoencoders (SAE), se identifican "features" interpretables, circuitos neuronales y trayectorias causales desde el prompt hasta la respuesta. En 2025, Anthropic trazó secuencias completas de features en Claude (attribution graphs); DeepMind publicó Gemma Scope 2, el toolkit open-source más grande del campo. MIT Technology Review la nombró una de las "10 Breakthrough Technologies 2026".
@@ -46,6 +50,8 @@ Evolución del paradigma RLHF que reemplaza el reward model (entrenado sobre pre
 
 ## Tendencia 3: Sistemas Multi-Agente y Protocolos de Estandarización
 
+![Multi-Agent Diagram](figs/Trend03.png)
+
 **¿Qué es?**
 Los agentes de IA pasaron de experimentos aislados a infraestructura de producción. El cambio central: el Model Context Protocol (MCP), creado por Anthropic en noviembre 2024 y donado a la Linux Foundation, se convirtió en el estándar de facto para conectar agentes a herramientas externas (bases de datos, APIs, editores). En paralelo, Google lanzó A2A (Agent-to-Agent Protocol) para comunicación entre agentes de distintos vendors. Para principios de 2026, MCP registraba 97 millones de descargas mensuales. El concepto central que emergió: *context engineering* como la nueva disciplina crítica — los fallos de los agentes son principalmente fallos de contexto, no del modelo.
 
@@ -67,6 +73,8 @@ Los agentes de IA pasaron de experimentos aislados a infraestructura de producci
 
 ## Tendencia 4: Modelos Multimodales Omni
 
+![Multi-Modal Diagram](figs/Trend04.png)
+
 **¿Qué es?**
 La arquitectura de los modelos está migrando de pipelines heterogéneos (visión y texto procesados por separado y luego "bridgeados") hacia modelos unificados que alinean texto, imagen, audio y video en un único espacio latente. Los modelos "omni" (GPT-4o, Gemini 2.0 Flash, LLaMA 4) procesan múltiples modalidades de forma nativa. En ICLR 2026 dominaron los trabajos sobre *multimodal alignment* y SAM 3. Un survey de 26,104 papers de CVPR/ICLR/NeurIPS 2023–2025 documenta la transición masiva del campo de CV clásico hacia entrenamiento multimodal y razonamiento general.
 
@@ -87,6 +95,8 @@ La arquitectura de los modelos está migrando de pipelines heterogéneos (visió
 ---
 
 ## Tendencia 5: IA para Matemáticas — Razonamiento Formal y Theorem Proving
+
+![Math Diagram](figs/Trend05.png)
 
 **¿Qué es?**
 Una de las fronteras más activas en 2025: sistemas de IA capaces de producir pruebas matemáticas formales verificables por computador (en Lean 4, Isabelle). El hito fue AlphaProof (Google DeepMind), que en IMO 2024 obtuvo nivel de medalla de plata — la primera vez que un sistema de IA alcanza ese nivel en una competencia olímpica de matemáticas. AlphaProof combina un LLM preentrenado con AlphaZero RL usando Lean como entorno verificable. En 2025, Aristotle (Harmonic) y Seed-Prover (ByteDance) superaron el nivel oro en IMO 2025. En paralelo, los modelos de razonamiento general (o1, DeepSeek-R1, Gemini) ahora superan el 85–95% en AIME 2025, benchmark que antes se consideraba fuera del alcance de la IA.
