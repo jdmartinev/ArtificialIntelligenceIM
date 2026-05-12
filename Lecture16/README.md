@@ -1,4 +1,11 @@
 # Tendencias en IA — 2025/2026
+## ¿Qué sigue? MLOps/AIOps/LLMOps
+
+![MLOps Diagram](figs/WhatIsNext.png)
+
+Después de construir unas bases sólidas en inteligencia artificial, aprendizaje automático y aprendizaje profundo — comprendiendo modelos, entrenamiento, evaluación, optimización y fundamentos matemáticos — el siguiente paso es evolucionar hacia la construcción de sistemas reales de IA. Hoy en día, un ingeniero en AI/ML/DL no solo debe entender modelos, sino también dominar el stack tecnológico que permite desplegarlos, escalarlos, monitorearlos y mantenerlos en producción. Esto implica fortalecer habilidades en ingeniería de software, Linux, Git, APIs y diseño de sistemas, entendiendo cómo los modelos interactúan con aplicaciones, usuarios y servicios reales.
+
+En este contexto, cobran gran importancia áreas como MLOps y LLMOps, que buscan llevar los modelos desde el entorno experimental hasta sistemas robustos y reproducibles. Esto incluye aprender herramientas y tecnologías como Docker, FastAPI, MLflow, GitHub Actions, Kubernetes y plataformas en la nube, además de conceptos modernos relacionados con embeddings, bases de datos vectoriales, RAG, agentes y observabilidad de modelos. El objetivo ya no es únicamente entrenar modelos con buenos resultados, sino construir soluciones completas de inteligencia artificial capaces de operar de manera escalable, mantenible y confiable en entornos reales.
 
 ---
 
