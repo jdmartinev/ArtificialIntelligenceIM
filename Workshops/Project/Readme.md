@@ -68,7 +68,20 @@ The repo must contain:
 - A clear `README.md` with instructions on how to run the code  
 - Training and evaluation code  
 - Any pretrained models or checkpoints (if applicable)  
-- `requirements.txt` or `environment.yml` for dependencies
+- `requirements.txt` or `environment.yml` for dependencies  
+- An AI usage statement  
+
+### AI Usage Statement
+
+Students must include a brief statement indicating whether AI tools were used during the development of the project.
+
+If AI tools were used, the statement should describe:
+
+- The AI tools used  
+- The purpose of their use  
+- Which parts of the project were supported by AI (e.g., coding, debugging, documentation, analysis, experimentation, etc.)
+
+Students are fully responsible for understanding, validating, and explaining all submitted work.
 
 ---
 
